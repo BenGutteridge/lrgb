@@ -1,7 +1,7 @@
 out_dir: results
 metric_best: f1
 wandb:
-  use: True
+  use: False # True
   project: gtblueprint
 dataset:
   format: PyG-COCOSuperpixels
@@ -28,8 +28,8 @@ gnn:
   layers_mp: 8
   layers_post_mp: 3
   dim_inner: 220
-  layer_type: gcnconv
-  stage_type: stack
+  layer_type: my_gcnconv # gcnconv
+  stage_type: delay_gnn # stack 
   batchnorm: True
   act: relu
   dropout: 0.0
@@ -44,3 +44,5 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 10
   min_lr: 1e-5
+tensorboard_each_run: False
+tensorboard_agg: True

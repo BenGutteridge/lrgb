@@ -23,6 +23,7 @@ from graphgps.transform.posenc_stats import compute_posenc_stats
 from graphgps.transform.transforms import (pre_transform_in_memory,
                                            typecast_x, concat_x_and_pos,
                                            clip_graphs_to_size)
+from graphgps.ben_utils import add_k_hop_edges
 
 
 def log_loaded_dataset(dataset, format, name):
@@ -165,6 +166,9 @@ def load_dataset_master(format, name, dataset_dir):
             raise ValueError(f"Unsupported OGB(-derived) dataset: {name}")
     else:
         raise ValueError(f"Unknown data format: {format}")
+    
+    dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
+    
     log_loaded_dataset(dataset, format, name)
 
     # Precompute necessary statistics for positional encodings.

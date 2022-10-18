@@ -1,7 +1,7 @@
 out_dir: results
 metric_best: ap
 wandb:
-  use: True
+  use: False # True
   project: peptides-func
 dataset:
   format: OGB
@@ -27,8 +27,8 @@ gnn:
   layers_mp: 5
   layers_post_mp: 1
   dim_inner: 300
-  layer_type: gcnconv
-  stage_type: stack
+  layer_type: my_gcnconv # gcnconv
+  stage_type: delay_gnn # stack 
   batchnorm: True
   act: relu
   dropout: 0.0
@@ -43,3 +43,5 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 20
   min_lr: 1e-5
+tensorboard_each_run: False
+tensorboard_agg: True
