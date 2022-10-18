@@ -103,13 +103,14 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-
+# VOC superpixels
+argpath = "/Users/beng/Documents/lrgb/configs/GCN/vocsuperpixels-GCN.yaml"
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/GCN/peptides-func-GCN.yaml'
-# Peptides-struct
-argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-GCN.yaml"
+# # Peptides-struct
+# argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-GCN.yaml"
 
 repeat = 1
 import argparse
