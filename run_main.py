@@ -105,9 +105,11 @@ def run_loop_settings():
 
 
 # Coco-superpixels
-argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
+# argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/GCN/peptides-func-GCN.yaml'
+# Peptides-struct
+argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-GCN.yaml"
 
 repeat = 1
 import argparse
