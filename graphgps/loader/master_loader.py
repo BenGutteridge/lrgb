@@ -167,8 +167,16 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
     
-    dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
-    
+    # get k-hop edge amended dataset - either load or make it
+    filepath = "graphgps/loader/k_hop_datasets/%s-%s.pt" % (format, name)
+    if osp.exists(filepath):
+        print('Loading k-hop dataset from file...')
+        dataset = torch.load(filepath)
+    else:
+        dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
+        print('Saving k-hop dataset...')
+        torch.save(dataset, filepath)
+        
     log_loaded_dataset(dataset, format, name)
 
     # Precompute necessary statistics for positional encodings.
