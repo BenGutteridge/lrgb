@@ -168,7 +168,7 @@ def load_dataset_master(format, name, dataset_dir):
         raise ValueError(f"Unknown data format: {format}")
     
     # get k-hop edge amended dataset - either load or make it
-    filepath = "graphgps/loader/k_hop_datasets/%s-%s.pt" % (format, name)
+    filepath = "graphgps/loader/dataset/k_hop_datasets/%s-%s.pt" % (format, name)
     if osp.exists(filepath):
         print('Loading k-hop dataset from file...')
         dataset = torch.load(filepath)
