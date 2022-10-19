@@ -106,9 +106,9 @@ def run_loop_settings():
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/GCN/vocsuperpixels-GCN.yaml"
 # Coco-superpixels
-# argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/GCN/original/peptides-func-GCN.yaml'
+argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/GCN/peptides-func-GCN.yaml'
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-GCN.yaml"
 
