@@ -17,7 +17,6 @@ try:
 except:
     from torch_geometric.graphgym.optim import create_optimizer, \
         create_scheduler, OptimizerConfig, SchedulerConfig
-except:
 from torch_geometric.graphgym.model_builder import create_model
 from torch_geometric.graphgym.train import train
 from torch_geometric.graphgym.utils.agg_runs import agg_runs
