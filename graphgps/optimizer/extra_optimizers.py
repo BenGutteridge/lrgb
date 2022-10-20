@@ -3,7 +3,11 @@ import math
 import torch.optim as optim
 from torch.optim import Optimizer
 from torch_geometric.graphgym import cfg
-from torch_geometric.graphgym.optimizer import OptimizerConfig, SchedulerConfig
+try:
+    from torch_geometric.graphgym.optimizer import OptimizerConfig, SchedulerConfig
+except:
+    print("No torch_geometric.graphgym.optimizer, trying torch_geometric.graphgym.optim...")
+    from torch_geometric.graphgym.optim import OptimizerConfig, SchedulerConfig
 from torch_geometric.graphgym.register import (register_optimizer,
                                                register_scheduler)
 
