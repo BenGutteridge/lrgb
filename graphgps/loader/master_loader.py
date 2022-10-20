@@ -1,4 +1,5 @@
 import logging
+import os
 import os.path as osp
 import time
 from functools import partial
@@ -169,14 +170,19 @@ def load_dataset_master(format, name, dataset_dir):
     
     if cfg.gnn.stage_type == 'delay_gnn':
         # get k-hop edge amended dataset - either load or make it
-        filepath = "graphgps/loader/k_hop_datasets/%s-%s.pt" % (format, name)
+        filedir = "graphgps/loader/k_hop_datasets"
+        filepath = osp.join(filedir, "%s-%s.pt" % (format, name))
         if osp.exists(filepath):
             print('Loading k-hop dataset from file...')
             dataset = torch.load(filepath)
         else:
             dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
             print('Saving k-hop dataset...')
+            if not osp.exists(filedir):
+                os.mkdir(filedir)
             torch.save(dataset, filepath)
+
+
         
     log_loaded_dataset(dataset, format, name)
 
