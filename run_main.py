@@ -103,16 +103,19 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# # VOC superpixels
-# argpath = "/Users/beng/Documents/lrgb/configs/GCN/vocsuperpixels-GCN.yaml"
-# # Coco-superpixels
-# argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-GCN.yaml'
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/GCN/peptides-func-GCN.yaml'
-# # Peptides-struct
-# argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-GCN.yaml"
+model = 'DelayGCN'
+# model = 'GCN'
 
-repeat = 3
+# # VOC superpixels
+# argpath = "/Users/beng/Documents/lrgb/configs/GCN/vocsuperpixels-%s.yaml" % model
+# # Coco-superpixels
+# argpath = '/Users/beng/Documents/lrgb/configs/GCN/cocosuperpixels-%s.yaml' % model
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/DelayGCN/peptides-func-%s.yaml' % model
+# # Peptides-struct
+# argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-%s.yaml" % model
+
+repeat = 2
 import argparse
 def parse_args() -> argparse.Namespace:
     r"""Parses the command line arguments."""
