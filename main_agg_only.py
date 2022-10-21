@@ -160,9 +160,11 @@ if __name__ == '__main__':
     # Aggregate results from different seeds
 
     #### MY ONE - DEBUGGING
-    from graphgps.my_agg_runs import agg_runs
+    from graphgps import my_agg_runs
+    my_agg_runs(cfg.out_dir, cfg.metric_best)
 
-    agg_runs(cfg.out_dir, cfg.metric_best)
+    #### ORIGINAL ONE
+    # agg_runs(cfg.out_dir, cfg.metric_best)
 
     # When being launched in batch mode, mark a yaml as done
     if args.mark_done:
