@@ -8,8 +8,10 @@ def get_k_hop_adjacencies(edge_index, max_k, stack_edge_indices=False):
   """Return list of matrices/edge indices for 1,..,k-hop adjacency matrices
   n.b. binary matrix
   n.b. pretty inefficient"""
-
-  tmp = to_dense_adj(edge_index).float()
+  try:
+    tmp = to_dense_adj(edge_index).float()
+  except:
+    print('Offending tensor:\nedge_index:\n', edge_index, '\nedge_index.shape:', edge_index.shape)
   adj = tmp.to_sparse().float()
   idxs, matrices = [edge_index], [tmp]
   cutoffs, n_edges_per_k = [0], edge_index.shape[-1]

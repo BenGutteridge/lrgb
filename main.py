@@ -19,7 +19,7 @@ except:
         create_scheduler, OptimizerConfig, SchedulerConfig
 from torch_geometric.graphgym.model_builder import create_model
 from torch_geometric.graphgym.train import train
-from torch_geometric.graphgym.utils.agg_runs import agg_runs
+# from torch_geometric.graphgym.utils.agg_runs import agg_runs #########################* TEMPORARILY REPLACED FOR DEBUGGING
 from torch_geometric.graphgym.utils.comp_budget import params_count
 from torch_geometric.graphgym.utils.device import auto_select_device
 from torch_geometric.graphgym.register import train_dict
@@ -158,7 +158,14 @@ if __name__ == '__main__':
             train_dict[cfg.train.mode](loggers, loaders, model, optimizer,
                                        scheduler)
     # Aggregate results from different seeds
-    agg_runs(cfg.out_dir, cfg.metric_best)
+
+    #### MY ONE - DEBUGGING
+    from graphgps import my_agg_runs
+    my_agg_runs(cfg.out_dir, cfg.metric_best)
+
+    #### ORIGINAL ONE
+    # agg_runs(cfg.out_dir, cfg.metric_best)
+
     # When being launched in batch mode, mark a yaml as done
     if args.mark_done:
         os.rename(args.cfg_file, '{}_done'.format(args.cfg_file))
