@@ -170,12 +170,14 @@ def load_dataset_master(format, name, dataset_dir):
     
     if cfg.gnn.stage_type == 'delay_gnn':
         # get k-hop edge amended dataset - either load or make it
-        filedir = '/data/beng' # data location for aimscdt1 cluster
-        if not osp.exists(filedir):
+        cluster_filedir = '/data/beng' # data location for aimscdt1 cluster
+        local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
+        if not osp.exists(cluster_filedir):
             print('Not on aimscdt1 cluster, using local data storage.')
-            filedir = "graphgps/loader/k_hop_datasets"
+            filedir = local_filedir
         else:
             print('On aimscdt1 cluster, using cluster data storage.')
+            filedir = osp.join(cluster_filedir, 'k_hop_datasets')
         filepath = osp.join(filedir, "%s-%s.pt" % (format, name))
         if osp.exists(filepath):
             print('Loading k-hop dataset from file...')
