@@ -116,52 +116,52 @@ if __name__ == '__main__':
     load_cfg(cfg, args)
     custom_set_out_dir(cfg, args.cfg_file, cfg.name_tag)
     dump_cfg(cfg)
-    # Set Pytorch environment
-    torch.set_num_threads(cfg.num_threads)
-    # Repeat for multiple experiment runs
-    for run_id, seed, split_index in zip(*run_loop_settings()):
-        # Set configurations for each run
-        custom_set_run_dir(cfg, run_id)
-        set_printing()
-        cfg.dataset.split_index = split_index
-        cfg.seed = seed
-        cfg.run_id = run_id
-        seed_everything(cfg.seed)
-        auto_select_device()
-        if cfg.train.finetune:
-            cfg = load_pretrained_model_cfg(cfg)
-        logging.info(f"[*] Run ID {run_id}: seed={cfg.seed}, "
-                     f"split_index={cfg.dataset.split_index}")
-        logging.info(f"    Starting now: {datetime.datetime.now()}")
-        # Set machine learning pipeline
-        loaders = create_loader()
-        loggers = create_logger()
-        model = create_model()
-        if cfg.train.finetune:
-            model = init_model_from_pretrained(model, cfg.train.finetune,
-                                               cfg.train.freeze_pretrained)
-        optimizer = create_optimizer(model.parameters(),
-                                     new_optimizer_config(cfg))
-        scheduler = create_scheduler(optimizer, new_scheduler_config(cfg))
-        # Print model info
-        logging.info(model)
-        logging.info(cfg)
-        cfg.params = params_count(model)
-        logging.info('Num parameters: {}'.format(cfg.params))
-        # Start training
-        if cfg.train.mode == 'standard':
-            if cfg.wandb.use:
-                logging.warning("[W] WandB logging is not supported with the "
-                                "default train.mode, set it to `custom`")
-            train(loggers, loaders, model, optimizer, scheduler)
-        else:
-            train_dict[cfg.train.mode](loggers, loaders, model, optimizer,
-                                       scheduler)
+    # # Set Pytorch environment
+    # torch.set_num_threads(cfg.num_threads)
+    # # Repeat for multiple experiment runs
+    # for run_id, seed, split_index in zip(*run_loop_settings()):
+    #     # Set configurations for each run
+    #     custom_set_run_dir(cfg, run_id)
+    #     set_printing()
+    #     cfg.dataset.split_index = split_index
+    #     cfg.seed = seed
+    #     cfg.run_id = run_id
+    #     seed_everything(cfg.seed)
+    #     auto_select_device()
+    #     if cfg.train.finetune:
+    #         cfg = load_pretrained_model_cfg(cfg)
+    #     logging.info(f"[*] Run ID {run_id}: seed={cfg.seed}, "
+    #                  f"split_index={cfg.dataset.split_index}")
+    #     logging.info(f"    Starting now: {datetime.datetime.now()}")
+    #     # Set machine learning pipeline
+    #     loaders = create_loader()
+    #     loggers = create_logger()
+    #     model = create_model()
+    #     if cfg.train.finetune:
+    #         model = init_model_from_pretrained(model, cfg.train.finetune,
+    #                                            cfg.train.freeze_pretrained)
+    #     optimizer = create_optimizer(model.parameters(),
+    #                                  new_optimizer_config(cfg))
+    #     scheduler = create_scheduler(optimizer, new_scheduler_config(cfg))
+    #     # Print model info
+    #     logging.info(model)
+    #     logging.info(cfg)
+    #     cfg.params = params_count(model)
+    #     logging.info('Num parameters: {}'.format(cfg.params))
+    #     # Start training
+    #     if cfg.train.mode == 'standard':
+    #         if cfg.wandb.use:
+    #             logging.warning("[W] WandB logging is not supported with the "
+    #                             "default train.mode, set it to `custom`")
+    #         train(loggers, loaders, model, optimizer, scheduler)
+    #     else:
+    #         train_dict[cfg.train.mode](loggers, loaders, model, optimizer,
+    #                                    scheduler)
     # Aggregate results from different seeds
 
     #### MY ONE - DEBUGGING
-    from graphgps import my_agg_runs
-    my_agg_runs(cfg.out_dir, cfg.metric_best)
+    from graphgps.my_agg_runs import agg_runs
+    agg_runs(cfg.out_dir, cfg.metric_best)
 
     #### ORIGINAL ONE
     # agg_runs(cfg.out_dir, cfg.metric_best)

@@ -115,7 +115,7 @@ model = 'DelayGCN'
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/GCN/peptides-struct-%s.yaml" % model
 # PCQM-Contact
-argpath = "/Users/beng/Documents/lrgb/configs/DelayGCN/pcqm-contact-DelayGCN.yaml"
+argpath = "/Users/beng/Documents/lrgb/configs/DelayGCN/pcqm-contact-%s.yaml" % model
 
 repeat = 2
 import argparse
@@ -132,7 +132,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('opts', default=None, nargs=argparse.REMAINDER,
                         help='See graphgym/config.py for remaining options.')
 
-    return parser.parse_args("--cfg {} --repeat {}".format(argpath, repeat).split())
+    return parser.parse_args("--cfg {} --repeat {} optim.max_epoch 1".format(argpath, repeat).split())
 
 if __name__ == '__main__':
     # Load cmd line args
