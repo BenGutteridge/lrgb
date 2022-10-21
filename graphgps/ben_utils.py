@@ -55,6 +55,8 @@ def add_k_hop_edges(dataset, K):
     print('Generating k-hop adjacencies...')
     for i in tqdm(range(len(graph_edge_cutoffs)-1)): # iterating over each graph in the dataset
         graph_edge_index = dataset.data.edge_index[:, graph_edge_cutoffs[i]:graph_edge_cutoffs[i+1]]
+        if graph_edge_index.shape[-1] == 0:
+          print('Graph with no edges. i: %d, graph_edge_cutoffs[i]: %d, graph_edge_cutoffs[i+1]: %d' % (i, graph_edge_cutoffs[i], graph_edge_cutoffs[i+1]))
         k_hop_edges, _ = get_k_hop_adjacencies(graph_edge_index, K)
         assert torch.mean((k_hop_edges[0] == graph_edge_index).float())==1.0 # check that the 1-hop edges are the same
         
