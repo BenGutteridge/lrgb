@@ -1,4 +1,5 @@
 out_dir: results
+tensorboard_each_run: True
 metric_best: mae
 metric_agg: argmin
 wandb:
