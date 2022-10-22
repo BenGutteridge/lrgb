@@ -56,26 +56,27 @@ def add_k_hop_edges(dataset, K):
     for i in tqdm(range(len(graph_edge_cutoffs)-1)): # iterating over each graph in the dataset
         graph_edge_index = dataset.data.edge_index[:, graph_edge_cutoffs[i]:graph_edge_cutoffs[i+1]]
         if graph_edge_index.shape[-1] == 0:
-          print('Graph with no edges. i: %d, graph_edge_cutoffs[i]: %d, graph_edge_cutoffs[i+1]: %d' % (i, graph_edge_cutoffs[i], graph_edge_cutoffs[i+1]))
+          print('Warning: graph with no edges. i: %d, graph_edge_cutoffs[i]: %d, graph_edge_cutoffs[i+1]: %d' % (i, graph_edge_cutoffs[i], graph_edge_cutoffs[i+1]))
           print('Empty graph skipped.')
+          k_hop_edges = [torch.empty((2,0), dtype=torch.long)]
         else:
           k_hop_edges, _ = get_k_hop_adjacencies(graph_edge_index, K)
           assert torch.mean((k_hop_edges[0] == graph_edge_index).float())==1.0 # check that the 1-hop edges are the same
           
-          # get k-hop edge cutoffs for labels
-          cutoffs = torch.tensor([v.shape[-1] for v in k_hop_edges])
-          k_hop_edges = torch.cat(k_hop_edges, dim=1) # list -> Tensor
-              
-          # make edge labels for k-hops
-          k_hop_labels = []
-          for i in range(len(cutoffs)):
-              k = i + 1
-              k_hop_labels.append(k * torch.ones(cutoffs[i]))
-          k_hop_labels = torch.cat(k_hop_labels)
-          
-          # lists of edges and labels over entire dataset of graphs
-          all_labels.append(k_hop_labels)
-          all_indices.append(k_hop_edges)
+        # get k-hop edge cutoffs for labels
+        cutoffs = torch.tensor([v.shape[-1] for v in k_hop_edges])
+        k_hop_edges = torch.cat(k_hop_edges, dim=1) # list -> Tensor
+            
+        # make edge labels for k-hops
+        k_hop_labels = []
+        for i in range(len(cutoffs)):
+            k = i + 1
+            k_hop_labels.append(k * torch.ones(cutoffs[i]))
+        k_hop_labels = torch.cat(k_hop_labels)
+        
+        # lists of edges and labels over entire dataset of graphs
+        all_labels.append(k_hop_labels)
+        all_indices.append(k_hop_edges)
 
     # stack all the edges and labels
     ei_slices = torch.cat([torch.tensor([0]), torch.cumsum(torch.tensor([v.shape[-1] for v in all_indices]), dim=0)])
