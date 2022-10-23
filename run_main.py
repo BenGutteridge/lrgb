@@ -117,7 +117,7 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-repeat = 2
+repeat = 1
 import argparse
 def parse_args() -> argparse.Namespace:
     r"""Parses the command line arguments."""
