@@ -8,7 +8,7 @@ from .example import GNNLayer
 def empty_func():
   pass
 
-def init_DelayGCN(model, dim_in, dim_out, num_layers):
+def init_khop_GCN(model, dim_in, dim_out, num_layers):
   model.num_layers = num_layers
   model.max_k = cfg.gnn.layers_mp # cfg.delay.max_k
   for t in range(num_layers):
