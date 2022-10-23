@@ -4,6 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
+from .utils import init_DelayGCN
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class DelayGNNStage(nn.Module):
@@ -17,16 +18,7 @@ class DelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        from .utils import init_DelayGCN
         self = init_DelayGCN(self, dim_in, dim_out, num_layers)
-        # self.num_layers = num_layers
-        # self.max_k = cfg.gnn.layers_mp # cfg.delay.max_k
-        # for t in range(num_layers):
-        #     d_in = dim_in if t == 0 else dim_out
-        #     K = min(self.max_k, t+1)
-        #     for k in range(1, K+1):
-        #         W = GNNLayer(d_in, dim_out) # regular GCN layers
-        #         self.add_module('W_k{}_t{}'.format(k,t), W)
 
     def forward(self, batch):
         """
