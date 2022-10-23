@@ -108,10 +108,10 @@ model = 'DelayGCN'
 
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
-# Coco-superpixels
-argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Coco-superpixels
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
