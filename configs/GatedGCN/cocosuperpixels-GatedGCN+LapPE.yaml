@@ -1,7 +1,7 @@
 out_dir: results
 metric_best: f1
 wandb:
-  use: True
+  use: False
   project: Pascal
 dataset:
   format: PyG-COCOSuperpixels
