@@ -21,7 +21,7 @@ filename = '../results/progress.txt'
 try: 
   run_name = args[1]
   timestr = time.strftime("%m%d-%H%M%S")
-  message = ["%s COMPLETED AT %S" % (run_name, timestr)]
+  message = ["%s COMPLETED AT %s" % (run_name, timestr)]
   with open(filename, 'a') as f:
     f.write('\n'.join(message))
 except:
