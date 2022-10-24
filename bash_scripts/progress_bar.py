@@ -14,7 +14,7 @@ literally just has to add the name of it to a text doc
 """
  
 # total arguments
-args = len(sys.argv)
+args = sys.argv
 
 filename = '../results/progress.txt'
 
