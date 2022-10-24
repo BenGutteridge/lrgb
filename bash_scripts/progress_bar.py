@@ -16,7 +16,7 @@ literally just has to add the name of it to a text doc
 # total arguments
 args = sys.argv
 
-filename = '../results/progress.txt'
+filename = 'results/progress.txt'
 
 try: 
   run_name = args[1]
