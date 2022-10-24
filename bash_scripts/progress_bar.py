@@ -27,5 +27,6 @@ try:
 except:
   if osp.exists(filename):
     os.remove(filename)
+  print(os.getcwd())
   with open(filename, 'w') as f:
     f.write('PROGRESS')
