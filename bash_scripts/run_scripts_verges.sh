@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-python progress_bar.py
+python bash_scripts/progress_bar.py
 models=( 
   GCN
   DelayGCN
