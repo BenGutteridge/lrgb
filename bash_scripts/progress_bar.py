@@ -21,12 +21,11 @@ filename = 'results/progress.txt'
 try: 
   run_name = args[1]
   timestr = time.strftime("%m%d-%H%M%S")
-  message = ["%s COMPLETED AT %s" % (run_name, timestr)]
+  message = ["%s \nCOMPLETED AT %s" % (run_name, timestr)]
   with open(filename, 'a') as f:
     f.write('\n'.join(message))
 except:
   if osp.exists(filename):
     os.remove(filename)
-  print(os.getcwd())
   with open(filename, 'w') as f:
     f.write('PROGRESS')
