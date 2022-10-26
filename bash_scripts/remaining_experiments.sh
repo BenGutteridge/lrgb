@@ -2,9 +2,38 @@
 cd ..
 python bash_scripts/progress_bar.py
 runs=( 
-configs/DeLiteGCN/500k_stretched/peptides-func-DeLiteGCN_L=11_d=200.yaml
-configs/DeLiteGCN/500k_stretched/peptides-func-DeLiteGCN_L=13_d=190.yaml
-configs/DeLiteGCN/500k_stretched/peptides-func-DeLiteGCN_L=15_d=175.yaml
+peptides-struct-GCNII
+peptides-struct-GINE
+peptides-struct-GatedGCN
+peptides-struct-KGCN
+peptides-struct-MLP
+peptides-struct-SAN+RWSE
+peptides-struct-SAN
+peptides-struct-GCNII
+peptides-struct-GINE
+peptides-struct-GatedGCN
+pcqm-contact-DeLiteGCN
+pcqm-contact-GCNII
+pcqm-contact-GINE
+pcqm-contact-GatedGCN
+pcqm-contact-KGCN
+pcqm-contact-SAN
+pcqm-contact-SAN+RWSE
+pcqm-contact-GCNII
+pcqm-contact-GINE
+pcqm-contact-GatedGCN
+vocsuperpixels-DeLiteGCN
+vocsuperpixels-GCN
+vocsuperpixels-GCNII
+vocsuperpixels-GINE
+vocsuperpixels-GatedGCN
+vocsuperpixels-SAN
+vocsuperpixels-SAN+RWSE
+vocsuperpixels-Transformer+LapPE
+vocsuperpixels-GCN
+vocsuperpixels-GCNII
+vocsuperpixels-GINE
+vocsuperpixels-GatedGCN
 )
 
 for run in "${runs[@]}" ; do
