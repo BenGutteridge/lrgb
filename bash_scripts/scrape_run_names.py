@@ -18,10 +18,9 @@ for path, subdirs, files in sorted(os.walk('configs/')):
     for name in files:    
         file = os.path.join(path, name)
         if file.endswith('.yaml'):
-            if not 'L=' in file:
-                file = file.rsplit('/', 1)[-1][:-5] # get rid of yaml
-                if file not in completed_runs:
-                    # if not 'coco' in file:
+            if not 'd=' in file:
+                name = file.rsplit('/', 1)[-1][:-5] # get rid of yaml
+                if name not in completed_runs:
                     if 'voc' in file:
                         print(file)
         

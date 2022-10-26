@@ -26,7 +26,7 @@ gnn:
   layers_pre_mp: 0
   layers_mp: 5
   layers_post_mp: 1
-  dim_inner: 175 # 300
+  dim_inner: 300
   layer_type: my_gcnconv # gcnconv
   stage_type: k_gnn # stack 
   batchnorm: True
