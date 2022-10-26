@@ -37,6 +37,6 @@ runs=(
 )
 
 for run in "${runs[@]}" ; do
-  python main.py --cfg "configs/$run" device cuda dataset.dir /data/beng/datasets
+  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets
   python bash_scripts/progress_bar.py "$run"
 done
