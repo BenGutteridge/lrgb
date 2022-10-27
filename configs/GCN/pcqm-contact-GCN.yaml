@@ -1,5 +1,5 @@
 out_dir: results
-tensorboard_each_run: True
+tensorboard_each_run: False
 metric_best: mrr
 num_workers: 4
 wandb:
