@@ -103,8 +103,9 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
+# model = 'DelayGCN'
 # model = 'GCN'
+model='SAN'
 
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
