@@ -25,6 +25,7 @@ class CustomLogger(Logger):
 
     # basic properties
     def basic(self):
+        print('\n\n\nTIME_ITER:\n{}\n\n\n'.format(round(self.time_iter(), cfg.round)))
         stats = {
             'loss': round(self._loss / self._size_current, max(8, cfg.round)),
             'lr': round(self._lr, max(8, cfg.round)),
@@ -217,7 +218,8 @@ class CustomLogger(Logger):
             task_stats = self.subtoken_prediction()
         else:
             raise ValueError('Task has to be regression or classification')
-
+        
+        print('\n\n\nTIME_EPOCH:\n{}\n\n\n'.format(round(self._time_used, cfg.round)))
         epoch_stats = {'epoch': cur_epoch,
                        'time_epoch': round(self._time_used, cfg.round)}
         eta_stats = {'eta': round(self.eta(cur_epoch), cfg.round),
