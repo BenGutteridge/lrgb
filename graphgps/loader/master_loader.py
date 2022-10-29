@@ -168,7 +168,8 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
     
-    if cfg.gnn.stage_type in ['delay_gnn', 'k_gnn', 'delite_gnn', 'klite_gnn, alpha_k_gnn']:
+    if cfg.gnn.stage_type in ['delay_gnn', 'k_gnn', 'delite_gnn', 'klite_gnn', 'alpha_k_gnn']:
+        print('Stage type %s, using k-hops' % cfg.gnn.stage_type)
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
@@ -189,8 +190,6 @@ def load_dataset_master(format, name, dataset_dir):
                 os.mkdir(filedir)
             torch.save(dataset, filepath)
 
-
-        
     log_loaded_dataset(dataset, format, name)
 
     # Precompute necessary statistics for positional encodings.

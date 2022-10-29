@@ -38,7 +38,7 @@ class AlphaKGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
-        alpha = nn.Softmax(self.alpha)
+        alpha = F.softmax(self.alpha)
 
         # run through layers
         t = 0
