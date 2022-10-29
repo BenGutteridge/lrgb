@@ -103,8 +103,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
-# model = 'GCN'
+# model = 'DelayGCN'
+model = 'GCN'
 # model='SAN'
 
 # # VOC superpixels
@@ -133,7 +133,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('opts', default=None, nargs=argparse.REMAINDER,
                         help='See graphgym/config.py for remaining options.')
 
-    return parser.parse_args("--cfg {} --repeat {} optim.max_epoch 3".format(argpath, repeat).split())
+    return parser.parse_args("--cfg {} --repeat {} gnn.layers_mp 15 optim.max_epoch 500".format(argpath, repeat).split())
 
 if __name__ == '__main__':
     # Load cmd line args
