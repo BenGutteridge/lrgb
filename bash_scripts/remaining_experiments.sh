@@ -37,6 +37,6 @@ runs=(
 )
 
 for run in "${runs[@]}" ; do
-  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets
+  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets train.batch_size 4
   python bash_scripts/progress_bar.py "$run"
 done
