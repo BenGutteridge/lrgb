@@ -20,20 +20,20 @@ runs=(
   # configs/expts_l2/GCNII/pcqm-contact-GCNII.yaml
   # configs/expts_l2/GINE/pcqm-contact-GINE.yaml
   # configs/expts_l2/GatedGCN/pcqm-contact-GatedGCN.yaml
-  configs/DeLiteGCN/vocsuperpixels-DeLiteGCN.yaml
-  configs/DelayGCN/vocsuperpixels-DelayGCN.yaml
-  configs/GCN/vocsuperpixels-GCN.yaml
-  configs/GCNII/vocsuperpixels-GCNII.yaml
-  configs/GINE/vocsuperpixels-GINE.yaml
-  configs/GatedGCN/vocsuperpixels-GatedGCN.yaml
-  configs/KGCN/vocsuperpixels-KGCN.yaml
+  # configs/DeLiteGCN/vocsuperpixels-DeLiteGCN.yaml
+  # configs/DelayGCN/vocsuperpixels-DelayGCN.yaml
+  # configs/GCN/vocsuperpixels-GCN.yaml
+  # configs/GCNII/vocsuperpixels-GCNII.yaml
+  # configs/GINE/vocsuperpixels-GINE.yaml
+  # configs/GatedGCN/vocsuperpixels-GatedGCN.yaml
+  # configs/KGCN/vocsuperpixels-KGCN.yaml
   configs/SAN/vocsuperpixels-SAN.yaml
   configs/SAN/vocsuperpixels-SAN+RWSE.yaml
-  configs/Transformer/vocsuperpixels-Transformer+LapPE.yaml
-  configs/expts_l2/GCN/vocsuperpixels-GCN.yaml
-  configs/expts_l2/GCNII/vocsuperpixels-GCNII.yaml
-  configs/expts_l2/GINE/vocsuperpixels-GINE.yaml
-  configs/expts_l2/GatedGCN/vocsuperpixels-GatedGCN.yaml
+  # configs/Transformer/vocsuperpixels-Transformer+LapPE.yaml
+  # configs/expts_l2/GCN/vocsuperpixels-GCN.yaml
+  # configs/expts_l2/GCNII/vocsuperpixels-GCNII.yaml
+  # configs/expts_l2/GINE/vocsuperpixels-GINE.yaml
+  # configs/expts_l2/GatedGCN/vocsuperpixels-GatedGCN.yaml
 )
 
 for run in "${runs[@]}" ; do
