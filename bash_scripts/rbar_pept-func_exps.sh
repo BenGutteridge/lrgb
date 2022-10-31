@@ -11,9 +11,9 @@ files=(
   configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=
 )
 
-for rbar in {01..06}; do
-  for file in files; do
-    python main.py --cfg "$file$rbar.yaml" device cuda dataset.dir /data/beng/datasets rbar $rbar
-    python bash_scripts/progress_bar.py "$file$rbar.yaml"
+for rbar in {02..06}; do
+  for file in "${files[@]}"; do
+    python main.py --cfg "$file"0"$rbar".yaml device cuda dataset.dir /data/beng/datasets rbar "$rbar"
+    python bash_scripts/progress_bar.py "$file"0"$rbar".yaml
   done
 done
