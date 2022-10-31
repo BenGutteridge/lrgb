@@ -12,6 +12,6 @@ configs/GCN/500k_stretched/peptides-func-GCN_L=15_d=175.yaml
 )
 
 for run in "${runs[@]}" ; do
-  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets gnn.batchnorm False
+  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets gnn.batchnorm False optim.max_epoch 200
   python bash_scripts/progress_bar.py "$run"
 done
