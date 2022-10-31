@@ -13,7 +13,7 @@ files=(
 
 for rbar in {02..06}; do
   for file in "${files[@]}"; do
-    python main.py --cfg "$file"0"$rbar".yaml device cuda dataset.dir /data/beng/datasets rbar "$rbar"
-    python bash_scripts/progress_bar.py "$file"0"$rbar".yaml
+    python main.py --cfg "$file""$rbar".yaml device cuda dataset.dir /data/beng/datasets rbar "$rbar"
+    python bash_scripts/progress_bar.py "$file""$rbar".yaml
   done
 done
