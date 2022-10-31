@@ -168,7 +168,7 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
     
-    if cfg.gnn.stage_type in ['delay_gnn', 'k_gnn', 'delite_gnn', 'klite_gnn', 'alpha_k_gnn']:
+    if 'k' in cfg.gnn.stage_type or 'del' in cfg.gnn.stage_type:
         print('Stage type %s, using k-hops' % cfg.gnn.stage_type)
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
