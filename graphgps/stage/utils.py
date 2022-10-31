@@ -17,7 +17,7 @@ def init_khop_GCN(model, dim_in, dim_out, num_layers, use_rbar=False):
           W = GNNLayer(d_in, dim_out) # regular GCN layers
           model.add_module('W_k{}_t{}'.format(k,t), W)
   if use_rbar:
-      model.rbar = nn.parameter.Parameter(torch.tensor(3)) # 3 chosen heuristically - 1 is min, inf is max
+      model.rbar = nn.parameter.Parameter(torch.tensor(3.)) # 3 chosen heuristically - 1 is min, inf is max
   return model
 
 
