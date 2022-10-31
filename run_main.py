@@ -136,7 +136,8 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         'optim.max_epoch 3',
         'gnn.layer_type my_gcnconv',
-        'gnn.stage_type delay_gnn_rbar',
+        'gnn.stage_type delay_gnn',
+        'rbar 3',
         'gnn.dim_inner 100',
         'gnn.layers_mp 1',
         ]

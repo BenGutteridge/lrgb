@@ -6,18 +6,17 @@ import torch
 from .example import GNNLayer
 
 
-def init_khop_GCN(model, dim_in, dim_out, num_layers, use_rbar=False):
+def init_khop_GCN(model, dim_in, dim_out, num_layers):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
   model.max_k = cfg.gnn.layers_mp # cfg.delay.max_k
+  model.rbar = cfg.rbar # default 1
   for t in range(num_layers):
       d_in = dim_in if t == 0 else dim_out
       K = min(model.max_k, t+1)
       for k in range(1, K+1):
           W = GNNLayer(d_in, dim_out) # regular GCN layers
           model.add_module('W_k{}_t{}'.format(k,t), W)
-  if use_rbar:
-      model.rbar = nn.parameter.Parameter(torch.tensor(3.)) # 3 chosen heuristically - 1 is min, inf is max
   return model
 
 
