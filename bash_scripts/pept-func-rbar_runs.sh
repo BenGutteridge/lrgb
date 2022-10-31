@@ -9,6 +9,6 @@ configs/DelayGCN_rbar/peptides-func-DelayGCN_rbar_L=13_d=070.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_rbar_L=15_d=060.yaml)
 
 for run in "${runs[@]}" ; do
-  python main.py --cfg "$run" device cuda dataset.dir /data/beng/datasets optim.max_epoch 300
+  python main.py --cfg "$run" device cuda dataset.dir ./datasets optim.max_epoch 300
   python bash_scripts/progress_bar.py "$run"
 done
