@@ -10,6 +10,6 @@ runs=(
   # configs/SAN/peptides-func-SAN+RWSE.yaml
 )
 for run in "${runs[@]}" ; do
-  python main.py --cfg "$run" device cuda dataset.dir --repeat 3 /data/beng/datasets
+  python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets
   python bash_scripts/progress_bar.py "$run"
 done
