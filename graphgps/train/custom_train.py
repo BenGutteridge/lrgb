@@ -174,6 +174,10 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
                     run.log(bstats, step=cur_epoch)
                     run.summary["full_epoch_time_avg"] = np.mean(full_epoch_times)
                     run.summary["full_epoch_time_sum"] = np.sum(full_epoch_times)
+            try:
+                rbar = float(model._modules['mp'].rbar)
+            except:
+                rbar = None
             logging.info(
                 f"Current run: {cfg.run_dir}\n"
                 f"> Epoch {cur_epoch}: took {full_epoch_times[-1]:.1f}s "
@@ -182,7 +186,7 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
                 f"train_loss: {perf[0][best_epoch]['loss']:.4f} {best_train}\t"
                 f"val_loss: {perf[1][best_epoch]['loss']:.4f} {best_val}\t"
                 f"test_loss: {perf[2][best_epoch]['loss']:.4f} {best_test}\t"
-                f"current rbar: {float(model._modules['mp'].rbar)}"
+                f"current rbar: {rbar}" 
             )
             if hasattr(model, 'trf_layers'):
                 # Log SAN's gamma parameter values if they are trainable.
