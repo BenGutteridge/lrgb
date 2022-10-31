@@ -2,7 +2,7 @@
 cd ..
 python bash_scripts/progress_bar.py
 
-files = (
+files=(
   configs/DelayGCN_rbar/peptides-func-DelayGCN_L=05_d=175_rbar=
   configs/DelayGCN_rbar/peptides-func-DelayGCN_L=07_d=130_rbar=
   configs/DelayGCN_rbar/peptides-func-DelayGCN_L=09_d=100_rbar=
