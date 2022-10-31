@@ -28,7 +28,7 @@ gnn:
   layers_post_mp: 1
   dim_inner: 130 # 300
   layer_type: my_gcnconv # gcnconv
-  stage_type: k_gnn # stack 
+  stage_type: delay_gnn_rbar # stack 
   batchnorm: True
   act: relu
   dropout: 0.0
