@@ -37,9 +37,10 @@ class rbarDelayGNNStage(nn.Module):
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
         try:
-            rbar = max(round(float(self.rbar)), 1) # 1 <= rbar <= inf
+            rbar = F.relu(torch.floor(self.rbar)) # 1 <= rbar <= inf
         except: 
             print("Error with rbar:\n", self.rbar)
+        assert rbar.requires_grad, "Gradient of rbar param not being tracked"
         modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
