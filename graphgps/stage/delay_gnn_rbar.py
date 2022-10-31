@@ -6,7 +6,6 @@ import torch
 from .example import GNNLayer
 from .utils import init_khop_GCN
 
-# @register_stage('rbar_delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class rbarDelayGNNStage(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
@@ -49,4 +48,4 @@ class rbarDelayGNNStage(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-register_stage('rbar_delay_gnn', rbarDelayGNNStage)
+register_stage('delay_gnn_rbar', rbarDelayGNNStage)
