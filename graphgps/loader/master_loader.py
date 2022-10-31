@@ -168,8 +168,9 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
     
-    if 'k' in cfg.gnn.stage_type or 'del' in cfg.gnn.stage_type:
-        print('Stage type %s, using k-hops' % cfg.gnn.stage_type)
+    if 'k_' in cfg.gnn.stage_type or 'del' in cfg.gnn.stage_type:
+        max_k = cfg.gnn.stage_type
+        print('Stage type %s, using k-hops' % max_k)
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
@@ -179,13 +180,13 @@ def load_dataset_master(format, name, dataset_dir):
         else:
             print('On aimscdt cluster, using cluster data storage.')
             filedir = osp.join(cluster_filedir, 'k_hop_datasets')
-        filepath = osp.join(filedir, "%s-%s.pt" % (format, name))
+        filepath = osp.join(filedir, "%s-%s_max_k=%d.pt" % (format, name, cfg.gnn.layers_mp))
         if osp.exists(filepath):
-            print('Loading k-hop dataset from file...')
+            print('Loading k-hop dataset from file %s...' % filepath)
             dataset = torch.load(filepath)
         else:
             dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
-            print('Saving k-hop dataset...')
+            print('Saving k-hop dataset as %s...' % filepath)
             if not osp.exists(filedir):
                 os.mkdir(filedir)
             torch.save(dataset, filepath)

@@ -103,8 +103,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
-model = 'GCN'
+model = 'DelayGCN'
+# model = 'GCN'
 # model='SAN'
 
 # # VOC superpixels
