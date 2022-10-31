@@ -36,13 +36,14 @@ class rbarDelayGNNStage(nn.Module):
         
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
+        rbar = max(round(float(self.rbar)), 1) # 1 <= rbar <= inf
         modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
             for k in range(1, (t+1)+1):
                 W = next(modules)
-                batch.x = batch.x + W(batch, x[t-(k-self.rbar)], A(k)).x
+                batch.x = batch.x + W(batch, x[t-max(k-rbar, 0)], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
