@@ -133,7 +133,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('opts', default=None, nargs=argparse.REMAINDER,
                         help='See graphgym/config.py for remaining options.')
 
-    return parser.parse_args("--cfg {} --repeat {} gnn.layers_mp 15 optim.max_epoch 500".format(argpath, repeat).split())
+    extra_args = [
+        'optim.max_epoch 3',
+        'gnn.layer_type my_gcnconv',
+        'gnn.stage_type delay_gnn_rbar',
+        'gnn.dim_inner 100',
+        'gnn.layers_mp 1',
+        ]
+    extra_args = ' '.join(extra_args)
+    return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
+
 
 if __name__ == '__main__':
     # Load cmd line args
