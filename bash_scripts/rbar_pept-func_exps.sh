@@ -25,3 +25,6 @@ for rbar in "${rbars[@]}"; do
     python bash_scripts/progress_bar.py "$file"0"$rbar".yaml
   done
 done
+
+python main.py --cfg configs/DelayGCN_rbar/peptides-func-DelayGCN_L=13_d=070_rbar=02.yaml device cuda dataset.dir /data/beng/datasets rbar 2
+python main.py --cfg configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=02.yaml device cuda dataset.dir /data/beng/datasets rbar 2
