@@ -24,7 +24,7 @@ from graphgps.transform.posenc_stats import compute_posenc_stats
 from graphgps.transform.transforms import (pre_transform_in_memory,
                                            typecast_x, concat_x_and_pos,
                                            clip_graphs_to_size)
-from graphgps.ben_utils import add_k_hop_edges
+from graphgps.ben_utils import add_k_hop_edges, add_k_leq_beta_adj
 
 
 def log_loaded_dataset(dataset, format, name):
@@ -169,8 +169,8 @@ def load_dataset_master(format, name, dataset_dir):
         raise ValueError(f"Unknown data format: {format}")
     
     if 'k_' in cfg.gnn.stage_type or 'del' in cfg.gnn.stage_type:
-        max_k = cfg.gnn.stage_type
-        print('Stage type %s, using k-hops' % max_k)
+        max_k = cfg.gnn.layers_mp
+        print('Stage type %s, using k-hops' % (cfg.gnn.stage_type))
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
@@ -180,16 +180,20 @@ def load_dataset_master(format, name, dataset_dir):
         else:
             print('On aimscdt cluster, using cluster data storage.')
             filedir = osp.join(cluster_filedir, 'k_hop_datasets')
-        filepath = osp.join(filedir, "%s-%s_max_k=%d.pt" % (format, name, cfg.gnn.layers_mp))
+        filepath = osp.join(filedir, "%s-%s_max_k=%d.pt" % (format, name, max_k))
         if osp.exists(filepath):
             print('Loading k-hop dataset from file %s...' % filepath)
             dataset = torch.load(filepath)
         else:
-            dataset = add_k_hop_edges(dataset, K=cfg.gnn.layers_mp) # ****************************************
+            print('Making k-hop dataset, max_k=%d' % (max_k))
+            dataset = add_k_hop_edges(dataset, K=max_k) # ****************************************
             print('Saving k-hop dataset as %s...' % filepath)
             if not osp.exists(filedir):
                 os.mkdir(filedir)
             torch.save(dataset, filepath)
+    elif cfg.beta > 1:
+        print('Stage type %s, using beta=%d' % (cfg.gnn.stage_type, cfg.beta))
+        dataset = add_k_leq_beta_adj(dataset, beta=cfg.beta)
 
     log_loaded_dataset(dataset, format, name)
 
