@@ -106,19 +106,20 @@ def run_loop_settings():
 # model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
+model='alpha_kGCN'
 
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/betaGCN/peptides-func-betaGCN_beta=5.yaml'
+# argpath = 'configs/betaGCN/peptides-func-betaGCN_beta=5.yaml'
 
 repeat = 1
 import argparse
@@ -142,7 +143,8 @@ def parse_args() -> argparse.Namespace:
         # 'rbar 3',
         'gnn.dim_inner 100',
         'gnn.layers_mp 1',
-        'beta 3',
+        # 'beta 3',
+        'fixed_alpha True',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
