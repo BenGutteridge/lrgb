@@ -24,7 +24,7 @@ class AlphaKGNNStage(nn.Module):
         # alpha_k sums to 1 and weights Sk
         # all Sk used at every layer - nondynamic
         self = init_khop_nondynamic_GCN(self, dim_in, dim_out, num_layers, 
-                                        cfg.fixed_alpha) # needs learned alpha_k
+                                        cfg.fixed_alpha, cfg.alpha_W_kt) # needs learned alpha_k
 
     def forward(self, batch):
         """
@@ -40,14 +40,17 @@ class AlphaKGNNStage(nn.Module):
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
         alpha = F.softmax(self.alpha, dim=0)
-
+        if cfg.alpha_W_kt:
+            W = lambda t,k : self.W[t][k-1] # W(t,k)
+        else:
+            W = lambda t,k : self.W[t] # W(t)
         # run through layers
         t = 0
         for t in range(self.num_layers):
             x = batch.x
             batch.x = torch.zeros_like(x)
             for k in range(1, self.max_k+1):
-                batch.x = batch.x + alpha[k-1] * self.W[t](batch, x, A(k)).x
+                batch.x = batch.x + alpha[k-1] * W(t,k)(batch, x, A(k)).x
             batch.x = x + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)

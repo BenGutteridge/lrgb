@@ -40,7 +40,7 @@ def init_khop_LiteGCN(model, dim_in, dim_out, num_layers):
   return model
 
 
-def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, fixed_alpha=False):
+def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, fixed_alpha=False, alpha_W_kt=False):
   """For the non-dynamic k-hop model: alpha_k_gnn.
   W_t, alpha_k (sums to 1)"""
   model.num_layers = num_layers
@@ -48,7 +48,10 @@ def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, fixed_alpha=Fal
   # make the W_k
   W = []
   for t in range(num_layers):
-      W.append(GNNLayer(dim_in, dim_out))
+    if alpha_W_kt:
+      W.append(nn.ModuleList([GNNLayer(dim_in, dim_out) for _ in range(model.max_k)])) # W_{k,t}
+    else:
+      W.append(GNNLayer(dim_in, dim_out)) # W_t only
   model.W = nn.ModuleList(W)
   if fixed_alpha:
     print('Using fixed alpha model.')

@@ -1,5 +1,3 @@
-
-
 #!/bin/bash
 cd ..
 python bash_scripts/progress_bar.py

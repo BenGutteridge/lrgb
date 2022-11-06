@@ -19,5 +19,8 @@ def set_cfg_alpha_beta(cfg):
     # if True: for alphaGCN, rather than having alpha as a learnable vector summing to 1, just use a 1-vector
     cfg.fixed_alpha = False
 
+    # if True: alphaGCN uses W_{k,t} like r*GCN rather than just W_t, and alpha is alpha_{k,t}
+    cfg.alpha_W_kt = False
+
 
 register_config('alpha_beta', set_cfg_alpha_beta)
