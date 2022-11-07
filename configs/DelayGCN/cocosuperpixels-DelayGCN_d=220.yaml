@@ -4,6 +4,7 @@ wandb:
   use: False # True
   project: gtblueprint
 dataset:
+  dir: /data/beng/datasets
   format: PyG-COCOSuperpixels
   name: edge_wt_only_coord
   slic_compactness: 10

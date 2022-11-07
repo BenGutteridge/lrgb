@@ -2,6 +2,7 @@ out_dir: results
 metric_best: mae
 metric_agg: argmin
 dataset:
+  dir: /data/beng/datasets
   format: PyG-ZINC
   name: subset
   task: graph
@@ -49,6 +50,7 @@ optim:
 # #   use: False
 # #   project: peptides-func
 # dataset:
+  dir: /data/beng/datasets
 #   format: PyG-ZINC
 #   name: subset # full
 #   task: graph

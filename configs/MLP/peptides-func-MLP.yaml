@@ -4,6 +4,7 @@ wandb:
   use: False
   project: peptides-func
 dataset:
+  dir: /data/beng/datasets
   format: OGB
   name: peptides-functional
   task: graph

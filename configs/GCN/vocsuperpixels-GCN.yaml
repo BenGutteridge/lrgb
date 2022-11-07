@@ -5,6 +5,7 @@ wandb:
   use: False
   project: Pascal
 dataset:
+  dir: /data/beng/datasets
   format: PyG-VOCSuperpixels
   name: edge_wt_only_coord  # Alternative: edge_wt_region_boundary
   slic_compactness: 10
