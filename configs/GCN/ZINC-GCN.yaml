@@ -50,7 +50,7 @@ optim:
 # #   use: False
 # #   project: peptides-func
 # dataset:
-  dir: /data/beng/datasets
+#   dir: /data/beng/datasets
 #   format: PyG-ZINC
 #   name: subset # full
 #   task: graph
