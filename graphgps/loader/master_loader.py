@@ -168,7 +168,14 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
     
-    if 'k_' in cfg.gnn.stage_type or 'del' in cfg.gnn.stage_type:
+    multi_hop_stages = [
+        'alpha_gnn',
+        'alpha_k_gnn',
+        'delay_gnn',
+        'k_gnn',
+        'delite_gnn',
+    ]
+    if cfg.gnn.stage_type in multi_hop_stages:
         max_k = cfg.gnn.layers_mp
         print('Stage type %s, using k-hops' % (cfg.gnn.stage_type))
         # get k-hop edge amended dataset - either load or make it

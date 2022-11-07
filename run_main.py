@@ -106,7 +106,7 @@ def run_loop_settings():
 # model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
-model='alpha_kGCN'
+model='alphaGCN'
 
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
@@ -142,9 +142,10 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_gnn',
         # 'rbar 3',
         'gnn.dim_inner 100',
-        'gnn.layers_mp 1',
+        'gnn.layers_mp 5',
         # 'beta 3',
-        'fixed_alpha True',
+        'dataset.dir datasets',
+        'alpha 15',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
