@@ -10,7 +10,7 @@ def init_khop_GCN(model, dim_in, dim_out, num_layers):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
   model.max_k = cfg.gnn.layers_mp # cfg.delay.max_k
-  if model.rbar == -1: # can't set inf in cfg
+  if cfg.rbar == -1: # can't set inf in cfg
     model.rbar = float('inf')
   else:
     model.rbar = cfg.rbar # default 1
