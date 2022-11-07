@@ -42,7 +42,10 @@ class DelayGNNStage(nn.Module):
             batch.x = torch.zeros_like(x[t])
             for k in range(1, (t+1)+1):
                 W = next(modules)
-                batch.x = batch.x + W(batch, x[t-max(k-self.rbar,0)], A(k)).x
+                delay = max(k-self.rbar,0)
+                if cfg.rbar_v2:
+                    delay = (k-1)//self.rbar
+                batch.x = batch.x + W(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)

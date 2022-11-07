@@ -15,6 +15,7 @@ def set_cfg_rbar(cfg):
 
     # example argument
     cfg.rbar = 1
+    cfg.rbar_v2 = False # determines whether to use (k-1)//rbar as delay (True), or max(k-rbar, 0) (False)
 
 
 register_config('rbar', set_cfg_rbar)

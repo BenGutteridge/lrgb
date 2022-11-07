@@ -18,11 +18,11 @@ runs=(
 # configs/DelayGCN_rbar/peptides-func-DelayGCN_L=09_d=100_rbar=04.yaml
 # configs/DelayGCN_rbar/peptides-func-DelayGCN_L=09_d=100_rbar=05.yaml
 # configs/DelayGCN_rbar/peptides-func-DelayGCN_L=09_d=100_rbar=06.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=02.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=03.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=04.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=05.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=06.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=02.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=03.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=04.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=05.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=11_d=085_rbar=06.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_L=13_d=070_rbar=02.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_L=13_d=070_rbar=03.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_L=13_d=070_rbar=04.yaml
