@@ -145,7 +145,7 @@ def parse_args() -> argparse.Namespace:
         'gnn.layers_mp 5',
         # 'beta 3',
         'dataset.dir datasets',
-        'alpha 15',
+        'alpha 6',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

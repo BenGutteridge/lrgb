@@ -176,8 +176,8 @@ def load_dataset_master(format, name, dataset_dir):
         'delite_gnn',
     ]
     if cfg.gnn.stage_type in multi_hop_stages:
-        max_k = cfg.gnn.layers_mp
-        print('Stage type %s, using k-hops' % (cfg.gnn.stage_type))
+        max_k = max(cfg.gnn.layers_mp, cfg.alpha)
+        print('Stage type %s, using %d-hops' % (cfg.gnn.stage_type, max_k))
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
