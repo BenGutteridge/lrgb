@@ -3,9 +3,9 @@ cd ..
 python bash_scripts/progress_bar.py
 runs=(
 # correct rbar pept-func
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=02.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=03.yaml
-configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=04.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=02.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=03.yaml
+# configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=04.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=05.yaml
 configs/DelayGCN_rbar/peptides-func-DelayGCN_L=15_d=060_rbar=06.yaml
 )
