@@ -31,8 +31,8 @@ gnn:
   layers_mp: 5
   layers_post_mp: 1
   dim_inner: 140
-  layer_type: gcnconv # generalconv
-  stage_type: stack
+  layer_type: my_gcnconv # generalconv
+  stage_type: alpha_gnn
   batchnorm: True
   act: prelu
   dropout: 0.0

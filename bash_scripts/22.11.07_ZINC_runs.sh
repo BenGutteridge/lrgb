@@ -20,17 +20,17 @@ configs/betaGCN/ZINC-betaGCN_L=07_d=250_beta=7.yaml
 configs/rbar-GCN/ZINC-rGCN_L=02_d=400_r=01.yaml
 configs/rbar-GCN/ZINC-rGCN_L=02_d=400_r=inf.yaml
 configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=01.yaml
-configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=02.yaml
-configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=04.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=02.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=04.yaml
 configs/rbar-GCN/ZINC-rGCN_L=05_d=175_r=inf.yaml
 configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=01.yaml
-configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=02.yaml
-configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=04.yaml
-configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=06.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=02.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=04.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=06.yaml
 configs/rbar-GCN/ZINC-rGCN_L=07_d=130_r=inf.yaml
 configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=01.yaml
-configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=02.yaml
-configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=06.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=02.yaml
+# configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=06.yaml
 configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=inf.yaml
 )
 for run in "${runs[@]}" ; do
