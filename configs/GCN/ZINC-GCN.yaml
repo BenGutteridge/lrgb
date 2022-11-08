@@ -12,10 +12,10 @@ dataset:
   node_encoder_name: TypeDictNode
   node_encoder_num_types: 28
   node_encoder_bn: False
-  edge_encoder: True
-  edge_encoder_name: TypeDictEdge
-  edge_encoder_num_types: 4
-  edge_encoder_bn: False
+  edge_encoder: False
+  # edge_encoder_name: TypeDictEdge
+  # edge_encoder_num_types: 4
+  # edge_encoder_bn: False
 train:
   mode: custom
   batch_size: 128

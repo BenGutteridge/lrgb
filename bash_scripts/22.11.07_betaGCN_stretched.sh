@@ -18,6 +18,12 @@ configs/betaGCN/500k_stretched/peptides-func-betaGCN_L=13_d=190_beta=5.yaml
 configs/betaGCN/500k_stretched/peptides-func-betaGCN_L=15_d=175_beta=2.yaml
 configs/betaGCN/500k_stretched/peptides-func-betaGCN_L=15_d=175_beta=3.yaml
 configs/betaGCN/500k_stretched/peptides-func-betaGCN_L=15_d=175_beta=5.yaml
+configs/betaGCN/ZINC-betaGCN_L=02_d=500_beta=2.yaml
+configs/betaGCN/ZINC-betaGCN_L=05_d=300_beta=2.yaml
+configs/betaGCN/ZINC-betaGCN_L=05_d=300_beta=5.yaml
+configs/betaGCN/ZINC-betaGCN_L=07_d=250_beta=2.yaml
+configs/betaGCN/ZINC-betaGCN_L=07_d=250_beta=7.yaml
+
 )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16

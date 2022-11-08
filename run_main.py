@@ -106,20 +106,20 @@ def run_loop_settings():
 # model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
-model='alphaGCN'
+# model='alphaGCN'
 
 # # VOC superpixels
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-# argpath = 'configs/betaGCN/peptides-func-betaGCN_beta=5.yaml'
+argpath = 'configs/rbar-GCN/ZINC-rGCN_L=02_d=400_r=01.yaml'
 
 repeat = 1
 import argparse
@@ -141,11 +141,12 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type my_gcnconv',
         # 'gnn.stage_type delay_gnn',
         # 'rbar 3',
-        'gnn.dim_inner 100',
-        'gnn.layers_mp 5',
+        # 'gnn.dim_inner 100',
+        # 'gnn.layers_mp 5',
         # 'beta 3',
         'dataset.dir datasets',
-        'alpha 6',
+        # 'alpha 6',
+        # 'dataset.edge_encoder False'
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
