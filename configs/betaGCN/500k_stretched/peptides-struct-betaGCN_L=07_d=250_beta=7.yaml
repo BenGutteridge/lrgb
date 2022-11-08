@@ -46,4 +46,4 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 20
   min_lr: 1e-5
-beta: 2
+beta: 7

@@ -28,9 +28,9 @@ model:
   graph_pooling: add
 gnn:
   layers_pre_mp: 1
-  layers_mp: 5
+  layers_mp: 7
   layers_post_mp: 1
-  dim_inner: 175
+  dim_inner: 130
   layer_type: my_gcnconv # generalconv
   stage_type: delay_gnn
   batchnorm: True
@@ -42,5 +42,5 @@ optim:
   optimizer: adam
   base_lr: 0.01
   max_epoch: 200
-rbar: 4
+rbar: 5
 rbar_v2: True

@@ -44,7 +44,7 @@ class DelayGNNStage(nn.Module):
                 W = next(modules)
                 delay = max(k-self.rbar,0)
                 if cfg.rbar_v2:
-                    delay = (k-1)//self.rbar
+                    delay = int((k-1)//self.rbar)
                 batch.x = batch.x + W(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer

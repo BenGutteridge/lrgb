@@ -119,7 +119,7 @@ def run_loop_settings():
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/rbar-GCN/ZINC-rGCN_L=02_d=400_r=01.yaml'
+argpath = 'configs/rbar-GCN/ZINC-rGCN_L=09_d=100_r=inf.yaml'
 
 repeat = 1
 import argparse
