@@ -10,7 +10,7 @@ import torch_geometric.transforms as T
 from numpy.random import default_rng
 from ogb.graphproppred import PygGraphPropPredDataset
 from torch_geometric.datasets import (GNNBenchmarkDataset, Planetoid, TUDataset,
-                                      WikipediaNetwork, ZINC)
+                                      WikipediaNetwork, ZINC, QM9)
 from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.loader import load_pyg, load_ogb, set_dataset_attr
 from torch_geometric.graphgym.register import register_loader
@@ -128,6 +128,10 @@ def load_dataset_master(format, name, dataset_dir):
 
         elif pyg_dataset_id == 'ZINC':
             dataset = preformat_ZINC(dataset_dir, name)
+
+        elif pyg_dataset_id == 'QM9':
+            dataset = preformat_QM9(dataset_dir)
+
 
         else:
             raise ValueError(f"Unexpected PyG Dataset identifier: {format}")
@@ -550,6 +554,24 @@ def preformat_ZINC(dataset_dir, name):
          for split in ['train', 'val', 'test']]
     )
     return dataset
+
+
+def preformat_QM9(dataset_dir):
+    """Load and preformat ZINC datasets.
+
+    Args:
+        dataset_dir: path where to store the cached dataset
+
+    Returns:
+        PyG dataset object
+    """
+    # if name not in ['subset', 'full']:
+    #     raise ValueError(f"Unexpected subset choice for ZINC dataset: {name}")
+    # dataset = join_dataset_splits(
+    #     [ZINC(root=dataset_dir, subset=(name == 'subset'), split=split)
+    #      for split in ['train', 'val', 'test']]
+    # )
+    return QM9(root=dataset_dir)
 
 
 def preformat_VOCSuperpixels(dataset_dir, name, slic_compactness):
