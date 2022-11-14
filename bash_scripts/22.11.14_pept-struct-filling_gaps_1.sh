@@ -4,6 +4,9 @@ BATCH="22.11.12_pept-struct_filling_gaps_1"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
+  # r*=1 13, 15
+  configs/rbar-GCN/peptides-struct-DelayGCN_L=13_rbar=01.yaml
+  configs/rbar-GCN/peptides-struct-DelayGCN_L=15_rbar=01.yaml
   # alpha L 13,15,17,19
   configs/alphaGCN/peptides-struct-alphaGCN_L=13_d=050.yaml
   configs/alphaGCN/peptides-struct-alphaGCN_L=15_d=045.yaml
@@ -11,13 +14,12 @@ runs=(
   configs/alphaGCN/peptides-struct-alphaGCN_L=19_d=035.yaml
   configs/alphaGCN/peptides-struct-alphaGCN_L=21_d=032.yaml
   # GCN L=17,19
-  # r*=inf 5
-  # r*=1 13, 15
+  configs/GCN/500k_stretched/peptides-struct-GCN_L=17_d=165.yaml
+  configs/GCN/500k_stretched/peptides-struct-GCN_L=19_d=155.yaml
   # beta2 L=13,15,17,19
   # r*=3 11,13,15,17,19
   # r*=10 15,17
   # beta2 L=13,15,17,19
-
   )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
