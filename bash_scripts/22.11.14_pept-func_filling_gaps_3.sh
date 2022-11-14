@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-BATCH="22.11.12_pept-func_filling_gaps"
+BATCH="22.11.12_pept-func_filling_gaps_3"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
