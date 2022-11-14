@@ -1,14 +1,16 @@
 out_dir: results
-metric_best: ap
+tensorboard_each_run: False
+metric_best: mae
+metric_agg: argmin
 wandb:
-  use: False # True
-  project: peptides-func
+  use: False
+  project: peptides-struct
 dataset:
   dir: /data/beng/datasets
   format: OGB
-  name: peptides-functional
+  name: peptides-structural
   task: graph
-  task_type: classification_multilabel
+  task_type: regression
   transductive: False
   node_encoder: True
   node_encoder_name: Atom
@@ -21,19 +23,19 @@ train:
   ckpt_period: 100
 model:
   type: gnn
-  loss_fun: cross_entropy
+  loss_fun: l1
   graph_pooling: mean
 gnn:
   layers_pre_mp: 0
-  layers_mp: 5
+  layers_mp: 17
   layers_post_mp: 1
-  dim_inner: 175 # 300
-  layer_type: my_gcnconv # gcnconv
-  stage_type: delay_gnn # stack 
+  dim_inner: 165
+  layer_type: gcnconv
+  stage_type: stack
   batchnorm: True
   act: relu
   dropout: 0.0
-  agg: mean
+  agg: add
   normalize_adj: False
 optim:
   optimizer: adamW
@@ -44,7 +46,4 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 20
   min_lr: 1e-5
-tensorboard_each_run: False
-tensorboard_agg: True
-rbar: 5
-
+beta: 2
