@@ -10,7 +10,7 @@ runs=(
   configs/alphaGCN/peptides-struct-alphaGCN_L=17_d=040.yaml
   configs/alphaGCN/peptides-struct-alphaGCN_L=19_d=035.yaml
   configs/alphaGCN/peptides-struct-alphaGCN_L=21_d=032.yaml
-
+)
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
   python main.py --cfg "$run" --repeat 1 device cuda dataset.dir /data/beng/datasets out_dir "results/$BATCH" optim.max_epoch 300
