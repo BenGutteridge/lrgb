@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-BATCH="22.11.12_pept-struct_25L"
+BATCH="22.11.14_pept-struct_25L"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(

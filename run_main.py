@@ -119,7 +119,7 @@ def run_loop_settings():
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/GCN/QM9-GCN_L=02_d=500.yaml'
+argpath = 'configs/rbar-GCN/rbar>20/peptides-struct-DelayGCN_L=21_rbar=20.yaml'
 
 repeat = 1
 import argparse
@@ -142,7 +142,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_gnn',
         # 'rbar 3',
         # 'gnn.dim_inner 100',
-        # 'gnn.layers_mp 5',
+        'gnn.layers_mp 23',
         # 'beta 3',
         'dataset.dir datasets',
         # 'alpha 6',
