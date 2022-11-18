@@ -29,11 +29,11 @@ model:
   graph_pooling: add
 gnn:
   layers_pre_mp: 1
-  layers_mp: 2
+  layers_mp: 17
   layers_post_mp: 1
-  dim_inner: 500
-  layer_type: gcnconv # generalconv
-  stage_type: stack
+  dim_inner: 40
+  layer_type: my_gcnconv # generalconv
+  stage_type: alpha_gnn
   batchnorm: True
   act: prelu
   dropout: 0.0

@@ -29,9 +29,9 @@ model:
   graph_pooling: add
 gnn:
   layers_pre_mp: 1
-  layers_mp: 2
+  layers_mp: 9
   layers_post_mp: 1
-  dim_inner: 500
+  dim_inner: 225
   layer_type: gcnconv # generalconv
   stage_type: stack
   batchnorm: True
