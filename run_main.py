@@ -119,7 +119,7 @@ def run_loop_settings():
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/rbar-GCN/rbar>20/peptides-struct-DelayGCN_L=21_rbar=20.yaml'
+argpath = 'configs/GCN/QM9-GCN_L=02_d=500.yaml'
 
 repeat = 1
 import argparse
