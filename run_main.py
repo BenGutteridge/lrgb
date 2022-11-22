@@ -103,7 +103,7 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
+model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
@@ -119,7 +119,7 @@ def run_loop_settings():
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/GCN/QM9-GCN_L=02_d=500.yaml'
+argpath = 'configs/rbar-GCN/rbar=01/QM9-rGCN_L=07_r=01.yaml'
 
 repeat = 1
 import argparse
@@ -139,14 +139,15 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         'optim.max_epoch 3',
         # 'gnn.layer_type my_gcnconv',
-        # 'gnn.stage_type delay_gnn',
+        'gnn.stage_type rel_delay_gnn',
         # 'rbar 3',
         # 'gnn.dim_inner 100',
-        'gnn.layers_mp 23',
+        'gnn.layers_mp 5',
         # 'beta 3',
         'dataset.dir datasets',
         # 'alpha 6',
         # 'dataset.edge_encoder False'
+        'use_edge_labels True',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

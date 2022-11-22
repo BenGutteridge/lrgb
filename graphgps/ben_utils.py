@@ -1,7 +1,22 @@
 import torch
-import torch_geometric
 from torch_geometric.utils import to_dense_adj, dense_to_sparse
 from tqdm import tqdm
+
+def get_edge_labels(dataset):
+  """takes in PyG dataset object and spits out some edge labels"""
+  e = dataset.data.edge_attr
+  if 'peptides' in dataset.root:
+    print('Getting edge labels for peptides dataset...')
+    # [bond_type, is_stereo, is_conj]
+    edge_labels = e[:,0]*1 + e[:,2]*10 + e[:,1]*100  # columns
+  elif 'QM9' in dataset.root:
+    print('Getting edge labels for QM9 dataset')
+    # one-hot vectors for bond type
+    edge_labels = torch.argmax(e, dim=1)
+  else:
+    raise NotImplementedError("Dataset '%s' not supported" % dataset.folder)
+  return edge_labels
+
 
 # K <= BETA ADJACENCIES
 
@@ -51,12 +66,12 @@ def get_k_leq_beta_adj(edge_index, beta):
 
 ### K-HOP ADJACENCIES
 
-def add_k_hop_edges(dataset, K):
+def add_k_hop_edges(dataset, K, edge_labels=None):
     """Add k-hop edges and labels, etc to PyG Dataset object"""
 
     graph_edge_cutoffs = dataset.slices['edge_index']
     # for each graph get the khops separately
-    all_labels, all_indices = [], []
+    all_labels, all_indices, all_edge_type_labels = [], [], []
     print('Generating k-hop adjacencies...')
     for i in tqdm(range(len(graph_edge_cutoffs)-1)): # iterating over each graph in the dataset
         graph_edge_index = dataset.data.edge_index[:, graph_edge_cutoffs[i]:graph_edge_cutoffs[i+1]]
@@ -74,10 +89,18 @@ def add_k_hop_edges(dataset, K):
             
         # make edge labels for k-hops
         k_hop_labels = []
-        for i in range(len(cutoffs)):
-            k = i + 1
-            k_hop_labels.append(k * torch.ones(cutoffs[i]))
+        for j in range(len(cutoffs)):
+            k = j + 1
+            k_hop_labels.append(k * torch.ones(cutoffs[j]))
         k_hop_labels = torch.cat(k_hop_labels)
+
+        if edge_labels is not None:
+          graph_edge_labels = edge_labels[graph_edge_cutoffs[i]:graph_edge_cutoffs[i+1]]
+          graph_edge_labels = [graph_edge_labels]
+          for j in range(1,len(cutoffs)):
+              graph_edge_labels.append(-1 * torch.ones(cutoffs[j])) # all >1-hop edges are labeled -1
+          graph_edge_labels = torch.cat(graph_edge_labels)
+          all_edge_type_labels.append(graph_edge_labels)
         
         # lists of edges and labels over entire dataset of graphs
         all_labels.append(k_hop_labels)
@@ -90,9 +113,16 @@ def add_k_hop_edges(dataset, K):
 
     # edit dataset directly
     dataset.data.edge_index = all_indices
-    dataset.data.edge_attr = all_labels
+    # dataset.data.edge_attr = all_labels
     dataset.slices['edge_index'] = ei_slices
     dataset.slices['edge_attr'] = ei_slices
+
+    # stack on the edge type labels as well, if needed
+    if edge_labels is not None: # COMBINE
+      all_edge_type_labels = torch.cat(all_edge_type_labels)
+      dataset.data.edge_attr = torch.stack([all_labels, all_edge_type_labels]).T
+    else:
+      dataset.data.edge_attr = all_labels
 
     return dataset
 
