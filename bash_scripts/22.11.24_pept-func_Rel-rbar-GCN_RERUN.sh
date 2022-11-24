@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-BATCH="pept-func_edges"
+BATCH="pept-func_edges_RERUN"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
