@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_GCN, add_edge_types_to_model
+from .utils import init_khop_GCN, init_khop_GCN_v2, add_edge_types_to_model
 
 class RelationalDelayGNNStage(nn.Module):
     """
@@ -17,7 +17,7 @@ class RelationalDelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_khop_GCN(self, dim_in, dim_out, num_layers)
+        self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_layer=True) # skip L=0 since using custom A_{k=1}
         self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
 
     def forward(self, batch):
@@ -33,11 +33,11 @@ class RelationalDelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr[:,0]==k] # edge attr now includes both k-hop and edge type
-        A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1*e to distinguish edge labels
-        
+        A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
+        W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
+
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
-        modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             # k = 1
@@ -45,12 +45,12 @@ class RelationalDelayGNNStage(nn.Module):
             for e in self.edge_types: # a list of strings
                 batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
             # k > 1 
-            for k in range(1, (t+1)+1):
-                W = next(modules)
-                delay = max(k-self.rbar,0)
-                if cfg.rbar_v2:
-                    delay = int((k-1)//self.rbar)
-                batch.x = batch.x + W(batch, x[t-delay], A(k)).x
+            for k in range(2, (t+1)+1):
+                if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
+                    delay = max(k-self.rbar,0)
+                    if cfg.rbar_v2:
+                        delay = int((k-1)//self.rbar)
+                    batch.x = batch.x + W(k,t)(batch, x[t-delay], A(k)).x    # n.b. W edits batch.x in-place. Not a problem here though
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)

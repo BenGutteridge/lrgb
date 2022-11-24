@@ -142,7 +142,7 @@ def parse_args() -> argparse.Namespace:
         'gnn.stage_type rel_delay_gnn',
         # 'rbar 3',
         # 'gnn.dim_inner 100',
-        'gnn.layers_mp 5',
+        # 'gnn.layers_mp 5',
         # 'beta 3',
         'dataset.dir datasets',
         # 'alpha 6',

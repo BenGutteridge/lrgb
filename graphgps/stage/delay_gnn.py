@@ -36,7 +36,7 @@ class DelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
-        W = lambda k, t : self.W_kt["k=%03d_t=%03d"%(k,t)]
+        W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
         
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t

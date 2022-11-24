@@ -21,7 +21,7 @@ def init_khop_GCN(model, dim_in, dim_out, num_layers, max_k=None):
           model.add_module('W_k{}_t{}'.format(k,t), W)
   return model
 
-def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None):
+def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_layer=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
   model.max_k = cfg.gnn.layers_mp if max_k is None else max_k
@@ -30,11 +30,12 @@ def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None):
     model.rbar = float('inf')
   else:
     model.rbar = cfg.rbar # default 1
-  for t in range(num_layers):
+  t0 = 1 if skip_first_layer else 0
+  for t in range(t0, num_layers):
       d_in = dim_in if t == 0 else dim_out
       K = min(model.max_k, t+1)
       for k in range(1, K+1):
-          W_kt["k=%03d_t=%03d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+          W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
   model.W_kt = nn.ModuleDict(W_kt)
   return model
 
