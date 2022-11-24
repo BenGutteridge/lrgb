@@ -119,7 +119,7 @@ model = 'DelayGCN'
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
-argpath = 'configs/rbar-GCN/rbar=01/QM9-rGCN_L=07_r=01.yaml'
+argpath = 'configs/rbar-GCN/rbar=01/QM9-rGCN_L=13_r=01.yaml'
 
 repeat = 1
 import argparse

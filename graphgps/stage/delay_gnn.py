@@ -4,7 +4,9 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_GCN
+# from .utils import init_khop_GCN
+from .utils import init_khop_GCN_v2
+
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class DelayGNNStage(nn.Module):
@@ -18,7 +20,8 @@ class DelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_khop_GCN(self, dim_in, dim_out, num_layers)
+        # self = init_khop_GCN(self, dim_in, dim_out, num_layers)
+        self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers)
 
     def forward(self, batch):
         """
@@ -33,19 +36,21 @@ class DelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
+        W = lambda k, t : self.W_kt["k=%03d_t=%03d"%(k,t)]
         
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
-        modules = self.children()
+        # modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
             for k in range(1, (t+1)+1):
-                W = next(modules)
+                # W = next(modules)
                 delay = max(k-self.rbar,0)
                 if cfg.rbar_v2:
                     delay = int((k-1)//self.rbar)
-                batch.x = batch.x + W(batch, x[t-delay], A(k)).x
+                # batch.x = batch.x + W(batch, x[t-delay], A(k)).x
+                batch.x = batch.x + W(k,t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
