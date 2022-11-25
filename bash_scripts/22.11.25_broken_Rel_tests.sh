@@ -12,7 +12,7 @@ runs=(
   # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V4.yaml
   
   # building back up to R-r*GCN -- now including a summation
-  configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V4.yaml
+  configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V5.yaml
 )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
