@@ -8,8 +8,8 @@ runs=(
   # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf.yaml
 
   # for v3 and v4 (run twice, but change which stage is activated for each)
-  configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V3.yaml
-  # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V4.yaml
+  # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V3.yaml
+  configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V4.yaml
 )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
