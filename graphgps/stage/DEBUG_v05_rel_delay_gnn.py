@@ -6,7 +6,7 @@ import torch
 from .example import GNNLayer
 from .utils import init_khop_GCN, init_khop_GCN_v2, add_edge_types_to_model
 
-class RelationalDelayGNNStage_v3(nn.Module):
+class RelationalDelayGNNStage_v5(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
 
@@ -19,10 +19,11 @@ class RelationalDelayGNNStage_v3(nn.Module):
         super().__init__()
         self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
         print('Edge types: ', cfg.edge_types, '\nAdding edge types to model...')
-        self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
+        # self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
         #####
         print("N.B. NOT CURRENTLY USING EDGE TYPES FOR DEBUGGING")
-        self.W_kt['k=1, t=0'] = GNNLayer(dim_in, dim_out)
+        for e in cfg.edge_types:
+            self.W_kt['k=1, t=0, e=%s' % e] = GNNLayer(dim_in, dim_out)
         #####
 
     def forward(self, batch):
@@ -49,8 +50,10 @@ class RelationalDelayGNNStage_v3(nn.Module):
             batch.x = torch.zeros_like(x[t])
             # for e in self.edge_types: # a list of strings
             #     batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
+            for e in cfg.edge_types:
+                batch.x = batch.x + self.W_kt["k=%d, t=%d, e=%s"%(1,t,e)](batch, x[t], A(1)).x
             # k > 1 
-            for k in range(1, (t+1)+1):
+            for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
                     delay = max(k-self.rbar,0)
                     if cfg.rbar_v2:
@@ -61,4 +64,4 @@ class RelationalDelayGNNStage_v3(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-# register_stage('rel_delay_gnn', RelationalDelayGNNStage_v3)
+register_stage('rel_delay_gnn', RelationalDelayGNNStage_v5)
