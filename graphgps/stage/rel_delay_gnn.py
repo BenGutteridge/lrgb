@@ -17,7 +17,9 @@ class RelationalDelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_layer=True) # skip L=0 since using custom A_{k=1}
+        self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
+        print('Edge types: ', self.edge_types, '\nAdding edge types to model...')
+        print("N.B. NOT CURRENTLY USING EDGE TYPES FOR DEBUGGING")
         self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
 
     def forward(self, batch):
@@ -33,7 +35,7 @@ class RelationalDelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr[:,0]==k] # edge attr now includes both k-hop and edge type
-        A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
+        # A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
         W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
 
         # run through layers
