@@ -213,7 +213,6 @@ def load_dataset_master(format, name, dataset_dir):
             if not osp.exists(filedir):
                 os.mkdir(filedir)
             torch.save(dataset, filepath)
-        # adding edge labels for Relational model
     elif cfg.beta > 1:
         print('Stage type %s, using beta=%d' % (cfg.gnn.stage_type, cfg.beta))
         dataset = add_k_leq_beta_adj(dataset, beta=cfg.beta)
