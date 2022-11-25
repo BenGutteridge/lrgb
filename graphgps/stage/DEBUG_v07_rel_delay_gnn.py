@@ -6,7 +6,7 @@ import torch
 from .example import GNNLayer
 from .utils import init_khop_GCN, init_khop_GCN_v2, add_edge_types_to_model
 
-class RelationalDelayGNNStage_v5(nn.Module):
+class RelationalDelayGNNStage_v7(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
 
@@ -52,7 +52,7 @@ class RelationalDelayGNNStage_v5(nn.Module):
             # for e in self.edge_types: # a list of strings
             #     batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
             for e in cfg.edge_types:
-                batch.x = batch.x + self.W_kt["k=1, t=%d, e=%s"%(t,e)](batch, x[t], A(1)).x
+                batch.x = batch.x + self.W_edge[e](batch, x[t], A(1)).x
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
