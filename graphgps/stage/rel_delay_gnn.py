@@ -38,7 +38,7 @@ class RelationalDelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr[:,0]==k] # edge attr now includes both k-hop and edge type
-        # A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
+        A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
         W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
 
         # run through layers
@@ -47,9 +47,8 @@ class RelationalDelayGNNStage(nn.Module):
             x.append(batch.x)
             # k = 1
             batch.x = torch.zeros_like(x[t])
-            # for e in self.edge_types: # a list of strings
-            #     batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
-            batch.x = batch.x + self.W_edge['k=1, t=0'](batch, x[t], A(1)).x
+            for e in self.edge_types: # a list of strings
+                batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
@@ -62,4 +61,4 @@ class RelationalDelayGNNStage(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-register_stage('rel_delay_gnn', RelationalDelayGNNStage)
+# register_stage('rel_delay_gnn', RelationalDelayGNNStage)
