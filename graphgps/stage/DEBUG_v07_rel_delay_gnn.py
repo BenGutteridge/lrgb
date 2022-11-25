@@ -21,10 +21,9 @@ class RelationalDelayGNNStage_v7(nn.Module):
         print('Edge types: ', cfg.edge_types, '\nAdding edge types to model...')
         self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
         #####
-        print("N.B. NOT CURRENTLY USING EDGE TYPES FOR DEBUGGING")
-        for e in cfg.edge_types:
-            for t in range(num_layers):
-                self.W_kt['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
+        # for e in cfg.edge_types:
+        #     for t in range(num_layers):
+        #         self.W_kt['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
         #####
 
     def forward(self, batch):
@@ -65,4 +64,4 @@ class RelationalDelayGNNStage_v7(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-# register_stage('rel_delay_gnn', RelationalDelayGNNStage_v7)
+register_stage('rel_delay_gnn', RelationalDelayGNNStage_v7)
