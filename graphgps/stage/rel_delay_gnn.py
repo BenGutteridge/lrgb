@@ -42,8 +42,9 @@ class RelationalDelayGNNStage(nn.Module):
             x.append(batch.x)
             # k = 1
             batch.x = torch.zeros_like(x[t])
-            for e in self.edge_types: # a list of strings
-                batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
+            # for e in self.edge_types: # a list of strings
+            #     batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
+            batch.x = batch.x + W(1,t)(batch, x[t], A(1)).x
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
