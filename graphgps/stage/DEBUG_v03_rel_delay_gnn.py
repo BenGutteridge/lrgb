@@ -61,4 +61,4 @@ class RelationalDelayGNNStage_v3(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-register_stage('rel_delay_gnn', RelationalDelayGNNStage_v3)
+# register_stage('rel_delay_gnn', RelationalDelayGNNStage_v3)
