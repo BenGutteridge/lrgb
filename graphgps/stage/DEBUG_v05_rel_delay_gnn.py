@@ -23,7 +23,8 @@ class RelationalDelayGNNStage_v5(nn.Module):
         #####
         print("N.B. NOT CURRENTLY USING EDGE TYPES FOR DEBUGGING")
         for e in cfg.edge_types:
-            self.W_kt['k=1, t=0, e=%s' % e] = GNNLayer(dim_in, dim_out)
+            for t in range(num_layers):
+                self.W_kt['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
         #####
 
     def forward(self, batch):
@@ -51,7 +52,7 @@ class RelationalDelayGNNStage_v5(nn.Module):
             # for e in self.edge_types: # a list of strings
             #     batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
             for e in cfg.edge_types:
-                batch.x = batch.x + self.W_kt["k=%d, t=%d, e=%s"%(1,t,e)](batch, x[t], A(1)).x
+                batch.x = batch.x + self.W_kt["k=1, t=%d, e=%s"%(t,e)](batch, x[t], A(1)).x
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
