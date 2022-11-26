@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_GCN, init_khop_GCN_v2, add_edge_types_to_model
+from .utils import init_khop_GCN, init_khop_GCN_v2
 
 class RelationalDelayGNNStage(nn.Module):
     """
@@ -19,11 +19,11 @@ class RelationalDelayGNNStage(nn.Module):
         super().__init__()
         self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
         print('Edge types: ', cfg.edge_types, '\nAdding edge types to model...')
-        self = add_edge_types_to_model(self, cfg.edge_types, dim_in, dim_out)
-        #####
-        print("N.B. NOT CURRENTLY USING EDGE TYPES FOR DEBUGGING")
-        self.W_edge['k=1, t=0'] = GNNLayer(dim_in, dim_out)
-        #####
+        W_edge = {}
+        for e in cfg.edge_types:
+            for t in range(num_layers):
+                W_edge['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
+        self.W_edge = nn.ModuleDict(W_edge)
 
     def forward(self, batch):
         """
@@ -40,6 +40,7 @@ class RelationalDelayGNNStage(nn.Module):
         A = lambda k : batch.edge_index[:, batch.edge_attr[:,0]==k] # edge attr now includes both k-hop and edge type
         A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
         W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
+        W_edge = lambda e, t : self.W_edge["k=1, t=%d, e=%s"%(t,e)]
 
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
@@ -47,8 +48,8 @@ class RelationalDelayGNNStage(nn.Module):
             x.append(batch.x)
             # k = 1
             batch.x = torch.zeros_like(x[t])
-            for e in self.edge_types: # a list of strings
-                batch.x = batch.x + self.W_edge[e](batch, x[t], A_edge(e)).x
+            for e in cfg.edge_types:
+                batch.x = batch.x + W_edge(e,t)(batch, x[t], A_edge(e)).x
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
@@ -61,4 +62,4 @@ class RelationalDelayGNNStage(nn.Module):
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         return batch
 
-# register_stage('rel_delay_gnn', RelationalDelayGNNStage)
+register_stage('rel_delay_gnn', RelationalDelayGNNStage)

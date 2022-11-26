@@ -51,16 +51,6 @@ def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
   model.W = nn.ModuleList(W)
   return model
 
-def add_edge_types_to_model(model, edge_types, dim_in, dim_out):
-  """Adds edge types and edge weight matrices to the model"""
-  # make the W_edge
-  model.edge_types = edge_types
-  W_edge = {}
-  for e in edge_types:
-    W_edge[e] = GNNLayer(dim_in, dim_out)
-  model.W_edge = nn.ModuleDict(W_edge)
-  return model
-
 # # retired
 # def init_khop_LiteGCN(model, dim_in, dim_out, num_layers):
 #   """The lightweight version of the k-hop GCN, with nu_{k,t}W_k instead of W_{k,t}, and W instead of W(t).
