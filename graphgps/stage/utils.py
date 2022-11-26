@@ -51,7 +51,7 @@ def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
   model.W = nn.ModuleList(W)
   return model
 
-def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_first_hop=False)
+def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_first_hop=False):
   """Using weight sharing over k - i.e. \nu_{k,t}W_t rather than W_{k,t}"""
   model.num_layers = num_layers
   model.max_k = cfg.gnn.layers_mp if max_k is None else max_k
