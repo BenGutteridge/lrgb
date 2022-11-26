@@ -21,7 +21,7 @@ runs=(
   # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V7.yaml
 
   # using W_kt with e parts, a la V6, but using A_e now -- this should be a finished version, if it works (still no idea what's wrong w V7 but oh well?)
-  configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V8.yaml
+  # configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V8.yaml
 
   # hopefully the finished, fixed version. The problem was that we were sharing weights across t for the first hop; just having W_e, akin to delite_gcn
     configs/debug_cfgs/peptides-func-RelDelayGCN_L=05_d=064_rbar=inf_Rel_V9.yaml
