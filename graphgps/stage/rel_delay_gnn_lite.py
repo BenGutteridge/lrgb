@@ -20,7 +20,7 @@ class RelationalDelayGNNLiteStage(nn.Module):
         self = init_khop_GCN_lite(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
         print('Using \nu_{kt} for k up to %d' % num_layers)
         print('Edge types: ', cfg.edge_types, '\nAdding edge types to model...')
-        W_edge, nu_edge = {}
+        W_edge, nu_edge = {}, {}
         for e in cfg.edge_types:
             for t in range(num_layers):
                 W_edge['t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
