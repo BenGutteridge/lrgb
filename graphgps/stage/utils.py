@@ -51,6 +51,27 @@ def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
   model.W = nn.ModuleList(W)
   return model
 
+def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_first_hop=False)
+  """Using weight sharing over k - i.e. \nu_{k,t}W_t rather than W_{k,t}"""
+  model.num_layers = num_layers
+  model.max_k = cfg.gnn.layers_mp if max_k is None else max_k
+  W_t = {}
+  nu_kt = {}
+  if cfg.rbar == -1: # can't set inf in cfg
+    model.rbar = float('inf')
+  else:
+    model.rbar = cfg.rbar # default 1
+  t0 = 1 if skip_first_hop else 0
+  for t in range(t0, num_layers):
+      d_in = dim_in if t == 0 else dim_out
+      W_t["t=%d" % t] = GNNLayer(d_in, dim_out)
+      K = min(model.max_k, t+1)
+      for k in range(1, K+1):
+          nu_kt["k=%d, t=%d" % (k,t)] = nn.Parameter(torch.ones(1), requires_grad=True)
+  model.W_t = nn.ModuleDict(W_t)
+  model.nu_kt = nn.ParameterDict(nu_kt)
+  return model
+
 # # retired
 # def init_khop_LiteGCN(model, dim_in, dim_out, num_layers):
 #   """The lightweight version of the k-hop GCN, with nu_{k,t}W_k instead of W_{k,t}, and W instead of W(t).

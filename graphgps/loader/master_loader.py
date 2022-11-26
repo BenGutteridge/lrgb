@@ -189,6 +189,7 @@ def load_dataset_master(format, name, dataset_dir):
         'k_gnn',
         'delite_gnn',
         'rel_delay_gnn',
+        'rel_delay_gnn_lite',
     ]
     if cfg.gnn.stage_type in multi_hop_stages:
         max_k = max(cfg.gnn.layers_mp, cfg.alpha)
