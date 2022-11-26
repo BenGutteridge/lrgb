@@ -23,7 +23,7 @@ class RelationalDelayGNNStage_v9(nn.Module):
         W_edge = {}
         for e in cfg.edge_types:
             for t in range(num_layers):
-                self.W_edge['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
+                W_edge['k=1, t=%d, e=%s'%(t,e)] = GNNLayer(dim_in, dim_out)
         self.W_edge = nn.ModuleDict(W_edge)
         #####
 
