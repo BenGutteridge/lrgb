@@ -5,7 +5,7 @@ mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
   # see below, rbar manually changed to -1
-  configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
+  # configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
   configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=15_d=060_rbar=01.yaml
   configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=17_rbar=01.yaml
   configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=19_rbar=01.yaml

@@ -4,7 +4,7 @@ BATCH="pept-func-rel_rGCN_large_L_r*=1"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
-configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
+# configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=15_d=060_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=17_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=19_rbar=01.yaml
