@@ -21,6 +21,6 @@ configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=29_rbar=01.yaml
 )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-  python main.py --cfg "$run" --repeat 1 rbar -1 device cuda dataset.dir /data/beng/datasets out_dir "results/$BATCH" optim.max_epoch 300 use_edge_labels True gnn.stage_type rel_delay_gnn_lite gnn.dim_inner 128 train.batch_size 256
+  python main.py --cfg "$run" --repeat 1 rbar -1 device cuda dataset.dir /data/beng/datasets out_dir "results/$BATCH" optim.max_epoch 300 use_edge_labels True gnn.stage_type rel_delay_gnn_lite gnn.dim_inner 128 train.batch_size 128
   python bash_scripts/progress_bar.py "$run"
 done
