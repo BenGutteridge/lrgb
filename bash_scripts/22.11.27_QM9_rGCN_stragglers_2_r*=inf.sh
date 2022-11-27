@@ -23,6 +23,6 @@ configs/rbar-GCN/rbar=01/QM9-rGCN_L=23_r=01.yaml
 )
 for run in "${runs[@]}" ; do
   # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-  python main.py --cfg "$run" --repeat 1 rbar -1 device cuda dataset.dir /data/beng/datasets out_dir "results/$BATCH" optim.max_epoch 300 train.batch_size 1024 gnn.dim_inner 128
+  python main.py --cfg "$run" --repeat 1 rbar -1 device cuda dataset.dir /data/beng/datasets out_dir "results/$BATCH" optim.max_epoch 300 train.batch_size 512 gnn.dim_inner 128
   python bash_scripts/progress_bar.py "$run"
 done
