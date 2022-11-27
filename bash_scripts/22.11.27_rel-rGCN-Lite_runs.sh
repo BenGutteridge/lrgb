@@ -7,8 +7,8 @@ runs=(
 # configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=05_d=175_rbar=01.yaml
 # configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=07_d=130_rbar=01.yaml
 # configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=09_d=100_rbar=01.yaml
-configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=11_d=085_rbar=01.yaml
-configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
+# configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=11_d=085_rbar=01.yaml
+# configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=13_d=070_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=15_d=060_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=17_rbar=01.yaml
 configs/rbar-GCN/rbar=01/peptides-func-DelayGCN_L=19_rbar=01.yaml
