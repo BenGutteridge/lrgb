@@ -46,7 +46,8 @@ class AlphaGNNStage(nn.Module):
             x = batch.x
             batch.x = torch.zeros_like(x)
             for k in range(1, alpha+1):
-                batch.x = batch.x + W(t,k)(batch, x, A(k)).x
+                if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
+                    batch.x = batch.x + W(t,k)(batch, x, A(k)).x
             batch.x = x + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)

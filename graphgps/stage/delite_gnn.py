@@ -43,7 +43,8 @@
 #             x.append(batch.x)
 #             batch.x = torch.zeros_like(x[t])
 #             for k in range(1, (t+1)+1):
-#                 batch.x = batch.x + nu(k,t) * W(k)(batch, x[t+1-k], A(k)).x
+#                   if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
+#                   batch.x = batch.x + nu(k,t) * W(k)(batch, x[t+1-k], A(k)).x
 #             batch.x = x[t] + nn.ReLU()(batch.x)
 #             if cfg.gnn.l2norm: # normalises after every layer
 #                 batch.x = F.normalize(batch.x, p=2, dim=-1)
