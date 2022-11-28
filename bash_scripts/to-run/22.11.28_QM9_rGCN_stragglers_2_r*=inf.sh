@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-BATCH="QM9_non-rel_stragglers_d=128"
+BATCH="22.11.28_QM9_rGCN_stragglers_1_r*=inf.sh"
 mkdir -p "results/$BATCH"
 python bash_scripts/progress_bar.py
 runs=(
