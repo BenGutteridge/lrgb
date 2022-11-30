@@ -16,8 +16,8 @@ batch_sizes=(
 )
 
 for bs in "${batch_sizes[@]}" ; do
-  mkdir -p "results/$DIR_NAME_bs=$bs"
-  DIR="results/$DIR_NAME_bs=$bs"
+  mkdir -p "results/$DIR_NAME\_=$bs"
+  DIR="results/$DIR_NAME\_bs=$bs"
   for run in "${runs[@]}" ; do
     # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
     python main.py --cfg "$run" --repeat 1 device cuda dataset.dir /data/beng/datasets out_dir "results/$DIR" optim.max_epoch 300 train.batch_size "$bs" gnn.dim_inner 64
