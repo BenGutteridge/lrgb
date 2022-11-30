@@ -8,7 +8,7 @@ configs/alphaGCN/QM9-alphaGCN_L=05.yaml
 configs/alphaGCN/QM9-alphaGCN_L=09.yaml
 configs/alphaGCN/QM9-alphaGCN_L=15.yaml
 )
-batch_sizes = (
+batch_sizes=(
   128
   256
   512
