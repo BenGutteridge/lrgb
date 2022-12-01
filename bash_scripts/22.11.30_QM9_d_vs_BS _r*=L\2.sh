@@ -32,7 +32,7 @@ for d in "${hidden_dims[@]}" ; do
         rbar=$((num_layers/2))
         echo "rbar = $rbar"
         # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-        python main.py --cfg "$run" --repeat 1 rbar "$rbar" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 300 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+        python main.py --cfg "$run" --repeat 1 rbar "$rbar" device cuda dataset.dir datasets out_dir "$DIR" optim.max_epoch 300 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
         python bash_scripts/progress_bar.py "$run"
       done
     done
