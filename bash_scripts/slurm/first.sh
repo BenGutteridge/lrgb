@@ -19,8 +19,9 @@
 #SBATCH --mail-user=gutterboyben@gmail.com
 
 # run the application
-module load cuda/10.2
-module load python/anaconda3
-conda activate lrgb2
+module load tmux
+# module load cuda/10.2
+# module load python/anaconda3
+# conda activate lrgb2
 echo "HAVE RUN"
 # python check_cuda.py
