@@ -25,5 +25,6 @@ source $condaDotFile
 conda activate lrgb2
 conda info --
 echo $CONDA_DEFAULT_ENV
+conda list
 echo "HAVE RUN"
 python check_cuda.py
