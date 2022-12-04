@@ -19,4 +19,8 @@
 #SBATCH --mail-user=gutterboyben@gmail.com
 
 # run the application
+module load cuda/10.2
+module load python/anaconda3
+conda activate lrgb2
+cd lrgb/bash_scripts/slurm
 python check_cuda.py
