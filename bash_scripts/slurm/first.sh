@@ -22,4 +22,5 @@
 module load cuda/10.2
 module load python/anaconda3
 conda activate lrgb2
-python check_cuda.py
+echo "HAVE RUN"
+# python check_cuda.py
