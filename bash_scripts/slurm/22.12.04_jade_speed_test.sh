@@ -3,7 +3,7 @@ cd ../..
 DIR_NAME="jade_speed_test"
 python bash_scripts/progress_bar.py
 runs=(
-configs/rbar-GCN/rbar=01/QM9-rGCN_L=05_r=inf.yaml
+configs/rbar-GCN/rbar=inf/peptides-func-DelayGCN_L=05_d=175_rbar=inf.yaml
 )
 batch_sizes=(
   128
