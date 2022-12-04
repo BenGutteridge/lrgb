@@ -31,7 +31,7 @@ for d in "${hidden_dims[@]}" ; do
     for run in "${runs[@]}" ; do
       echo "RUN: $DIR"
       # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-      python3 main.py --cfg "$run" --repeat 3 device cuda dataset.dir datasets out_dir "$DIR" optim.max_epoch 300 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+      python3 main.py --cfg "$run" --repeat 3 device cuda dataset.dir datasets out_dir "$DIR" optim.max_epoch 1 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
       python3 bash_scripts/progress_bar.py "$run"
     done
   done
