@@ -23,5 +23,7 @@ module load cuda/10.2
 module load python/anaconda3
 source $condaDotFile
 conda activate lrgb2
+conda info --
+echo $CONDA_DEFAULT_ENV
 echo "HAVE RUN"
 python check_cuda.py
