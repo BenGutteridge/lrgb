@@ -20,8 +20,8 @@
 
 # run the application
 module load tmux
-# module load cuda/10.2
-# module load python/anaconda3
-# conda activate lrgb2
+module load cuda/10.2
+module load python/anaconda3
+conda activate lrgb2
 echo "HAVE RUN"
-# python check_cuda.py
+python check_cuda.py
