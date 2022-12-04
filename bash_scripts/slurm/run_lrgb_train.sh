@@ -23,7 +23,7 @@ module load cuda/10.2
 module load python/anaconda3
 source $condaDotFile
 conda activate lrgb2
-conda info --
+# conda info --
 echo $CONDA_DEFAULT_ENV
 # conda list
-bash 22.12.04_QM9_d_vs_BS_rbar=inf.sh
+bash 22.12.04_jade_speed_test.sh
