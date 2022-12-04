@@ -26,4 +26,4 @@ conda activate lrgb2
 conda info --
 echo $CONDA_DEFAULT_ENV
 # conda list
-python check_cuda.py
+python3 check_cuda.py
