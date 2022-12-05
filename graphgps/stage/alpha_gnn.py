@@ -6,7 +6,6 @@ import torch
 from .example import GNNLayer
 from .utils import init_khop_nondynamic_GCN
 
-# @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class AlphaGNNStage(nn.Module):
     """
     \alpha_GNN: 
@@ -29,7 +28,8 @@ class AlphaGNNStage(nn.Module):
                                         num_layers, 
                                         max_k=alpha)
         for t in range(num_layers):
-            assert len(self.W[t]) == alpha
+            assert len(self.W[t]) == self.max_k
+        # add Res- edge handling (don't forget change to d)
 
     def forward(self, batch):
         """

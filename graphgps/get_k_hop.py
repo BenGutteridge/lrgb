@@ -1,8 +1,29 @@
 import torch
 from torch_geometric.utils import to_dense_adj, dense_to_sparse
 from tqdm import tqdm
-from torch_geometric.graphgym.config import cfg
 
+def get_next_k_hop(edge_indices_1_to_k):
+  A = {}
+  for k, ei_k in zip(range(1,len(edge_indices_1_to_k)+1), edge_indices_1_to_k):
+    A[k] = to_dense_adj(ei_k).float()
+  A_1 = A[1].to_sparse().float()
+  
+  A_k_plus_1 = torch.bmm(A_1, A[k])
+  for i in range(A_k_plus_1.shape[-1]):
+    A_k_plus_1[0, i, i] = 0 # remove self-connections
+  A_k_plus_1 = (A_k_plus_1>0).float() # remove edge multiples
+  for A_i in A.values():
+    A_k_plus_1 -= A_i
+  A_k_plus_1 = (A_k_plus_1>0).float() # remove -ves, cancelled edges
+  edge_index_k_plus_1 = dense_to_sparse(A_k_plus_1)[0]
+  if torch.sum(A_k_plus_1) == 0:
+    return # matrix is empty, no (k+1)-hop connections
+  return edge_index_k_plus_1
+
+
+
+
+#######
 def get_edge_labels(dataset):
   """takes in PyG dataset object and spits out some edge labels"""
   e = dataset.data.edge_attr

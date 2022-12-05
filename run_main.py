@@ -104,7 +104,7 @@ def run_loop_settings():
     return run_ids, seeds, split_indices
 
 # model = 'DelayGCN'
-model = 'GCN'
+# model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -112,14 +112,19 @@ model = 'GCN'
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
+
+# argpath = 'configs/alphaGCN/peptides-func-alphaGCN_L=21_d=032.yaml'
+
+# argpath = 'configs/alphaGCN/QM9-alphaGCN_L=13.yaml'
+argpath = 'configs/DelayGCN/500k_stretched/peptides-func-DelayGCN_L=07_d=130.yaml'
 
 repeat = 1
 import argparse
@@ -137,15 +142,15 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'optim.max_epoch 3',
+        'optim.max_epoch 1',
         # 'gnn.layer_type my_gcnconv',
         # 'gnn.stage_type rel_delay_gnn',
         # 'rbar 3',
         'gnn.dim_inner 16',
-        'gnn.layers_mp 1',
+        # 'gnn.layers_mp 4',
         # 'beta 3',
         'dataset.dir datasets',
-        'device cuda',
+        # 'device cuda',
         # 'alpha 6',
         # 'dataset.edge_encoder False'
         # 'use_edge_labels True',

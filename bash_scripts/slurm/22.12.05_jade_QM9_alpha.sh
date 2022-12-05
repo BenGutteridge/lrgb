@@ -1,8 +1,8 @@
 #!/bin/bash
 cd ../..
-DIR_NAME="22.12.05_jade_QM9_alpha"
+DIR_NAME="22.12.05_jade_QM9_alpha_REALLY_ALPHA"
 runs=(
-configs/alphaGCN/peptides-func-alphaGCN_L=05_d=140.yaml
+configs/alphaGCN/QM9-alphaGCN_L=05.yaml
 )
 batch_sizes=(
   128

@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_GCN, init_khop_GCN_v2
+from .utils import init_khop_GCN_v2
 
 class RelationalDelayGNNStage(nn.Module):
     """

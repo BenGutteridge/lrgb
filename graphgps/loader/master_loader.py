@@ -130,6 +130,7 @@ def load_dataset_master(format, name, dataset_dir):
             dataset = preformat_ZINC(dataset_dir, name)
 
         elif pyg_dataset_id == 'QM9':
+            cfg.max_graph_diameter = 10
             dataset = preformat_QM9(dataset_dir)
 
 
