@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ../..
-DIR_NAME="22.12.05_jade_QM9_alpha_REALLY_ALPHA"
+DIR_NAME="22.12.05_jade_QM9_alpha_REALLY_QM9"
 runs=(
 configs/alphaGCN/QM9-alphaGCN_L=05.yaml
 )
