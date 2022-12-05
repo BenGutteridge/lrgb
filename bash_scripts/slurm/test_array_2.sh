@@ -4,10 +4,10 @@
 #SBATCH --nodes=1
 
 # set max wallclock time
-#SBATCH --time=12:00:00
+#SBATCH --time=36:00:00
 
 # set name of job
-#SBATCH --job-name=jade_test
+#SBATCH --job-name=jade_qm9_alpha
 
 # set number of GPUs
 #SBATCH --gres=gpu:1
@@ -26,4 +26,4 @@ conda activate lrgb2
 conda info --
 echo $CONDA_DEFAULT_ENV
 # conda list
-bash 22.12.04_jade_speed_test_2.sh "${SLURM_ARRAY_TASK_ID}"
+bash 22.12.05_jade_QM9_alpha.sh "${SLURM_ARRAY_TASK_ID}"
