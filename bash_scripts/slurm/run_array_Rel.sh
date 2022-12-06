@@ -27,13 +27,14 @@ conda info --
 echo $CONDA_DEFAULT_ENV
 # conda list
 # bash 22.12.05_jade_QM9_alpha.sh "${SLURM_ARRAY_TASK_ID}"
-bash 22.12.06_jade_QM9_Rel-rbar=01.sh "${SLURM_ARRAY_TASK_ID}" &
-      bash 22.12.06_jade_QM9_Rel-rbar=03.sh "${SLURM_ARRAY_TASK_ID}" &
-      bash 22.12.06_jade_QM9_Rel-rbar=half_L.sh "${SLURM_ARRAY_TASK_ID}" &
-      bash 22.12.06_jade_QM9_Rel-rbar=inf.sh "${SLURM_ARRAY_TASK_ID}" &
-      bash 22.12.06_jade_QM9_Rel-rbar=L-2.sh "${SLURM_ARRAY_TASK_ID}" &
-      bash 22.12.06_jade_QM9_Rel-rbar=01.sh "$(({SLURM_ARRAY_TASK_ID}+10))" &
-      bash 22.12.06_jade_QM9_Rel-rbar=03.sh "$(({SLURM_ARRAY_TASK_ID}+10))" &
-      bash 22.12.06_jade_QM9_Rel-rbar=half_L.sh "$(({SLURM_ARRAY_TASK_ID}+10))" &
-      bash 22.12.06_jade_QM9_Rel-rbar=inf.sh "$(({SLURM_ARRAY_TASK_ID}+10))" &
-      bash 22.12.06_jade_QM9_Rel-rbar=L-2.sh "$(({SLURM_ARRAY_TASK_ID}+10))"
+L="${SLURM_ARRAY_TASK_ID}"
+bash 22.12.06_jade_QM9_Rel-rbar=01.sh "$L" &
+      bash 22.12.06_jade_QM9_Rel-rbar=03.sh "$L" &
+      bash 22.12.06_jade_QM9_Rel-rbar=half_L.sh "$L" &
+      bash 22.12.06_jade_QM9_Rel-rbar=inf.sh "$L" &
+      bash 22.12.06_jade_QM9_Rel-rbar=L-2.sh "$L" &
+      bash 22.12.06_jade_QM9_Rel-rbar=01.sh "$((L+10))" &
+      bash 22.12.06_jade_QM9_Rel-rbar=03.sh "$((L+10))" &
+      bash 22.12.06_jade_QM9_Rel-rbar=half_L.sh "$((L+10))" &
+      bash 22.12.06_jade_QM9_Rel-rbar=inf.sh "$((L+10))" &
+      bash 22.12.06_jade_QM9_Rel-rbar=L-2.sh "$((L+10))"
