@@ -27,7 +27,8 @@ conda info --
 echo $CONDA_DEFAULT_ENV
 # conda list
 # bash 22.12.05_jade_QM9_alpha.sh "${SLURM_ARRAY_TASK_ID}"
-echo "${SLURM_ARRAY_TASK_ID}" & echo "$(({SLURM_ARRAY_TASK_ID}+10))" 
+N="${SLURM_ARRAY_TASK_ID}"
+echo $N & echo $((N+10))
       # bash 22.12.06_jade_QM9_rbar=03.sh "${SLURM_ARRAY_TASK_ID}" &
       # bash 22.12.06_jade_QM9_rbar=half_L.sh "${SLURM_ARRAY_TASK_ID}" &
       # bash 22.12.06_jade_QM9_rbar=inf.sh "${SLURM_ARRAY_TASK_ID}" &
