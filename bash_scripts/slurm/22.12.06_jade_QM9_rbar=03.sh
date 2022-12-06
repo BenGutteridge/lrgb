@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ../..
-DIR_NAME="22.12.06_jade_QM9_rbar=half_L"
+DIR_NAME="22.12.06_jade_QM9_rbar=03"
 runs=(
 configs/rbar-GCN/QM9-rGCN.yaml
 )
