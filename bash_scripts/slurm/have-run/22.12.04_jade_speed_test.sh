@@ -21,7 +21,7 @@ num_layers=(
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
     for bs in "${batch_sizes[@]}" ; do
-      DIR="results/$DIR_NAME\_bs=$bs\_d=$d\_L=$L"
+      DIR="results/${DIR_NAME}_bs=${bs}_d=${d}_L=${L}"
       mkdir -p DIR
       for run in "${runs[@]}" ; do
         echo "RUN: $DIR"
