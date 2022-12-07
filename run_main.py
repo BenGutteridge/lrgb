@@ -124,7 +124,8 @@ def run_loop_settings():
 # argpath = 'configs/alphaGCN/peptides-func-alphaGCN_L=21_d=032.yaml'
 
 # argpath = 'configs/alphaGCN/QM9-alphaGCN_L=13.yaml'
-argpath = 'configs/DelayGCN/500k_stretched/peptides-func-DelayGCN_L=07_d=130.yaml'
+# argpath = 'configs/DelayGCN/500k_stretched/peptides-func-DelayGCN_L=07_d=130.yaml'
+argpath = 'configs/rbar-GCN/QM9-rGCN.yaml'
 
 repeat = 1
 import argparse
@@ -144,7 +145,7 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         'optim.max_epoch 1',
         # 'gnn.layer_type my_gcnconv',
-        # 'gnn.stage_type rel_delay_gnn',
+        'gnn.stage_type rel_delay_gnn',
         # 'rbar 3',
         'gnn.dim_inner 16',
         # 'gnn.layers_mp 4',
@@ -153,7 +154,7 @@ def parse_args() -> argparse.Namespace:
         # 'device cuda',
         # 'alpha 6',
         # 'dataset.edge_encoder False'
-        # 'use_edge_labels True',
+        'use_edge_labels True',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
