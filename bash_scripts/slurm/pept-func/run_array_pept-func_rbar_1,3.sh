@@ -18,6 +18,9 @@
 # send mail to this address
 #SBATCH --mail-user=gutterboyben@gmail.com
 
+# puts outfiles in outfiles folder
+#SBATCH -o ./outfiles/output.%a.out # STDOUT
+
 # run the application
 module load cuda/10.2
 module load python/anaconda3
