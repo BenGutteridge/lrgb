@@ -6,8 +6,8 @@ runs=(
 configs/rbar-GIN/QM9-r*GIN.yaml
 )
 batch_sizes=(
-  # 128
-  1024
+  128
+  # 1024
 )
 hidden_dims=(
   128
