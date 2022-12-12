@@ -23,7 +23,7 @@ train:
   eval_period: 1
   ckpt_period: 100
 model:
-  type: flattened_delay_gin
+  type: custom_gnn
   loss_fun: l1
   edge_decoding: dot
   graph_pooling: add
