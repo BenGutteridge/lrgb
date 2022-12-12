@@ -192,9 +192,11 @@ def load_dataset_master(format, name, dataset_dir):
         'rel_delay_gnn',
         'rel_delay_gnn_lite',
     ]
-    if cfg.gnn.stage_type in multi_hop_stages:
+    multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine']
+
+    if cfg.gnn.stage_type in multi_hop_stages or cfg.model.type in multi_hop_models:
         max_k = max(cfg.gnn.layers_mp, cfg.alpha)
-        print('Stage type %s, using %d-hops' % (cfg.gnn.stage_type, max_k))
+        print('Stage type %s, model type %s, using %d-hops' % (cfg.gnn.stage_type, cfg.model.type, max_k))
         # get k-hop edge amended dataset - either load or make it
         cluster_filedir = '/data/beng' # data location for aimscdt cluster
         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
@@ -584,6 +586,9 @@ def preformat_QM9(dataset_dir):
     #     [ZINC(root=dataset_dir, subset=(name == 'subset'), split=split)
     #      for split in ['train', 'val', 'test']]
     # )
+
+    cfg.dataset.regression_targets = ['mu', 'alpha', 'epsilon_HOMO', 'epsilon_LUMO', 'gap', 'r2', 'zpve', 'U0', 'U', 'H', 'G', 'Cv', 'U0_atom', 'U_atom', 'H_atom', 'G_atom', 'rot_A', 'rot_B', 'rot_C']
+
     return QM9(root=dataset_dir)
 
 
