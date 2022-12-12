@@ -3,7 +3,7 @@ cd ..
 DIR_NAME="22.12.12_QM9_GINE"
 # python bash_scripts/progress_bar.py
 runs=(
-configs/rbar-GIN/QM9-r*GIN.yaml
+configs/GINE/QM9-GINE.yaml
 )
 batch_sizes=(
   # 128

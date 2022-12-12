@@ -42,9 +42,9 @@ class GIN(nn.Module):
             "The inner and hidden dims must match."
 
         layers = []
-        for _ in range(cfg.gnn.layers_mp):
-            layers.append(GINConvLayer(dim_in))
-        self.gnn_layers = torch.nn.ModuleList(layers)              
+        for t in range(cfg.gnn.layers_mp):
+            layers.append(GINConvLayer(t, dim_in))
+        self.gnn_layers = torch.nn.ModuleList(layers)     
 
         GNNHead = register.head_dict[cfg.gnn.head]
         self.post_mp = GNNHead(dim_in=cfg.gnn.dim_inner, dim_out=dim_out)
@@ -71,12 +71,13 @@ class GINConvLayer(nn.Module):
     """
     Just a nn.Module wrapper for the MessagePassing GINConv
     """
-    def __init__(self, hidden_dim):
+    def __init__(self, t, hidden_dim):
         super().__init__()
         gin_nn = nn.Sequential(
             pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU(),
             pyg_nn.Linear(hidden_dim, hidden_dim)) # dim_out just for head
-        self.model = GINConv(gin_nn)
+        nu = nn.Parameter(torch.rand(t+1))
+        self.model = GINConv(gin_nn, nu)
 
     def forward(self, t, xs, batch):
         batch.x = self.model(t, xs, batch.edge_index, 
@@ -113,11 +114,13 @@ class GINConv(MessagePassing):
         **kwargs (optional): Additional arguments of
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
-    def __init__(self, nn: Callable, eps: float = 0., train_eps: bool = False,
+    def __init__(self, nn: Callable, nu, 
+                 eps: float = 0., train_eps: bool = False,
                  **kwargs):
         kwargs.setdefault('aggr', 'add')
         super(GINConv, self).__init__(**kwargs)
         self.nn = nn
+        self.nu = nu # weights for convex combination of k=1-t layers
         self.initial_eps = eps
         if train_eps:
             self.eps = torch.nn.Parameter(torch.Tensor([eps]))
@@ -157,14 +160,19 @@ class GINConv(MessagePassing):
         # propagate_type: (x: OptPairTensor, edge_attr: OptTensor)
 
         A = lambda k : edge_indices[:, edge_attr==k]
+        nu_norm = F.softmax(self.nu, dim=0) # for convex combination
+        nu = lambda k : nu_norm[k-1]
 
         # TODO add alpha weights
         # k=1
-        out = self.propagate(A(1), x=x, size=size)
+        out = nu(1) * self.propagate(A(1), x=x, size=size)
         # k>1
         for k in range(2, t+2):
-            delay = max(k - cfg.rbar, 0)
-            out += self.propagate(A(k), x=xs[t-delay], size=size)
+            if A(k).shape[1] == 0:
+                continue # skip if no edges
+            else:
+                delay = max(k - cfg.rbar, 0)
+                out += nu(k) * self.propagate(A(k), x=xs[t-delay], size=size)
 
         x_r = x[1]
         if x_r is not None:
