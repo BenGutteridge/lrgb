@@ -22,7 +22,7 @@ from torch_sparse import SparseTensor, matmul
 
 class DelayGIN(nn.Module):
     """
-    DelayGIN, flattened down to a single python file
+    GIN, flattened down to a single python file
     """
 
     def __init__(self, dim_in, dim_out):
@@ -43,7 +43,7 @@ class DelayGIN(nn.Module):
 
         layers = []
         for t in range(cfg.gnn.layers_mp):
-            layers.append(GINConvLayer(t, dim_in))
+            layers.append(DelayGINConvLayer(t, dim_in))
         self.gnn_layers = torch.nn.ModuleList(layers)     
 
         GNNHead = register.head_dict[cfg.gnn.head]
@@ -65,19 +65,23 @@ class DelayGIN(nn.Module):
         return batch
 
 
-register_network('flattened_delay_gin', DelayGIN)
+register_network('flattened_delay_gin_v2', DelayGIN)
 
 class DelayGINConvLayer(nn.Module):
     """
-    Just a nn.Module wrapper for the MessagePassing DelayGINConv
+    Just a nn.Module wrapper for the MessagePassing GINConv
     """
     def __init__(self, t, hidden_dim):
         super().__init__()
         gin_nn = nn.Sequential(
             pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU(),
             pyg_nn.Linear(hidden_dim, hidden_dim)) # dim_out just for head
-        nu = nn.Parameter(torch.rand(t+1))
-        self.model = DelayGINConv(gin_nn, nu)
+        mlp_s = pyg_nn.Linear(hidden_dim, hidden_dim)
+        mlp_k = nn.ModuleList([pyg_nn.Linear(hidden_dim, hidden_dim) for k in range(1, t+2)])
+        self.all_modules = nn.ModuleDict(dict(gin_nn=gin_nn, # making an attr of the module so it shows in model summary (hopefully)
+                                     mlp_s=mlp_s,
+                                     mlp_k=mlp_k))
+        self.model = DelayGINConv(self.all_modules)
 
     def forward(self, t, xs, batch):
         batch.x = self.model(t, xs, batch.edge_index, 
@@ -114,13 +118,14 @@ class DelayGINConv(MessagePassing):
         **kwargs (optional): Additional arguments of
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
-    def __init__(self, nn: Callable, nu, 
+    def __init__(self, modules: nn.ModuleDict,
                  eps: float = 0., train_eps: bool = False,
                  **kwargs):
         kwargs.setdefault('aggr', 'add')
         super(DelayGINConv, self).__init__(**kwargs)
-        self.nn = nn
-        self.nu = nu # weights for convex combination of k=1-t layers
+        self.nn = modules['gin_nn']
+        self.mlp_s = modules['mlp_s'] # for the self-connection ((1+eps) weighted)
+        self.mlp_k = modules['mlp_k'] # for the k-hop aggregations (list)
         self.initial_eps = eps
         if train_eps:
             self.eps = torch.nn.Parameter(torch.Tensor([eps]))
@@ -145,23 +150,23 @@ class DelayGINConv(MessagePassing):
         # propagate_type: (x: OptPairTensor, edge_attr: OptTensor)
 
         A = lambda k : edge_indices[:, edge_attr==k]
-        nu_norm = F.softmax(self.nu, dim=0) # for convex combination
-        nu = lambda k : nu_norm[k-1]
+        mlp = lambda k : self.mlp_k[k-1]
 
         # TODO add alpha weights
         # k=1
-        out = nu(1) * self.propagate(A(1), x=x, size=size)
+        out = self.propagate(A(1), x=x, size=size)
+        out = mlp(1)(out)
         # k>1
         for k in range(2, t+2):
             if A(k).shape[1] == 0:
                 continue # skip if no edges
             else:
                 delay = max(k - cfg.rbar, 0)
-                out += nu(k) * self.propagate(A(k), x=xs[t-delay], size=size)
+                out += mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
 
         x_r = x[1]
         if x_r is not None:
-            out += (1 + self.eps) * x_r
+            out += (1 + self.eps) * self.mlp_s(x_r)
 
         return self.nn(out)
 

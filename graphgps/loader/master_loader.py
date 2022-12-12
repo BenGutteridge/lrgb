@@ -192,7 +192,7 @@ def load_dataset_master(format, name, dataset_dir):
         'rel_delay_gnn',
         'rel_delay_gnn_lite',
     ]
-    multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine']
+    multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2']
 
     if cfg.gnn.stage_type in multi_hop_stages or cfg.model.type in multi_hop_models:
         max_k = max(cfg.gnn.layers_mp, cfg.alpha)
