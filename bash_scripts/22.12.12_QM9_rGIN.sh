@@ -11,11 +11,7 @@ batch_sizes=(
 hidden_dims=(
   128
 )
-num_layers=(
-5
-8
-11
-)
+num_layers=$1
 
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
