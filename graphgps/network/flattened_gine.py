@@ -72,7 +72,8 @@ class GINEConvLayer(nn.Module):
         gin_nn = nn.Sequential(
             pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU(),
             pyg_nn.Linear(hidden_dim, hidden_dim)) # dim_out just for head
-        self.model = GINEConv(gin_nn)
+        edge_dim = cfg.edge_dim if not cfg.edge_dim == 0 else None
+        self.model = GINEConv(gin_nn, edge_dim=edge_dim)
 
     def forward(self, batch):
         batch.x = self.model(batch.x, batch.edge_index, batch.edge_attr)

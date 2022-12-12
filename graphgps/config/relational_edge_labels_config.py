@@ -16,6 +16,7 @@ def set_cfg_edge_labels(cfg):
     # max rbar for the betaGCN model - i.e. vanilla GCN w/ adjacency for FC graph up to beta hops
     cfg.use_edge_labels = False
     cfg.edge_types = [] # fills in automatically
+    cfg.edge_dim = 0 # fills in automatically
 
 
 register_config('edge_labels', set_cfg_edge_labels)

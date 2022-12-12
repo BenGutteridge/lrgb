@@ -23,7 +23,7 @@ train:
   eval_period: 1
   ckpt_period: 100
 model:
-  type: flattened_gine
+  type: flattened_gin
   loss_fun: l1
   edge_decoding: dot
   graph_pooling: add
@@ -32,7 +32,7 @@ gnn:
   layers_mp: 5
   layers_post_mp: 1
   dim_inner: 175
-  # layer_type: gineconv
+  layer_type: gineconv
   # stage_type: delay_gnn
   batchnorm: True
   act: prelu

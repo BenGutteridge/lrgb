@@ -588,7 +588,7 @@ def preformat_QM9(dataset_dir):
     # )
 
     cfg.dataset.regression_targets = ['mu', 'alpha', 'epsilon_HOMO', 'epsilon_LUMO', 'gap', 'r2', 'zpve', 'U0', 'U', 'H', 'G', 'Cv', 'U0_atom', 'U_atom', 'H_atom', 'G_atom', 'rot_A', 'rot_B', 'rot_C']
-
+    cfg.edge_dim = 4
     return QM9(root=dataset_dir)
 
 
