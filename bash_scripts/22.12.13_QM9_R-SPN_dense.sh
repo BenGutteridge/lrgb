@@ -26,7 +26,7 @@ for L in "${num_layers[@]}" ; do
       mkdir -p DIR
       for run in "${runs[@]}" ; do
         # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-        python main.py --cfg "$run" --repeat 1 spn.K "$K" model.type "R-SPN_dense" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 100 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+        python main.py --cfg "$run" --repeat 1 use_edge_labels True spn.K "$K" model.type "R-SPN_dense" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 100 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
         # python bash_scripts/progress_bar.py "$run"
       done
     done
