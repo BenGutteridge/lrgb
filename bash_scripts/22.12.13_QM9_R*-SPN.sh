@@ -19,7 +19,7 @@ hidden_dims=(
 )
 num_layers=$1
 
-echo "model type = ${model_type}_L=$L, d=$d, bs=$bs, rbar=$rbar"
+echo "model type = ${model_type}_L=$L, rbar=$rbar"
 
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
