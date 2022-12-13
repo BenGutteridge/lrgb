@@ -7,7 +7,7 @@
 #SBATCH --time=36:00:00
 
 # set name of job
-#SBATCH --job-name=jade_qm9_rbars
+#SBATCH --job-name=c3
 
 # set number of GPUs
 #SBATCH --gres=gpu:1
