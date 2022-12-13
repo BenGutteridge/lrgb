@@ -1,11 +1,9 @@
 #!/bin/bash
 cd ..
 
-model_type="R*-SPN"
+model_type="GINE"
 
-rbar=$2
-
-DIR_NAME="22.12.13_QM9_${model_type}_r*=$rbar"
+DIR_NAME="22.12.13_QM9_${model_type}"
 # python bash_scripts/progress_bar.py
 runs=(
 configs/rbar-GIN/QM9-r*GIN.yaml
@@ -19,7 +17,7 @@ hidden_dims=(
 )
 num_layers=$1
 
-echo "model type = ${model_type}_L=$L, d=$d, bs=$bs, rbar=$rbar"
+echo "model type = ${model_type}_L=$L, d=$d, bs=$bs"
 
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
@@ -28,7 +26,7 @@ for L in "${num_layers[@]}" ; do
       mkdir -p DIR
       for run in "${runs[@]}" ; do
         # python main.py --cfg "$run" --repeat 1 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-        python main.py --cfg "$run" --repeat 1 use_edge_labels True rbar "$rbar" model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 200 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+        python main.py --cfg "$run" --repeat 1 model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 200 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
         # python bash_scripts/progress_bar.py "$run"
       done
     done

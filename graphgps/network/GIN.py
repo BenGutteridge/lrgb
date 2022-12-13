@@ -18,9 +18,11 @@ from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.nn.dense.linear import Linear
 from torch_geometric.nn.inits import reset
 
-class GINE(nn.Module):
+from torch_sparse import SparseTensor, matmul
+
+class GIN(nn.Module):
     """
-    GINE, flattened down to a single python file
+    GIN, flattened down to a single python file
     """
 
     def __init__(self, dim_in, dim_out):
@@ -40,7 +42,7 @@ class GINE(nn.Module):
 
         layers = []
         for _ in range(cfg.gnn.layers_mp):
-            layers.append(GINEConvLayer(dim_in))
+            layers.append(GINConvLayer(dim_in))
         self.gnn_layers = torch.nn.ModuleList(layers)              
 
         GNNHead = register.head_dict[cfg.gnn.head]
@@ -61,36 +63,41 @@ class GINE(nn.Module):
         return batch
 
 
-register_network('flattened_gine', GINE)
+register_network('GIN', GIN)
 
-class GINEConvLayer(nn.Module):
+class GINConvLayer(nn.Module):
     """
-    Just a nn.Module wrapper for the MessagePassing GINEConv
+    Just a nn.Module wrapper for the MessagePassing GINConv
     """
     def __init__(self, hidden_dim):
         super().__init__()
         gin_nn = nn.Sequential(
             pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU(),
             pyg_nn.Linear(hidden_dim, hidden_dim)) # dim_out just for head
-        edge_dim = cfg.edge_dim if not cfg.edge_dim == 0 else None
-        self.model = GINEConv(gin_nn, edge_dim=edge_dim)
+        self.model = GINConv(gin_nn)
 
     def forward(self, batch):
-        batch.x = self.model(batch.x, batch.edge_index, batch.edge_attr)
+        batch.x = self.model(batch.x, batch.edge_index, 
+                            #  batch.edge_attr,
+                             )
         return batch
 
-class GINEConv(MessagePassing):
-    r"""The modified :class:`GINConv` operator from the `"Strategies for
-    Pre-training Graph Neural Networks" <https://arxiv.org/abs/1905.12265>`_
-    paper
+
+class GINConv(MessagePassing):
+    r"""The graph isomorphism operator from the `"How Powerful are
+    Graph Neural Networks?" <https://arxiv.org/abs/1810.00826>`_ paper
 
     .. math::
         \mathbf{x}^{\prime}_i = h_{\mathbf{\Theta}} \left( (1 + \epsilon) \cdot
-        \mathbf{x}_i + \sum_{j \in \mathcal{N}(i)} \mathrm{ReLU}
-        ( \mathbf{x}_j + \mathbf{e}_{j,i} ) \right)
+        \mathbf{x}_i + \sum_{j \in \mathcal{N}(i)} \mathbf{x}_j \right)
 
-    that is able to incorporate edge features :math:`\mathbf{e}_{j,i}` into
-    the aggregation procedure.
+    or
+
+    .. math::
+        \mathbf{X}^{\prime} = h_{\mathbf{\Theta}} \left( \left( \mathbf{A} +
+        (1 + \epsilon) \cdot \mathbf{I} \right) \cdot \mathbf{X} \right),
+
+    here :math:`h_{\mathbf{\Theta}}` denotes a neural network, *.i.e.* an MLP.
 
     Args:
         nn (torch.nn.Module): A neural network :math:`h_{\mathbf{\Theta}}` that
@@ -101,47 +108,33 @@ class GINEConv(MessagePassing):
             (default: :obj:`0.`)
         train_eps (bool, optional): If set to :obj:`True`, :math:`\epsilon`
             will be a trainable parameter. (default: :obj:`False`)
-        edge_dim (int, optional): Edge feature dimensionality. If set to
-            :obj:`None`, node and edge feature dimensionality is expected to
-            match. Other-wise, edge features are linearly transformed to match
-            node feature dimensionality. (default: :obj:`None`)
         **kwargs (optional): Additional arguments of
             :class:`torch_geometric.nn.conv.MessagePassing`.
     """
     def __init__(self, nn: Callable, eps: float = 0., train_eps: bool = False,
-                 edge_dim: Optional[int] = None, **kwargs):
+                 **kwargs):
         kwargs.setdefault('aggr', 'add')
-        super(GINEConv, self).__init__(**kwargs)
+        super(GINConv, self).__init__(**kwargs)
         self.nn = nn
         self.initial_eps = eps
         if train_eps:
             self.eps = torch.nn.Parameter(torch.Tensor([eps]))
         else:
             self.register_buffer('eps', torch.Tensor([eps]))
-        if edge_dim is not None:
-            if hasattr(self.nn[0], 'in_features'):
-                in_channels = self.nn[0].in_features
-            else:
-                in_channels = self.nn[0].in_channels
-            self.lin = Linear(edge_dim, in_channels)
-        else:
-            self.lin = None
         self.reset_parameters()
 
     def reset_parameters(self):
         reset(self.nn)
         self.eps.data.fill_(self.initial_eps)
-        if self.lin is not None:
-            self.lin.reset_parameters()
-    
+
     def forward(self, x: Union[Tensor, OptPairTensor], edge_index: Adj,
-                edge_attr: OptTensor = None, size: Size = None) -> Tensor:
+                size: Size = None) -> Tensor:
         """"""
         if isinstance(x, Tensor):
             x: OptPairTensor = (x, x)
 
-        # propagate_type: (x: OptPairTensor, edge_attr: OptTensor)
-        out = self.propagate(edge_index, x=x, edge_attr=edge_attr, size=size)
+        # propagate_type: (x: OptPairTensor)
+        out = self.propagate(edge_index, x=x, size=size)
 
         x_r = x[1]
         if x_r is not None:
@@ -149,16 +142,13 @@ class GINEConv(MessagePassing):
 
         return self.nn(out)
 
-    def message(self, x_j: Tensor, edge_attr: Tensor) -> Tensor:
-        if self.lin is None and x_j.size(-1) != edge_attr.size(-1):
-            raise ValueError("Node and edge feature dimensionalities do not "
-                             "match. Consider setting the 'edge_dim' "
-                             "attribute of 'GINEConv'")
+    def message(self, x_j: Tensor) -> Tensor:
+        return x_j
 
-        if self.lin is not None:
-            edge_attr = self.lin(edge_attr)
-
-        return (x_j + edge_attr).relu()
+    def message_and_aggregate(self, adj_t: SparseTensor,
+                              x: OptPairTensor) -> Tensor:
+        adj_t = adj_t.set_value(None, layout=None)
+        return matmul(adj_t, x[0], reduce=self.aggr)
 
     def __repr__(self):
         return '{}(nn={})'.format(self.__class__.__name__, self.nn)

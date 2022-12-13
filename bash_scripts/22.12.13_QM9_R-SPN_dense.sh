@@ -3,7 +3,7 @@ cd ..
 
 model_type="R-SPN_dense"
 
-K=10
+K=$2
 
 DIR_NAME="22.12.13_QM9_${model_type}_K=$K"
 # python bash_scripts/progress_bar.py
@@ -19,14 +19,16 @@ hidden_dims=(
 )
 num_layers=$1
 
+echo "model type = ${model_type}_L=$L, d=$d, bs=$bs, K=$K"
+
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
     for bs in "${batch_sizes[@]}" ; do
       DIR="results/$DIR_NAME"
       mkdir -p DIR
       for run in "${runs[@]}" ; do
-        # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-        python main.py --cfg "$run" --repeat 3 use_edge_labels True spn.K "$K" model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 150 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+        # python main.py --cfg "$run" --repeat 1 device cuda dataset.dir /data/beng/datasets train.batch_size 16
+        python main.py --cfg "$run" --repeat 1 use_edge_labels True spn.K "$K" model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 200 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
         # python bash_scripts/progress_bar.py "$run"
       done
     done

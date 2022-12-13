@@ -149,10 +149,11 @@ def parse_args() -> argparse.Namespace:
         'optim.max_epoch 1',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
-        # 'model.type flattened_delay_gin_v2',
+        'model.type GINE',
         # 'model.type flattened_gine',
         # 'model.type R*-SPN',
-        'model.type R-SPN_dense',
+        # 'model.type R-SPN_dense',
+        # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
         # 'rbar -1',
         'gnn.dim_inner 8',
@@ -162,9 +163,9 @@ def parse_args() -> argparse.Namespace:
         # 'device cuda',
         # 'alpha 6',
         'dataset.edge_encoder False',
-        'use_edge_labels True',
+        # 'use_edge_labels True',
         'train.batch_size 128',
-        'spn.K 10',
+        # 'spn.K 10',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
