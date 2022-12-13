@@ -20,6 +20,7 @@ from torch_geometric.graphgym.utils.comp_budget import params_count
 from torch_geometric.graphgym.utils.device import auto_select_device
 from torch_geometric.graphgym.register import train_dict
 from torch_geometric import seed_everything
+from graphgps.ben_utils import custom_set_out_dir
 
 from graphgps.finetuning import load_pretrained_model_cfg, \
     init_model_from_pretrained
@@ -39,19 +40,19 @@ def new_scheduler_config(cfg):
                            max_epoch=cfg.optim.max_epoch)
 
 
-def custom_set_out_dir(cfg, cfg_fname, name_tag):
-    """Set custom main output directory path to cfg.
-    Include the config filename and name_tag in the new :obj:`cfg.out_dir`.
+# def custom_set_out_dir(cfg, cfg_fname, name_tag):
+#     """Set custom main output directory path to cfg.
+#     Include the config filename and name_tag in the new :obj:`cfg.out_dir`.
 
-    Args:
-        cfg (CfgNode): Configuration node
-        cfg_fname (string): Filename for the yaml format configuration file
-        name_tag (string): Additional name tag to identify this execution of the
-            configuration file, specified in :obj:`cfg.name_tag`
-    """
-    run_name = os.path.splitext(os.path.basename(cfg_fname))[0]
-    run_name += f"-{name_tag}" if name_tag else ""
-    cfg.out_dir = os.path.join(cfg.out_dir, run_name)
+#     Args:
+#         cfg (CfgNode): Configuration node
+#         cfg_fname (string): Filename for the yaml format configuration file
+#         name_tag (string): Additional name tag to identify this execution of the
+#             configuration file, specified in :obj:`cfg.name_tag`
+#     """
+#     run_name = os.path.splitext(os.path.basename(cfg_fname))[0]
+#     run_name += f"-{name_tag}" if name_tag else ""
+#     cfg.out_dir = os.path.join(cfg.out_dir, run_name)
 
 
 def custom_set_run_dir(cfg, run_id):
@@ -103,7 +104,7 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
+model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
@@ -148,18 +149,22 @@ def parse_args() -> argparse.Namespace:
         'optim.max_epoch 1',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
-        'model.type flattened_delay_gin_v2',
+        # 'model.type flattened_delay_gin_v2',
         # 'model.type flattened_gine',
+        # 'model.type R*-SPN',
+        'model.type R-SPN_dense',
         # 'gnn.stage_type rel_delay_gnn',
-        # 'rbar 3',
-        'gnn.dim_inner 16',
-        'gnn.layers_mp 5',
+        # 'rbar -1',
+        'gnn.dim_inner 8',
+        'gnn.layers_mp 8',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',
         # 'alpha 6',
-        'dataset.edge_encoder False'
-        # 'use_edge_labels True',
+        'dataset.edge_encoder False',
+        'use_edge_labels True',
+        'train.batch_size 128',
+        'spn.K 10',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

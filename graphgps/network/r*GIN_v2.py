@@ -73,12 +73,14 @@ class DelayGINConvLayer(nn.Module):
     """
     def __init__(self, t, hidden_dim):
         super().__init__()
-        gin_nn = nn.Sequential(
-            pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU(),
-            pyg_nn.Linear(hidden_dim, hidden_dim)) # dim_out just for head
-        mlp_s = pyg_nn.Linear(hidden_dim, hidden_dim)
-        mlp_k = nn.ModuleList([pyg_nn.Linear(hidden_dim, hidden_dim) for k in range(1, t+2)])
-        self.all_modules = nn.ModuleDict(dict(gin_nn=gin_nn, # making an attr of the module so it shows in model summary (hopefully)
+        gin_nn_post = nn.Sequential(
+            # pyg_nn.Linear(hidden_dim, hidden_dim), 
+            # nn.ReLU(),
+            # pyg_nn.Linear(hidden_dim, hidden_dim),
+            )
+        mlp_s = nn.Sequential(pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU())
+        mlp_k = nn.ModuleList([nn.Sequential(pyg_nn.Linear(hidden_dim, hidden_dim), nn.ReLU()) for k in range(1, t+2)])
+        self.all_modules = nn.ModuleDict(dict(gin_nn_post=gin_nn_post, # making an attr of the module so it shows in model summary (hopefully)
                                      mlp_s=mlp_s,
                                      mlp_k=mlp_k))
         self.model = DelayGINConv(self.all_modules)
@@ -123,7 +125,8 @@ class DelayGINConv(MessagePassing):
                  **kwargs):
         kwargs.setdefault('aggr', 'add')
         super(DelayGINConv, self).__init__(**kwargs)
-        self.nn = modules['gin_nn']
+        self.rbar = cfg.rbar if cfg.rbar != -1 else float('inf')
+        self.nn_post = modules['gin_nn_post']
         self.mlp_s = modules['mlp_s'] # for the self-connection ((1+eps) weighted)
         self.mlp_k = modules['mlp_k'] # for the k-hop aggregations (list)
         self.initial_eps = eps
@@ -134,7 +137,7 @@ class DelayGINConv(MessagePassing):
         self.reset_parameters()
 
     def reset_parameters(self):
-        reset(self.nn)
+        reset(self.nn_post)
         self.eps.data.fill_(self.initial_eps)
 
     def forward(self, t: int, # current layer/timestep
@@ -161,14 +164,14 @@ class DelayGINConv(MessagePassing):
             if A(k).shape[1] == 0:
                 continue # skip if no edges
             else:
-                delay = max(k - cfg.rbar, 0)
+                delay = max(k - self.rbar, 0)
                 out += mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
 
         x_r = x[1]
         if x_r is not None:
             out += (1 + self.eps) * self.mlp_s(x_r)
 
-        return self.nn(out)
+        return self.nn_post(out)
 
     def message(self, x_j: Tensor) -> Tensor:
         return x_j

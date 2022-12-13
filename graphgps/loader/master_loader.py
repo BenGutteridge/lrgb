@@ -192,7 +192,8 @@ def load_dataset_master(format, name, dataset_dir):
         'rel_delay_gnn',
         'rel_delay_gnn_lite',
     ]
-    multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2']
+    multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
+                        'R-SPN_dense', 'R*-SPN', 'R-SPN']
 
     if cfg.gnn.stage_type in multi_hop_stages or cfg.model.type in multi_hop_models:
         max_k = max(cfg.gnn.layers_mp, cfg.alpha)
@@ -587,7 +588,7 @@ def preformat_QM9(dataset_dir):
     #      for split in ['train', 'val', 'test']]
     # )
 
-    cfg.dataset.regression_targets = ['mu', 'alpha', 'epsilon_HOMO', 'epsilon_LUMO', 'gap', 'r2', 'zpve', 'U0', 'U', 'H', 'G', 'Cv', 'U0_atom', 'U_atom', 'H_atom', 'G_atom', 'rot_A', 'rot_B', 'rot_C']
+    cfg.dataset.regression_targets = ['mu', 'alpha', 'HOMO', 'LUMO', 'gap', 'r2', 'zpve', 'U0', 'U', 'H', 'G', 'Cv', 'U0_atom', 'U_atom', 'H_atom', 'G_atom', 'rot_A', 'rot_B', 'rot_C']
     cfg.edge_dim = 4
     return QM9(root=dataset_dir)
 

@@ -168,7 +168,7 @@ class CustomLogger(Logger):
                 out[f'mae_task_%02d' % i] = float(mae)
         else:
             for i, mae in enumerate(mae_per_task):
-                out[f'mae_{cfg.dataset.regression_targets[i]}'] = float(mae)
+                out["%02d_%s_mae" % (i, cfg.dataset.regression_targets[i])] = float(mae)
         return out
 
     def update_stats(self, true, pred, loss, lr, time_used, params,

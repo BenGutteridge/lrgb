@@ -2,6 +2,44 @@ import torch
 from torch_geometric.utils import to_dense_adj, dense_to_sparse
 from tqdm import tqdm
 from torch_geometric.graphgym.config import cfg
+import os
+
+def custom_set_out_dir(cfg, cfg_fname, name_tag, default=False):
+    """Set custom main output directory path to cfg.
+    Include the config filename and name_tag in the new :obj:`cfg.out_dir`.
+
+    Args:
+        cfg (CfgNode): Configuration node
+        cfg_fname (string): Filename for the yaml format configuration file
+        name_tag (string): Additional name tag to identify this execution of the
+            configuration file, specified in :obj:`cfg.name_tag`
+    """
+    run_name = get_run_name(cfg_fname, default)
+    run_name += f"-{name_tag}" if name_tag else ""
+    cfg.out_dir = os.path.join(cfg.out_dir, run_name)
+
+
+def get_run_name(cfg_fname, default):
+  dataset_name = ('-' + cfg.dataset.name) if cfg.dataset.name!='none' else ''
+  if default:
+    return os.path.splitext(os.path.basename(cfg_fname))[0]
+  elif cfg.model.type == 'gnn':
+    model = cfg.gnn.stage_type if cfg.beta==1 else 'beta=%d' % cfg.beta
+  elif cfg.model.type == 'custom_gnn':
+    model = cfg.gnn.layer_type
+  else:
+    model = cfg.model.type
+  if cfg.rbar != 1:
+    rbar = '%02d' % cfg.rbar if cfg.rbar != -1 else 'inf'
+    model += '_r*=%s' % rbar
+  if cfg.spn.K != 0:
+    model += '_K=%02d' % cfg.spn.K
+  run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp)
+  cut = ['ides', 'ural', 'tional', 'PyG-', 'OGB-']
+  for c in cut:
+    run_name = run_name.replace(c, '')
+  return run_name
+
 
 def get_edge_labels(dataset):
   """takes in PyG dataset object and spits out some edge labels"""
