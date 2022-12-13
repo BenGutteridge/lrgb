@@ -22,7 +22,7 @@ num_layers=$1
 for L in "${num_layers[@]}" ; do
   for d in "${hidden_dims[@]}" ; do
     for bs in "${batch_sizes[@]}" ; do
-      DIR="results/$DIR_NAME\_bs=$bs"
+      DIR="results/$DIR_NAME"
       mkdir -p DIR
       for run in "${runs[@]}" ; do
         # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
