@@ -3,7 +3,7 @@ cd ..
 
 model_type="R-SPN_dense"
 
-K=5
+K=10
 
 DIR_NAME="22.12.13_QM9_${model_type}_K=$K"
 # python bash_scripts/progress_bar.py
