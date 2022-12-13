@@ -3,7 +3,7 @@ cd ..
 
 model_type="R*-SPN"
 
-K=10
+rbar="-1"
 
 DIR_NAME="22.12.13_QM9_${model_type}_K=$K"
 # python bash_scripts/progress_bar.py
@@ -26,7 +26,7 @@ for L in "${num_layers[@]}" ; do
       mkdir -p DIR
       for run in "${runs[@]}" ; do
         # python main.py --cfg "$run" --repeat 3 device cuda dataset.dir /data/beng/datasets train.batch_size 16
-        python main.py --cfg "$run" --repeat 1 use_edge_labels True rbar 1 model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 150 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
+        python main.py --cfg "$run" --repeat 1 use_edge_labels True rbar "$rbar" model.type "${model_type}" device cuda dataset.dir /data/beng/datasets out_dir "$DIR" optim.max_epoch 150 train.batch_size "$bs" gnn.dim_inner "$d" gnn.layers_mp "$L"
         # python bash_scripts/progress_bar.py "$run"
       done
     done
