@@ -12,5 +12,5 @@ L=$2
 
 for file in "${files[@]}"
 do
-  python main.py --cfg "$file" device cuda dataset.dir datasets rbar "$rbar" gnn.layers_mp "$L"
+  python main.py --cfg "$file" device cuda dataset.dir data/beng/datasets rbar "$rbar" gnn.layers_mp "$L"
 done
