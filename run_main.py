@@ -104,7 +104,7 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
+# model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
@@ -127,8 +127,13 @@ model = 'DelayGCN'
 # argpath = 'configs/alphaGCN/QM9-alphaGCN_L=13.yaml'
 # argpath = 'configs/DelayGCN/500k_stretched/peptides-func-DelayGCN_L=07_d=130.yaml'
 # argpath = 'configs/rbar-GCN/QM9-rGCN.yaml'
-argpath = 'configs/rbar-GIN/QM9-r*GIN.yaml'
+# argpath = 'configs/rbar-GIN/QM9-r*GIN.yaml'
 # argpath = 'configs/GINE/QM9-GINE.yaml'
+
+# argpath = 'configs/GatedGCN/peptides-struct-GatedGCN+RWSE.yaml'
+
+# argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
+argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
 
 repeat = 1
 import argparse
@@ -149,23 +154,26 @@ def parse_args() -> argparse.Namespace:
         'optim.max_epoch 1',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
-        'model.type GINE',
+        # 'model.type GINE',
         # 'model.type flattened_gine',
         # 'model.type R*-SPN',
         # 'model.type R-SPN_dense',
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
-        # 'rbar -1',
-        'gnn.dim_inner 8',
-        'gnn.layers_mp 8',
+        'rbar -1',
+        'gnn.dim_inner 16',
+        'gnn.layers_mp 2',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',
         # 'alpha 6',
-        'dataset.edge_encoder False',
+        # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         'train.batch_size 128',
+        # 'posenc_RWSE.kernel.times_func range(1,17)', # 16 steps for RWPE
+        'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
         # 'spn.K 10',
+        # 'posenc_RWSE.dim_pe 8',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

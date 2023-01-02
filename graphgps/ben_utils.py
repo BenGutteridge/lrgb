@@ -29,6 +29,8 @@ def get_run_name(cfg_fname, default):
     model = cfg.gnn.layer_type
   else:
     model = cfg.model.type
+  if '+' in cfg.dataset.node_encoder_name: # note if PE used
+    model += '_%s' % cfg.dataset.node_encoder_name.split('+')[-1]
   if cfg.rbar != 1:
     rbar = '%02d' % cfg.rbar if cfg.rbar != -1 else 'inf'
     model += '_r*=%s' % rbar
