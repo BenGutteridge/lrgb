@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ..
 
 # various r*, L=11, LapPE
 bash run_ps_exp.sh LapPE 1 11

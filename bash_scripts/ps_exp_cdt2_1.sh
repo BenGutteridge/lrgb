@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ..
 
 # various r*, L=11, RWSE
 bash run_ps_exp.sh none 1 11
