@@ -2,8 +2,7 @@
 cd ..
 
 files=(
-  configs/rbar-GCN/peptides-struct-DelayGCN_RWSE.yaml
-  configs/rbar-GCN/peptides-struct-DelayGCN_LapPE.yaml
+  configs/rbar-GCN/peptides-struct-DelayGCN.yaml
 )
 
 rbar=$1
