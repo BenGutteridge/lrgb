@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=test_lrgb
+#SBATCH --job-name=lrgb
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --time=12:00:00
