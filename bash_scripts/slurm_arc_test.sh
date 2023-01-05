@@ -2,7 +2,7 @@
 #SBATCH --job-name=test_lrgb
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --time=00:10:00
+#SBATCH --time=12:00:00
 #SBATCH --partition=short
 # must be on htc, only one w/ GPUs
 #SBATCH --clusters=htc
