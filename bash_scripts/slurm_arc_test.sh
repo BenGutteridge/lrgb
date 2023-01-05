@@ -8,7 +8,7 @@
 #SBATCH --clusters=htc
 # set number of GPUs
 #SBATCH --gres=gpu:1
-cd $DATA/repos/lrgb
+cd $DATA/repos/lrgb/bash_scripts
 module load Anaconda3
 module load CUDA/11.3
 source activate $DATA/lrgb
