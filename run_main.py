@@ -135,7 +135,7 @@ def run_loop_settings():
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
 argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
 
-repeat = 1
+repeat = 3
 import argparse
 def parse_args() -> argparse.Namespace:
     r"""Parses the command line arguments."""
@@ -174,6 +174,7 @@ def parse_args() -> argparse.Namespace:
         'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
+        'seed 5',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
