@@ -7,4 +7,4 @@ rbar=$2
 L=$3
 d=$4
 
-python main.py --cfg "$file" --repeat 3 device cuda dataset.dir data/beng/datasets rbar "$rbar" gnn.layers_mp "$L" optim.max_epoch 300 gnn.dim_inner "$d"
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir data/beng/datasets rbar "$rbar" gnn.layers_mp "$L" optim.max_epoch 300 gnn.dim_inner "$d" tensorboard_each_run True
