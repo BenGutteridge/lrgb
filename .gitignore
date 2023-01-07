@@ -12,6 +12,12 @@ slurm_history/
 datasets/
 pretrained/
 results/
+results_good/
+results_exp/
+results_pre_20230107/
+results_paper/
+results**/
+results.*/
 scripts/PascalVOC/benchmark_RELEASE/
 scripts/PascalVOC/voc_viz_files/
 scripts/PascalVOC/benchmark_RELEASE/
