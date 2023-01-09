@@ -20,4 +20,5 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 layers=(7 11 15 19)
 dims=(130 85 64 50)
-bash run_struct_pe_exp.sh $pe $rbar ${layers[$SLURM_ARRAY_TASK_ID]} ${dims[$SLURM_ARRAY_TASK_ID]} datasets
+rbars=(3 5 7 9)
+bash run_struct_pe_exp.sh $pe ${rbars[$SLURM_ARRAY_TASK_ID]} ${layers[$SLURM_ARRAY_TASK_ID]} ${dims[$SLURM_ARRAY_TASK_ID]} datasets
