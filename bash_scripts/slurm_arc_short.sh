@@ -13,11 +13,11 @@ cd $DATA/repos/lrgb/bash_scripts
 pe=$1
 rbar=$2
 module load Anaconda3
-module load CUDA/11.2
+module load CUDA/11.3
 source activate $DATA/lrgb
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 layers=(7 11 15 19)
 dims=(130 85 64 50)
-bash run_struct_pe_exp.sh $pe $rbar layers[$SLURM_ARRAY_TASK_ID] dims[$SLURM_ARRAY_TASK_ID] datasets
+bash run_struct_pe_exp.sh $pe $rbar ${layers[$SLURM_ARRAY_TASK_ID]} ${dims[$SLURM_ARRAY_TASK_ID]} datasets
