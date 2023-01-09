@@ -105,7 +105,7 @@ def run_loop_settings():
     return run_ids, seeds, split_indices
 
 # model = 'DelayGCN'
-# model = 'GCN'
+model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -115,8 +115,8 @@ def run_loop_settings():
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
-# # Peptides-struct
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
+# Peptides-struct
+argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
@@ -133,7 +133,7 @@ def run_loop_settings():
 # argpath = 'configs/GatedGCN/peptides-struct-GatedGCN+RWSE.yaml'
 
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
-argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
+# argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
 
 repeat = 3
 import argparse
@@ -160,7 +160,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN_dense',
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
-        'rbar -1',
+        # 'rbar -1',
         'gnn.dim_inner 16',
         'gnn.layers_mp 2',
         # 'beta 3',
@@ -171,10 +171,10 @@ def parse_args() -> argparse.Namespace:
         # 'use_edge_labels True',
         'train.batch_size 128',
         # 'posenc_RWSE.kernel.times_func range(1,17)', # 16 steps for RWPE
-        'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
+        # 'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
-        'seed 5',
+        # 'seed 5',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
