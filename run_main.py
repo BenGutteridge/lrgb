@@ -135,7 +135,7 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (mod
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
 
-repeat = 3
+repeat = 1
 import argparse
 def parse_args() -> argparse.Namespace:
     r"""Parses the command line arguments."""
@@ -151,7 +151,10 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
+        'train.mode my_custom',
         'optim.max_epoch 1',
+        'gnn.stage_type my_stack',
+        # 'gnn.stage_type stack_residual',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
         # 'model.type GINE',
@@ -161,7 +164,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
         # 'rbar -1',
-        'gnn.dim_inner 16',
+        'gnn.dim_inner 8',
         'gnn.layers_mp 2',
         # 'beta 3',
         'dataset.dir datasets',

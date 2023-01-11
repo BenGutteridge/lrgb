@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+import torch_geometric as pyg
 from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
@@ -23,7 +24,7 @@ class DelayGNNStage(nn.Module):
         # self = init_khop_GCN(self, dim_in, dim_out, num_layers)
         self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers)
 
-    def forward(self, batch):
+    def forward(self, batch, dirichlet_energy=False):
         """
         x_{t+1} = x_t + f(x_t, x_{t-1})
         first pass: uses regular edge index for each layer
@@ -54,6 +55,49 @@ class DelayGNNStage(nn.Module):
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
+        if dirichlet_energy:
+            L, energies = get_laplacian(A(1)), []
+            for x_i in x+[batch.x]:
+                energies.append(dirichlet(x_i, L))
+            batch.dirichlet_energies = np.array(energies)
         return batch
 
 register_stage('delay_gnn', DelayGNNStage)
+
+import numpy as np
+
+def dirichlet(x, L):
+    """takes in list of node features (nxd) 
+    at each layer and outputs array of dirichlet energies"""
+    x = tonp(x)
+    assert x.shape[0] == L.shape[0] == L.shape[1]
+    E = np.dot(np.dot(x.T, L), x)
+    E = np.trace(E) / np.linalg.norm(x, ord='fro')
+    return E
+
+def get_laplacian(edge_index):
+    L = pyg.utils.get_laplacian(edge_index, normalization='sym')[0]
+    L = pyg.utils.to_dense_adj(L).squeeze() # from index format to matrix
+    return L
+
+def tonp(tsr):
+    if isinstance(tsr, np.ndarray):
+        return tsr
+    elif isinstance(tsr, np.matrix):
+        return np.array(tsr)
+    # elif isinstance(tsr, scipy.sparse.csc.csc_matrix):
+    #     return np.array(tsr.todense())
+
+    assert isinstance(tsr, torch.Tensor)
+    tsr = tsr.cpu()
+    assert isinstance(tsr, torch.Tensor)
+
+    try:
+        arr = tsr.numpy()
+    except TypeError:
+        arr = tsr.detach().to_dense().numpy()
+    except:
+        arr = tsr.detach().numpy()
+
+    assert isinstance(arr, np.ndarray)
+    return arr
