@@ -13,7 +13,7 @@
 cd $DATA/repos/lrgb
 module load Anaconda3
 module load CUDA/11.3
-source activate $DATA/lrgb2
+source activate $DATA/lrgb3
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
