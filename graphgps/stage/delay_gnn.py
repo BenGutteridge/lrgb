@@ -71,8 +71,8 @@ def dirichlet(x, L):
     at each layer and outputs array of dirichlet energies"""
     x = tonp(x)
     assert x.shape[0] == L.shape[0] == L.shape[1]
-    print('x: ', type(x))
-    print('L: ', type(L))
+    # print('x: ', type(x))
+    # print('L: ', type(L))
     E = np.dot(np.dot(x.T, L), x)
     E = np.trace(E) / np.linalg.norm(x, ord='fro')
     return E
