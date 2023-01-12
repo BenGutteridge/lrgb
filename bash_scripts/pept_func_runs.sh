@@ -1,6 +1,6 @@
 #! /bin/bash
 echo "Waiting to start"
-sleep 5s
+sleep 3h
 echo "Ready to run!"
 cd ..
 pe=none
