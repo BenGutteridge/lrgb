@@ -2,6 +2,7 @@
 # echo "Waiting to start"
 # sleep 5h
 # echo "Ready to run!"
+cd ..
 pe=none
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
 dir=data/beng/datasets
