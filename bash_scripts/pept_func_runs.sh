@@ -1,13 +1,14 @@
 #! /bin/bash
+t=$1
 echo "Waiting to start"
-sleep 3h
+sleep ${t}h
 echo "Ready to run!"
 cd ..
 pe=none
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
 dir="/data/beng/datasets"
 
-SLURM_ARRAY_TASK_ID=$1
+SLURM_ARRAY_TASK_ID=$2
 
 layers=(7 9 11 13 15 17)
 dims=(130 105 85 72 64 55)
