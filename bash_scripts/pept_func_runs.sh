@@ -6,7 +6,7 @@ echo "Ready to run!"
 cd ..
 pe=LapPE
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
-dir="/data/beng/datasets"
+dir="datasets"
 
 SLURM_ARRAY_TASK_ID=$2
 
