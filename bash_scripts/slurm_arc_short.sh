@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=more_r*_struct
+#SBATCH --job-name=func_r*=1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -10,15 +10,19 @@
 #SBATCH --gres=gpu:1
 #SBATCH --account=engs-oxnsg
 cd $DATA/repos/lrgb/bash_scripts
-pe=$1
-rbar=$2
 module load Anaconda3
 module load CUDA/11.3
 source activate $DATA/lrgb
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
-layers=(7 11 15 19)
-dims=(130 85 64 50)
-rbars=(3 5 7 9)
-bash run_struct_pe_exp.sh $pe ${rbars[$SLURM_ARRAY_TASK_ID]} ${layers[$SLURM_ARRAY_TASK_ID]} ${dims[$SLURM_ARRAY_TASK_ID]} datasets
+pe=none
+file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
+
+dir=datasets
+
+layers=(7 9 11 13 15 17)
+dims=(130 105 85 72 64 55)
+rbars=(1 1 1 1 1 1)
+
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar ${rbars[$SLURM_ARRAY_TASK_ID]} gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner ${dims[$SLURM_ARRAY_TASK_ID]} tensorboard_each_run True train.mode my_custom
