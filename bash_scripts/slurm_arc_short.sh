@@ -9,7 +9,8 @@
 # set number of GPUs
 #SBATCH --gres=gpu:1
 #SBATCH --account=engs-oxnsg
-cd $DATA/repos/lrgb/bash_scripts
+
+cd $DATA/repos/lrgb
 module load Anaconda3
 module load CUDA/11.3
 source activate $DATA/lrgb
