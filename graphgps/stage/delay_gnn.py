@@ -76,6 +76,7 @@ def dirichlet(x, L):
     return E
 
 def get_laplacian(edge_index):
+    edge_index = tonp(edge_index)
     L = pyg.utils.get_laplacian(edge_index, normalization='sym')[0]
     L = pyg.utils.to_dense_adj(L).squeeze() # from index format to matrix
     return L
