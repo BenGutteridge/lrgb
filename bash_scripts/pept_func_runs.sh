@@ -4,7 +4,7 @@ echo "Waiting to start"
 sleep ${t}h
 echo "Ready to run!"
 cd ..
-pe=none
+pe=LapPE
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
 dir="/data/beng/datasets"
 
