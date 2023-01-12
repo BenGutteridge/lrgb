@@ -15,7 +15,7 @@ module load Anaconda3
 module load CUDA/11.3
 source activate $DATA/lrgb
 nvcc --version
-python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 pe=none
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
@@ -26,4 +26,4 @@ layers=(7 9 11 13 15 17)
 dims=(130 105 85 72 64 55)
 rbars=(1 1 1 1 1 1)
 
-python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar ${rbars[$SLURM_ARRAY_TASK_ID]} gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner ${dims[$SLURM_ARRAY_TASK_ID]} tensorboard_each_run True train.mode my_custom
+python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar ${rbars[$SLURM_ARRAY_TASK_ID]} gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner ${dims[$SLURM_ARRAY_TASK_ID]} tensorboard_each_run True train.mode my_custom
