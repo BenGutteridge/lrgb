@@ -71,12 +71,13 @@ def dirichlet(x, L):
     at each layer and outputs array of dirichlet energies"""
     x = tonp(x)
     assert x.shape[0] == L.shape[0] == L.shape[1]
+    print('x: ', type(x))
+    print('L: ', type(L))
     E = np.dot(np.dot(x.T, L), x)
     E = np.trace(E) / np.linalg.norm(x, ord='fro')
     return E
 
 def get_laplacian(edge_index):
-    edge_index = tonp(edge_index)
     L = pyg.utils.get_laplacian(edge_index, normalization='sym')[0]
     L = pyg.utils.to_dense_adj(L).squeeze() # from index format to matrix
     return L
