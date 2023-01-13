@@ -102,8 +102,8 @@ def dirichlet_epoch(logger, loader, model, split='val'):
     dirichlet_energies /=  num_graphs
     print('Dirichlet energies:')
     for l, de in enumerate(list(dirichlet_energies)):
-        print('After %02d layers: %.2f' % (l, de))
-    np.savetxt(os.path.join(cfg.run_dir, "dirichlet_energies.csv"), dirichlet_energies, delimiter=",")
+        print('After %02d layers: %.4f' % (l, de))
+    np.savetxt(os.path.join(cfg.run_dir, "dirichlet.csv"), dirichlet_energies, delimiter=",")
 
 def get_num_graphs(loader):
     num = 0

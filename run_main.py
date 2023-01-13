@@ -152,7 +152,7 @@ def parse_args() -> argparse.Namespace:
 
     extra_args = [
         'train.mode my_custom',
-        'optim.max_epoch 1',
+        'optim.max_epoch 3',
         'gnn.stage_type my_stack',
         # 'gnn.stage_type stack_residual',
         # 'gnn.layer_type delay_gineconv',
@@ -164,8 +164,8 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
         # 'rbar -1',
-        'gnn.dim_inner 8',
-        'gnn.layers_mp 2',
+        'gnn.dim_inner 64',
+        'gnn.layers_mp 5',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',

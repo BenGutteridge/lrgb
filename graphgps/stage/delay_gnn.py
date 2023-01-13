@@ -74,7 +74,7 @@ def dirichlet(x, L):
     # print('x: ', type(x))
     # print('L: ', type(L))
     E = np.dot(np.dot(x.T, L), x)
-    E = np.trace(E) / np.linalg.norm(x, ord='fro')
+    E = np.trace(E) / np.linalg.norm(x, ord='fro')**2
     return E
 
 def get_laplacian(edge_index):
