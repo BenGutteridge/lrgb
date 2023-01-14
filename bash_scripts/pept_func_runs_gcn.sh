@@ -5,7 +5,7 @@ sleep ${t}h
 echo "Ready to run!"
 cd ..
 pe=LapPE
-file="configs/GCN/pept-func-GCN+${pe}.yaml"
+file="configs/GCN/peptides-func-GCN+${pe}.yaml"
 dir="datasets"
 # dir="/data/beng/datasets"
 # train_mode=my_custom
