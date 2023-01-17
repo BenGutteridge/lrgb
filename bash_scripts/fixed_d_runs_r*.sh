@@ -1,8 +1,8 @@
 
 #!/bin/bash
 cd ..
-# dir="/data/beng/datasets"
-dir='datasets'
+dir="/data/beng/datasets"
+# dir='datasets'
 # fixed d r*=1
 file="configs/rbar-GCN/peptides-struct-DelayGCN+LapPE.yaml"
 
