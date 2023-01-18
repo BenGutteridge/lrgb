@@ -8,7 +8,7 @@
 # set number of GPUs
 #SBATCH --gres=gpu:1
 
-cd lrgb
+cd ..
 module load cuda/10.2
 module load python/anaconda3
 source $condaDotFile
