@@ -1,9 +1,9 @@
 #! /bin/bash
-#SBATCH --job-name=d=64r1
+#SBATCH --job-name=d=64r-1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
-#SBATCH --partition=devel
+#SBATCH --partition=big
 # must be on htc, only one w/ GPUs
 # set number of GPUs
 #SBATCH --gres=gpu:1
