@@ -6,13 +6,13 @@ echo "Ready to run!"
 cd ..
 pe=none
 file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
-# dir="datasets"
-dir="/data/beng/datasets"
+dir="datasets"
+# dir="/data/beng/datasets"
 
 SLURM_ARRAY_TASK_ID=$2
 
-layers=(5 7 9 11 13 15 17 19 21 23)
-dims=(175 130 105 85 72 64 55 50 42)
+layers=(5   7   9   11 13 15 17 19 21 23)
+dims=(  175 130 105 85 72 64 55 50 45 42)
 # rbars=(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1)
 rbar=$3
 
