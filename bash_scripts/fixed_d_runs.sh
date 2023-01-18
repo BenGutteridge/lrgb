@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd ..
 pe=none
 task=func
 # task=struct
