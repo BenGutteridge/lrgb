@@ -19,7 +19,6 @@ pe=none
 file="configs/rbar-GCN/peptides-func-DelayGCN+${pe}.yaml"
 dir=datasets
 d=64
-layers=(7 9 11 13 15 17)
+L=$SLURM_ARRAY_TASK_ID
 rbar=1
-
-python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
