@@ -104,8 +104,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
-model = 'GCN'
+model = 'DelayGCN'
+# model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -133,7 +133,7 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (mod
 # argpath = 'configs/GatedGCN/peptides-struct-GatedGCN+RWSE.yaml'
 
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
-# argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
+# argpath = 'configs/rbar-GCN/peptides-struct-DelayGCN+LapPE.yaml'
 
 repeat = 1
 import argparse
@@ -152,8 +152,8 @@ def parse_args() -> argparse.Namespace:
 
     extra_args = [
         'train.mode my_custom',
-        'optim.max_epoch 3',
-        'gnn.stage_type my_stack',
+        'optim.max_epoch 1',
+        # 'gnn.stage_type my_stack',
         # 'gnn.stage_type stack_residual',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
@@ -163,9 +163,9 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN_dense',
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
-        # 'rbar -1',
-        'gnn.dim_inner 64',
-        'gnn.layers_mp 5',
+        'rbar 1',
+        'gnn.dim_inner 8',
+        'gnn.layers_mp 2',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',
@@ -178,6 +178,9 @@ def parse_args() -> argparse.Namespace:
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
+        # 'train.auto_resume True',
+
+        # 'out_dir /Users/beng/Documents/lrgb/results_scp/pept-struct_500k_copy/pept-struct'
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
