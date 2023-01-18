@@ -16,7 +16,7 @@ conda activate lrgb2
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 pe=none
-file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
+file="configs/rbar-GCN/peptides-func-DelayGCN+${pe}.yaml"
 dir=datasets
 d=64
 layers=(7 9 11 13 15 17)
