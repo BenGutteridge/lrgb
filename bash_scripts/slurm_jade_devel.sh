@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=test
+#SBATCH --job-name==func_d=64
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=00:10:00
@@ -16,7 +16,12 @@ conda activate lrgb2
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 pe=none
-file="configs/rbar-GCN/peptides-func-DelayGCN+${pe}.yaml"
+task='func'
+rbar=1
+file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
+file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
+file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
+
 dir=datasets
 d=64
 L=$SLURM_ARRAY_TASK_ID
