@@ -29,3 +29,5 @@ L=$SLURM_ARRAY_TASK_ID
 rbar=$(($SLURM_ARRAY_TASK_ID/2))
 echo "r*=$rbar"
 python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+
+python main.py --cfg file="configs/rbar-GCN/peptides-struct-DelayGCN+none.yaml" --repeat 3 device cuda dataset.dir datasets rbar 1 gnn.layers_mp 17 optim.max_epoch 300 gnn.dim_inner 64 tensorboard_each_run False train.mode my_custom
