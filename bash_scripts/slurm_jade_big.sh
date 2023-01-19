@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Sd=64rinf
+#SBATCH --job-name=Sd=64r1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -18,7 +18,6 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 pe=none
 # task='func'
 task='struct'
-rbar=-1
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
