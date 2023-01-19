@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=d=64rL/2
+#SBATCH --job-name=d=F.64rL/2
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -16,8 +16,8 @@ conda activate lrgb2
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 pe=none
-# task='func'
-task='struct'
+task='func'
+# task='struct'
 rbar=1
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
