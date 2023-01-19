@@ -1,9 +1,9 @@
 #! /bin/bash
-#SBATCH --job-name=func_r*=1
+#SBATCH --job-name=Sd=64all
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
-#SBATCH --time=12:00:00
-#SBATCH --partition=short
+#SBATCH --time=72:00:00
+#SBATCH --partition=long
 # must be on htc, only one w/ GPUs
 #SBATCH --clusters=htc
 # set number of GPUs
@@ -20,8 +20,8 @@ nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 pe=none
-task='func'
-# task='struct'
+# task='func'
+task='struct'
 rbar=1
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
@@ -30,7 +30,8 @@ file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 dir=datasets
 d=64
 L=$SLURM_ARRAY_TASK_ID
-# rbar=-1
 rbar=$(($SLURM_ARRAY_TASK_ID/2))
 echo "r*=$rbar"
 python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar -1 gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar 1 gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
