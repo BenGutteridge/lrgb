@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Fd=64r1
+#SBATCH --job-name=Sd=64r1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
