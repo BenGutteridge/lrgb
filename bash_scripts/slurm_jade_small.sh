@@ -16,8 +16,8 @@ conda activate lrgb2
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 pe=none
-# task='func'
-task='struct'
+task='func'
+# task='struct'
 rbar=1
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
