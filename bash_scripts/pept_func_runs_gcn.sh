@@ -4,7 +4,7 @@ echo "Waiting to start"
 sleep ${t}h
 echo "Ready to run!"
 cd ..
-pe=LapPE
+pe=none
 file="configs/GCN/peptides-func-GCN+${pe}.yaml"
 dir="datasets"
 # dir="/data/beng/datasets"
