@@ -13,8 +13,8 @@ files=(
   "configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 )
 
-dir=datasets
-# dir="/data/beng/datasets"
+# dir=datasets
+dir="/data/beng/datasets"
 d=64
 L=$2
 
