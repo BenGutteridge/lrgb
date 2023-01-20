@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=S.d=64rinf
+#SBATCH --job-name=S.d=64r1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -23,9 +23,15 @@ task='struct'
 file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 dir=datasets
-d=64
-L=$SLURM_ARRAY_TASK_ID
-rbar=-1
+# d=64
+dims=(  175 130 105 85 72 64 55 50 45 42)
+layers=(5   7   9   11 13 15 17 19 21 23)
+L=
+rbar=1
 # rbar=$(($SLURM_ARRAY_TASK_ID/2))
 echo "r*=$rbar"
-python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+
+# # fixed d
+# python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+# # fixed params
+python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner ${dims[$SLURM_ARRAY_TASK_ID]} tensorboard_each_run False train.mode my_custom
