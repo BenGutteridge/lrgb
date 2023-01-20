@@ -4,7 +4,7 @@ pe=none
 task=func
 # task=struct
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
-file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
+# file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 residual=$1
