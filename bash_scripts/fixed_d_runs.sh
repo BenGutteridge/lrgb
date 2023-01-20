@@ -7,8 +7,8 @@ file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
-# dir=datasets
-dir="/data/beng/datasets"
+dir=datasets
+# dir="/data/beng/datasets"
 d=64
 L=$1
 
