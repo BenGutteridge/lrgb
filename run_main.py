@@ -104,8 +104,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
-# model = 'GCN'
+# model = 'DelayGCN'
+model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -154,7 +154,7 @@ def parse_args() -> argparse.Namespace:
         'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
-        # 'gnn.stage_type stack_residual',
+        'gnn.stage_type stack_residual',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
         # 'model.type GINE',
@@ -179,8 +179,9 @@ def parse_args() -> argparse.Namespace:
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
         # 'train.auto_resume True',
+        'gnn.batchnorm False',
 
-        # 'out_dir /Users/beng/Documents/lrgb/results_scp/pept-struct_500k_copy/pept-struct'
+        'out_dir results/no_batchnorm',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
