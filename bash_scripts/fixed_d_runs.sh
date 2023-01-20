@@ -21,4 +21,4 @@ L=$2
 # rbar=$((L/2))
 # echo "r*=$rbar"
 
-python main.py --cfg ${files[$residual]} --repeat 3 train.auto_resume True gnn.batchnorm False gnn.l2norm False out_dir "results/no_batchnorm" device cuda dataset.dir "$dir" gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+python main.py --cfg "${files[$residual]}" --repeat 3 gnn.batchnorm False gnn.l2norm False out_dir "results/no_batchnorm" device cuda dataset.dir "$dir" gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
