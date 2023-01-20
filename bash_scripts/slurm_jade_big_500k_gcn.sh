@@ -18,8 +18,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 pe=none
 task='func'
 # task='struct'
-file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
-# file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
+# file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
+file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 
 dir=datasets
 # d=64
