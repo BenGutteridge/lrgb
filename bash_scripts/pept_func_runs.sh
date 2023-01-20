@@ -5,7 +5,7 @@ sleep ${t}h
 echo "Ready to run!"
 cd ..
 pe=none
-file="configs/rbar-GCN/pept-func-DelayGCN+${pe}.yaml"
+file="configs/rbar-GCN/peptides-func-DelayGCN+${pe}.yaml"
 # dir="datasets"
 dir="/data/beng/datasets"
 
