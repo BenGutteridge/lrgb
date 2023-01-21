@@ -154,7 +154,7 @@ def parse_args() -> argparse.Namespace:
         'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
-        'gnn.stage_type stack_residual',
+        'gnn.stage_type my_stack',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
         # 'model.type GINE',
