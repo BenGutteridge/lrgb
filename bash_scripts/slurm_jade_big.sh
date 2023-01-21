@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=BNresgcn64
+#SBATCH --job-name=BNr164
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
