@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=BNgcn64
+#SBATCH --job-name=BNresgcn64
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -17,8 +17,8 @@ nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 pe=none
 task='func'
-file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
-# file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
+# file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
+file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 dir=datasets
