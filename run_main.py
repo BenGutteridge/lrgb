@@ -109,12 +109,12 @@ model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# VOC superpixels
-argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# # VOC superpixels
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -135,7 +135,7 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (mode
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
 # argpath = 'configs/rbar-GCN/peptides-struct-DelayGCN+LapPE.yaml'
 
-argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+# argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 
 repeat = 1
 import argparse
@@ -156,8 +156,8 @@ def parse_args() -> argparse.Namespace:
         'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
-        # 'gnn.stage_type my_stack',
-        'gnn.stage_type delay_gnn',
+        'gnn.stage_type my_stack',
+        # 'gnn.stage_type delay_gnn',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
         # 'model.type GINE',
@@ -184,7 +184,7 @@ def parse_args() -> argparse.Namespace:
         # 'train.auto_resume True',
         'gnn.l2norm False',
         'gnn.batchnorm False',
-        'gnn.layer_type my_gcnconv',
+        # 'gnn.layer_type my_gcnconv',
 
         'out_dir results/no_batchnorm',
         ]
