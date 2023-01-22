@@ -14,7 +14,7 @@ file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 #   "configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 # )
 
-# dir=datasets
+dir=datasets
 dir="/data/beng/datasets"
 d=64
 L=$2

@@ -109,14 +109,14 @@ model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# # VOC superpixels
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# VOC superpixels
+argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
-# Peptides-struct
-argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
+# # Peptides-struct
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
@@ -154,7 +154,8 @@ def parse_args() -> argparse.Namespace:
         'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
-        'gnn.stage_type my_stack',
+        # 'gnn.stage_type my_stack',
+        'gnn.stage_type delay_gnn',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
         # 'model.type GINE',
@@ -164,8 +165,8 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
         'rbar 1',
-        'gnn.dim_inner 50',
-        'gnn.layers_mp 19',
+        'gnn.dim_inner 8',
+        'gnn.layers_mp 3',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',
@@ -179,7 +180,9 @@ def parse_args() -> argparse.Namespace:
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
         # 'train.auto_resume True',
+        'gnn.l2norm False',
         'gnn.batchnorm False',
+        'gnn.layer_type my_gcnconv',
 
         'out_dir results/no_batchnorm',
         ]
