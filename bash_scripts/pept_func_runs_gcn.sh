@@ -2,11 +2,11 @@
 cd ..
 pe=$1
 file="configs/GCN/peptides-func-GCN+${pe}.yaml"
-# dir="datasets"
-dir="/data/beng/datasets"
+dir="datasets"
+# dir="/data/beng/datasets"
 train_mode=my_custom
-stage_type=my_stack
-# stage_type=stack_residual
+# stage_type=my_stack
+stage_type=stack_residual
 
 SLURM_ARRAY_TASK_ID=$2
 
