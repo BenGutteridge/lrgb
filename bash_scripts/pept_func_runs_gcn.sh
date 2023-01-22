@@ -1,10 +1,6 @@
 #! /bin/bash
-t=$1
-echo "Waiting to start"
-sleep ${t}h
-echo "Ready to run!"
 cd ..
-pe=none
+pe=$1
 file="configs/GCN/peptides-func-GCN+${pe}.yaml"
 dir="datasets"
 # dir="/data/beng/datasets"
