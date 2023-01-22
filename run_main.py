@@ -135,6 +135,8 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (mode
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
 # argpath = 'configs/rbar-GCN/peptides-struct-DelayGCN+LapPE.yaml'
 
+argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+
 repeat = 1
 import argparse
 def parse_args() -> argparse.Namespace:

@@ -23,6 +23,7 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 file='configs/GCN/vocsuperpixels-GCN.yaml'
+# file=
 
 dir=datasets
 out_dir="results/voc"
@@ -31,4 +32,4 @@ L=$SLURM_ARRAY_TASK_ID
 
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run False train.mode my_custom
 rbar=1
-python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type my_gcnconv gnn.stage_type my_stack out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run False train.mode my_custom
+python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type my_gcnconv gnn.stage_type my_stack gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run False train.mode my_custom
