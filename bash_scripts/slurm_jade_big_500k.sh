@@ -15,12 +15,12 @@ source $condaDotFile
 conda activate lrgb2
 nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
-pe=none
-# task='func'
-task='struct'
-file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
+pe=LapPE
+task='func'
+# task='struct'
+# file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
-# file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
+file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 dir=datasets
 # d=64
