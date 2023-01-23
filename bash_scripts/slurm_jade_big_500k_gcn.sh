@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=F500res
+#SBATCH --job-name=F500gcn
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -18,8 +18,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 pe=none
 task='func'
 # task='struct'
-# file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
-file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
+file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
+# file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 
 dir=datasets
 # d=64
