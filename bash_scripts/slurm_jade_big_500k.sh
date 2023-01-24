@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=F5rL/2
+#SBATCH --job-name=F5rL/2lappe
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -15,7 +15,7 @@ source $condaDotFile
 conda activate lrgb2
 nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
-pe=none
+pe=LapPE
 task='func'
 # task='struct'
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
