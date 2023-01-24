@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=F5rinfPE
+#SBATCH --job-name=F5r1L/2
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -26,7 +26,7 @@ dir=datasets
 # d=64
 dims=(  175 130 105 85 72 64 55 50 45 42)
 layers=(5   7   9   11 13 15 17 19 21 23)
-rbar=-1
+rbar=10
 # rbars=(2 3 4 5 6 7 8 9 10 11)
 # rbar=$(($SLURM_ARRAY_TASK_ID/2))
 # echo "r*=$rbar"
