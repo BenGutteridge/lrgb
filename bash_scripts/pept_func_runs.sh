@@ -2,8 +2,8 @@
 cd ..
 pe=$1
 file="configs/rbar-GCN/peptides-func-DelayGCN+${pe}.yaml"
-# dir="datasets"
-dir="/data/beng/datasets"
+dir="datasets"
+# dir="/data/beng/datasets"
 
 SLURM_ARRAY_TASK_ID=$2
 
