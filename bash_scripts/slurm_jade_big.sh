@@ -23,8 +23,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 # file='configs/GCN/vocsuperpixels-GCN.yaml'
-# file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
-file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+# file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # layer=gcnconv
 layer=my_gcnconv
