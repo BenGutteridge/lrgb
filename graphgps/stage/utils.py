@@ -6,21 +6,21 @@ import torch
 from .example import GNNLayer
 
 
-def setup(model, dim_in, dim_out, num_layers, max_k=None):
-  model.num_layers = num_layers
-  model.dim_in = dim_in
-  model.max_k = num_layers if max_k is None else max_k
-  if cfg.max_graph_diameter <= model.max_k:
-    print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
-    model.max_k = cfg.max_graph_diameter
-  # set hidden_dim if using fixed param count
-  if cfg.fixed_params:
-    n_params = cfg.fixed_mp_params_num
-    model.hidden_dim = (n_params/(model.max_k * num_layers))**0.5
-    print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, model.hidden_dim))
-  else:
-    model.hidden_dim = dim_out
-  return model
+# def setup(model, dim_in, dim_out, num_layers, max_k=None):
+#   model.num_layers = num_layers
+#   model.dim_in = dim_in
+#   model.max_k = num_layers if max_k is None else max_k
+#   if cfg.max_graph_diameter <= model.max_k:
+#     print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
+#     model.max_k = cfg.max_graph_diameter
+#   # set hidden_dim if using fixed param count
+#   if cfg.fixed_params:
+#     n_params = cfg.fixed_mp_params_num
+#     model.hidden_dim = (n_params/(model.max_k * num_layers))**0.5
+#     print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, model.hidden_dim))
+#   else:
+#     model.hidden_dim = dim_out
+#   return model
 
 # FINISH
 def init_khop_GCN_v3(model, skip_first_hop=False):

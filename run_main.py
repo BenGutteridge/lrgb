@@ -20,7 +20,7 @@ from torch_geometric.graphgym.utils.comp_budget import params_count
 from torch_geometric.graphgym.utils.device import auto_select_device
 from torch_geometric.graphgym.register import train_dict
 from torch_geometric import seed_everything
-from graphgps.ben_utils import custom_set_out_dir
+from graphgps.ben_utils import custom_set_out_dir, set_d_fixed_params
 
 from graphgps.finetuning import load_pretrained_model_cfg, \
     init_model_from_pretrained
@@ -68,7 +68,6 @@ def custom_set_run_dir(cfg, run_id):
         os.makedirs(cfg.run_dir, exist_ok=True)
     else:
         makedirs_rm_exist(cfg.run_dir)
-
 
 def run_loop_settings():
     """Create main loop execution settings based on the current cfg.
@@ -137,6 +136,8 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 
 # argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 
+argpath = 'configs/GCN/vocsuperpixels-GCN.yaml'
+
 repeat = 1
 import argparse
 def parse_args() -> argparse.Namespace:
@@ -166,27 +167,29 @@ def parse_args() -> argparse.Namespace:
         # 'model.type R-SPN_dense',
         # 'model.type R-SPN',
         # 'gnn.stage_type rel_delay_gnn',
-        'rbar 1',
-        'gnn.dim_inner 8',
-        'gnn.layers_mp 3',
+        # 'rbar 1',
+        # 'gnn.dim_inner 8',
+        # 'gnn.layers_mp 3',
         # 'beta 3',
         'dataset.dir datasets',
         # 'device cuda',
         # 'alpha 6',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
-        'train.batch_size 128',
+        # 'train.batch_size 128',
         # 'posenc_RWSE.kernel.times_func range(1,17)', # 16 steps for RWPE
         # 'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
         # 'train.auto_resume True',
-        'gnn.l2norm False',
-        'gnn.batchnorm False',
+        # 'gnn.l2norm False',
+        # 'gnn.batchnorm False',
         # 'gnn.layer_type my_gcnconv',
 
-        'out_dir results/no_batchnorm',
+        # 'out_dir results/no_batchnorm',
+        'fixed_params.N 500_000',
+        'fixed_params.model_task voc_gcn',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
@@ -198,6 +201,7 @@ if __name__ == '__main__':
     # Load config file
     set_cfg(cfg)
     load_cfg(cfg, args)
+    set_d_fixed_params(cfg) # for setting d with fixed param budget
     custom_set_out_dir(cfg, args.cfg_file, cfg.name_tag)
     dump_cfg(cfg)
     # Set Pytorch environment

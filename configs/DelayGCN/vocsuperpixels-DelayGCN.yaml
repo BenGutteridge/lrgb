@@ -47,3 +47,6 @@ optim:
   min_lr: 1e-5
 tensorboard_each_run: False
 tensorboard_agg: True
+fixed_params:
+  N: 500_000
+  model_task : 'voc_drew'

@@ -4,6 +4,14 @@ from tqdm import tqdm
 from torch_geometric.graphgym.config import cfg
 import os
 
+from param_calcs import calc_dict
+def set_d_fixed_params(cfg):
+    N, model_task = cfg.fixed_params.N, cfg.fixed_params.model_task
+    if N > 0 and model_task != 'none':
+        get_d = calc_dict[model_task]
+        cfg.gnn.dim_inner = get_d(N, cfg.gnn.layers_mp)
+        print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
+
 def custom_set_out_dir(cfg, cfg_fname, name_tag, default=False):
     """Set custom main output directory path to cfg.
     Include the config filename and name_tag in the new :obj:`cfg.out_dir`.

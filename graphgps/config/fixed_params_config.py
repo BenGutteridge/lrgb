@@ -12,7 +12,8 @@ def set_cfg_fixed_params(cfg):
     # Customized options
     # ----------------------------------------------------------------------- #
 
-    cfg.fixed_params = False
-    cfg.fixed_mp_params_num = 450_000
+    cfg.fixed_params = CN()
+    cfg.fixed_params.N = 0 # a default, ignored if not >0
+    cfg.fixed_params.model_task = 'none' # a default, ignored if not >0 ['voc_gcn', 'pept_drew', etc]
 
 register_config('fixed_params', set_cfg_fixed_params)
