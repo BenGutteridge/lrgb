@@ -134,9 +134,9 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+RWSE.yaml'
 # argpath = 'configs/rbar-GCN/peptides-struct-DelayGCN+LapPE.yaml'
 
-# argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+argpath='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 
-argpath = 'configs/GCN/vocsuperpixels-GCN.yaml'
+# argpath = 'configs/GCN/vocsuperpixels-GCN.yaml'
 
 repeat = 1
 import argparse
@@ -157,7 +157,7 @@ def parse_args() -> argparse.Namespace:
         'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
-        'gnn.stage_type my_stack',
+        # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.layer_type delay_gineconv',
         # 'model.type flattened_delay_gine',
@@ -189,7 +189,7 @@ def parse_args() -> argparse.Namespace:
 
         # 'out_dir results/no_batchnorm',
         'fixed_params.N 500_000',
-        'fixed_params.model_task voc_gcn',
+        # 'fixed_params.model_task voc_drew',
         ]
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

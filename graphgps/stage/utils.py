@@ -48,10 +48,10 @@ def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_
     print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
     model.max_k = cfg.max_graph_diameter
   # set hidden_dim if using fixed param count
-  if cfg.fixed_params:
-    n_params = cfg.fixed_mp_params_num
-    dim_out = (n_params/(model.max_k * num_layers))**0.5
-    print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
+  # if cfg.fixed_params:
+  #   n_params = cfg.fixed_mp_params_num
+  #   dim_out = (n_params/(model.max_k * num_layers))**0.5
+  #   print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
   W_kt = {}
   if cfg.rbar == -1: # can't set inf in cfg
     model.rbar = float('inf')
