@@ -34,7 +34,7 @@ file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 layer=my_gcnconv
 
 dir=datasets
-out_dir="results""
+out_dir="results"
 L=$SLURM_ARRAY_TASK_ID
 rbar=1
 
