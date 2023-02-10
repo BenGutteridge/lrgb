@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=pc_rinf
+#SBATCH --job-name=pcrwrinf
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -27,8 +27,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 
 # layer=gcnconv
 layer=my_gcnconv
@@ -40,4 +40,4 @@ rbar=-1
 
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
 
-python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+echo python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
