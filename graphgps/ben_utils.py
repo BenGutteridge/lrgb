@@ -3,6 +3,7 @@ from torch_geometric.utils import to_dense_adj, dense_to_sparse
 from tqdm import tqdm
 from torch_geometric.graphgym.config import cfg
 import os
+from torch_geometric.data import Data
 
 from param_calcs import calc_dict
 def set_d_fixed_params(cfg):
@@ -172,6 +173,19 @@ def add_k_hop_edges(dataset, K, edge_labels=None):
       dataset.data.edge_attr = torch.stack([all_labels, all_edge_type_labels]).T
     else:
       dataset.data.edge_attr = all_labels
+
+    print('Checking correct conversion...')
+    count  = 0
+    for i in tqdm(range(len(dataset))):
+      if not torch.equal(dataset.get(i).edge_attr, dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]]):
+        # print('Graph %d not changed in dataset._data_list; setting manually' % i)
+        count += 1
+        dataset._data_list[i] = Data(x=dataset.get(i).x,
+                                  edge_index=dataset.data.edge_index[:, ei_slices[i]:ei_slices[i+1]],
+                                  edge_attr=dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]],
+                                  y=dataset.get(i).y)
+      assert torch.equal(dataset.get(i).edge_attr, dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]]) # check that the conversion worked
+    if count > 0: print('Warning: %d/%d graphs not changed in dataset._data_list; have been set manually' % (count, len(dataset)))
 
     return dataset
 

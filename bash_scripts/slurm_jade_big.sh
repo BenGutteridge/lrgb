@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=vocr1LapPE
+#SBATCH --job-name=voclapr1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -26,11 +26,15 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
+# file='configs/GCN/pcqm-contact-GCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
+
 # layer=gcnconv
 layer=my_gcnconv
 
 dir=datasets
-out_dir="results/voc"
+out_dir="results""
 L=$SLURM_ARRAY_TASK_ID
 rbar=1
 

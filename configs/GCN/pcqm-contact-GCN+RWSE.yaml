@@ -14,9 +14,16 @@ dataset:
   resample_negative: True
   transductive: False
   node_encoder: True
-  node_encoder_name: Atom
+  node_encoder_name: Atom+RWSE
   node_encoder_bn: False
   edge_encoder: False
+posenc_RWSE:
+  enable: True
+  kernel:
+    times_func: range(1,17)
+  model: Linear
+  dim_pe: 20
+  raw_norm_type: BatchNorm
 train:
   mode: custom
   batch_size: 256
@@ -48,3 +55,6 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 10
   min_lr: 1e-5
+fixed_params:
+  # N: 500_000
+  model_task : 'pcqm_gcn'

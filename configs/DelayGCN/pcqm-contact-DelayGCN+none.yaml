@@ -17,7 +17,7 @@ dataset:
   node_encoder_bn: False
   edge_encoder: False
 train:
-  mode: custom
+  mode: my_custom
   batch_size: 256
   eval_period: 1
   ckpt_period: 100
@@ -49,4 +49,7 @@ optim:
   min_lr: 1e-5
 tensorboard_each_run: False
 tensorboard_agg: True
+fixed_params:
+  N: 500_000
+  model_task : 'pcqm_drew'
 
