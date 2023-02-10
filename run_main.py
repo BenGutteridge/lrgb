@@ -180,8 +180,9 @@ def parse_args() -> argparse.Namespace:
         ]
 
     # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
-    argpath = 'configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+    # argpath = 'configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
     # argpath = 'configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+    argpath= 'configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
     debug_args = [
         'gnn.layer_type my_gcnconv',
         'rbar -1',
