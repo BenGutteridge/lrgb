@@ -51,5 +51,3 @@ tensorboard_each_run: False
 tensorboard_agg: True
 fixed_params:
   N: 500_000
-  model_task : 'pcqm_drew'
-

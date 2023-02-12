@@ -43,7 +43,11 @@ def init_khop_GCN_v3(model, skip_first_hop=False):
 def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_hop=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
-  model.max_k = num_layers if max_k is None else max_k
+  if max_k is None:
+    model.max_k = num_layers
+  else:
+    model.max_k = max_k
+    print('WARNING: Using max_k = %d; was this intentional?' % max_k)
   if cfg.max_graph_diameter <= model.max_k:
     print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
     model.max_k = cfg.max_graph_diameter
@@ -52,16 +56,17 @@ def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_
   #   n_params = cfg.fixed_mp_params_num
   #   dim_out = (n_params/(model.max_k * num_layers))**0.5
   #   print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
+  model.rho = cfg.rho if cfg.rho != -1 else float('inf')
+  model.rbar = cfg.rbar if cfg.rbar != -1 else float('inf')
+
   W_kt = {}
-  if cfg.rbar == -1: # can't set inf in cfg
-    model.rbar = float('inf')
-  else:
-    model.rbar = cfg.rbar # default 1
   t0 = 1 if skip_first_hop else 0
+  inner = 1
   for t in range(t0, num_layers):
       d_in = dim_in if t == 0 else dim_out
-      K = min(model.max_k, t+1)
-      for k in range(1, K+1):
+      outer = min(model.max_k, t+1)
+      inner += 1 if ((outer-inner) == cfg.rho) else 0
+      for k in range(inner, outer+1):
           W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
   model.W_kt = nn.ModuleDict(W_kt)
   return model

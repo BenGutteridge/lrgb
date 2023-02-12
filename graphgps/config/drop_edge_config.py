@@ -3,16 +3,17 @@ from yacs.config import CfgNode as CN
 from torch_geometric.graphgym.register import register_config
 
 
-def set_cfg_fixed_params(cfg):
+def set_cfg_dropedge(cfg):
     r'''
     This function sets the default config value for customized options
     :return: customized configuration use by the experiment.
     '''
+
     # ----------------------------------------------------------------------- #
     # Customized options
     # ----------------------------------------------------------------------- #
 
-    cfg.fixed_params = CN()
-    cfg.fixed_params.N = 0 # a default, ignored if not >0
+    # rho determines the max number of k-hop neighbourhoods per layer
+    cfg.rho = -1 # default -1, which means no limit, ie vanilla DRew
 
-register_config('fixed_params', set_cfg_fixed_params)
+register_config('rho', set_cfg_dropedge)

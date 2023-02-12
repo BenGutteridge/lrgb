@@ -5,13 +5,14 @@ from torch_geometric.graphgym.config import cfg
 import os
 from torch_geometric.data import Data
 
-from param_calcs import calc_dict
+from param_calcs import return_hidden_dim
 def set_d_fixed_params(cfg):
-    N, model_task = cfg.fixed_params.N, cfg.fixed_params.model_task
-    if N > 0 and model_task != 'none':
-        get_d = calc_dict[model_task]
-        cfg.gnn.dim_inner = get_d(N, cfg.gnn.layers_mp)
-        print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
+  N = cfg.fixed_params.N
+  if N > 0:
+    cfg.gnn.dim_inner = return_hidden_dim(N)
+    print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
+  else:
+      print('Using given hidden dim of %d' % cfg.gnn.dim_inner)
 
 def custom_set_out_dir(cfg, cfg_fname, name_tag, default=False):
     """Set custom main output directory path to cfg.

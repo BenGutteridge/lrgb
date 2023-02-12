@@ -40,12 +40,15 @@ class DelayGNNStage(nn.Module):
         W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
         
         # run through layers
-        t, x = 0, [] # length t list with x_0, x_1, ..., x_t
+        t, x, inner = 0, [], 1 # length t list with x_0, x_1, ..., x_t
         # modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
-            for k in range(1, (t+1)+1):
+            outer = t+1 # inner, outer give the slice of k-neighbourhoods to aggregate
+            if (outer - inner) == cfg.rho:
+                inner += 1 # maintain fixed size: param scaling O(rho*L*d**2)
+            for k in range(inner, outer+1):
                 # W = next(modules)
                 if A(k).shape[1] > 0: # iff there are edges of type k
                     delay = max(k-self.rbar,0)
