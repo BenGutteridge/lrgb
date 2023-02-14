@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=pcqSANbl
+#SBATCH --job-name=pcqGCNbl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -34,8 +34,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
 
-# file='configs/GCN/pcqm-contact-GCN.yaml'
-file='configs/SAN/pcqm-contact-SAN.yaml'
+file='configs/GCN/pcqm-contact-GCN.yaml'
+# file='configs/SAN/pcqm-contact-SAN.yaml'
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # layer=gcnconv
