@@ -103,7 +103,7 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
+# model = 'DelayGCN'
 # model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
@@ -116,8 +116,8 @@ model = 'DelayGCN'
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# PCQM-Contact
-argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# # PCQM-Contact
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
@@ -136,6 +136,8 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model,
 # argpath = 'configs/rbar-GCN/peptides-struct-DelayGCN.yaml'
 
 # argpath='configs/GCN/pcqm-contact-GCN.yaml'
+
+argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 repeat = 1
 import argparse
@@ -161,9 +163,9 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type rel_delay_gnn',
         # 'gnn.layer_type my_gcnconv',
-        'nu 1',
-        'gnn.dim_inner 64',
-        'gnn.layers_mp 5',
+        # 'nu 1',
+        'gnn.dim_inner 16',
+        # 'gnn.layers_mp 5',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -176,9 +178,9 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        'fixed_params.N 500_000',
+        # 'fixed_params.N 500_000',
 
-        'rho 3'
+        # 'rho 3'
         ]
 
     # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'

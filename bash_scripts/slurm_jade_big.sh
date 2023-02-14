@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=pcqGCNbl
+#SBATCH --job-name=pcr1Lappe
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -30,25 +30,28 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
 
-file='configs/GCN/pcqm-contact-GCN.yaml'
+# file='configs/GCN/pcqm-contact-GCN.yaml'
 # file='configs/SAN/pcqm-contact-SAN.yaml'
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # layer=gcnconv
-# layer=my_gcnconv
+layer=my_gcnconv
 
 dir=datasets
-out_dir="results/pcqm_baselines"
-# L=$SLURM_ARRAY_TASK_ID
-# rbar=-1
+out_dir="results/pcqm"
+L=$SLURM_ARRAY_TASK_ID
+rbar=1
 # rho=$1
 
+python3.9 main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+
+# FOR NO BN
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
 
-# python3.9 main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
-
-python3.9 main.py --cfg "$file" --repeat 3 out_dir $out_dir device cuda dataset.dir "$dir" optim.max_epoch 300 tensorboard_each_run True
+# FOR STANDARD BASELINES
+# python3.9 main.py --cfg "$file" --repeat 3 out_dir $out_dir device cuda dataset.dir "$dir" optim.max_epoch 300 tensorboard_each_run True
