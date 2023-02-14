@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=pcr1Lappe
+#SBATCH --job-name=pcrinfLappe
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -45,7 +45,7 @@ layer=my_gcnconv
 dir=datasets
 out_dir="results/pcqm"
 L=$SLURM_ARRAY_TASK_ID
-rbar=1
+rbar=-1
 # rho=$1
 
 python3.9 main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
