@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=voc_gcn_bl
+#SBATCH --job-name=vocsanbl
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
