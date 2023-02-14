@@ -34,8 +34,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
 
-file='configs/GCN/vocsuperpixels-GCN.yaml'
-# file='configs/SAN/vocsuperpixels-SAN.yaml'
+# file='configs/GCN/vocsuperpixels-GCN.yaml'
+file='configs/SAN/vocsuperpixels-SAN.yaml'
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 # layer=gcnconv
