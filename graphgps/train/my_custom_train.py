@@ -228,8 +228,11 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
     logging.info(f"Total train loop time: {np.sum(full_epoch_times) / 3600:.2f}h")
     torch.save(model.state_dict(), os.path.join(cfg.run_dir, 'model.pt'))
     # put the DE calc here
-    print('Calculating Dirichlet energy on test dataset...')
-    dirichlet_epoch(loggers[-1], loaders[-1], model, split=split_names[-1])
+    try:
+        print('Calculating Dirichlet energy on test dataset...')
+        dirichlet_epoch(loggers[-1], loaders[-1], model, split=split_names[-1])
+    except:
+        print('Failed to calculate Dirichlet energy on test dataset...')
     for logger in loggers:
         logger.close()
     if cfg.train.ckpt_clean:

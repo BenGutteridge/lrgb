@@ -161,7 +161,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type rel_delay_gnn',
         # 'gnn.layer_type my_gcnconv',
-        'rbar 1',
+        'nu 1',
         'gnn.dim_inner 64',
         'gnn.layers_mp 5',
         # 'dataset.edge_encoder False',
@@ -187,7 +187,7 @@ def parse_args() -> argparse.Namespace:
     # argpath= 'configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
     # debug_args = [
     #     'gnn.layer_type my_gcnconv',
-    #     'rbar -1',
+    #     'nu -1',
     #     'gnn.layers_mp 2', # og 8
     #     'optim.max_epoch 300',
     #     'train.mode my_custom'

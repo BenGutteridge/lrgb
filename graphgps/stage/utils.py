@@ -26,10 +26,10 @@ from .example import GNNLayer
 def init_khop_GCN_v3(model, skip_first_hop=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   W_kt = {}
-  if cfg.rbar == -1: # can't set inf in cfg
-    model.rbar = float('inf')
+  if cfg.nu == -1: # can't set inf in cfg
+    model.nu = float('inf')
   else:
-    model.rbar = cfg.rbar # default 1
+    model.nu = cfg.nu # default 1
   t0 = 1 if skip_first_hop else 0
   for t in range(t0, model.num_layers):
       d_in = model.dim_in if t == 0 else model.hidden_dim
@@ -57,7 +57,7 @@ def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_
   #   dim_out = (n_params/(model.max_k * num_layers))**0.5
   #   print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
   model.rho = cfg.rho if cfg.rho != -1 else float('inf')
-  model.rbar = cfg.rbar if cfg.rbar != -1 else float('inf')
+  model.nu = cfg.nu if cfg.nu != -1 else float('inf')
 
   W_kt = {}
   t0 = 1 if skip_first_hop else 0
@@ -107,10 +107,10 @@ def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_firs
     print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_out))
   W_t = {}
   nu_kt = {}
-  if cfg.rbar == -1: # can't set inf in cfg
-    model.rbar = float('inf')
+  if cfg.nu == -1: # can't set inf in cfg
+    model.nu = float('inf')
   else:
-    model.rbar = cfg.rbar # default 1
+    model.nu = cfg.nu # default 1
   t0 = 1 if skip_first_hop else 0
   for t in range(t0, num_layers):
       d_in = dim_in if t == 0 else dim_out
@@ -130,10 +130,10 @@ def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_firs
 #   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
 #   model.num_layers = num_layers
 #   model.max_k = cfg.gnn.layers_mp if max_k is None else max_k
-#   if cfg.rbar == -1: # can't set inf in cfg
-#     model.rbar = float('inf')
+#   if cfg.nu == -1: # can't set inf in cfg
+#     model.nu = float('inf')
 #   else:
-#     model.rbar = cfg.rbar # default 1
+#     model.nu = cfg.nu # default 1
 #   for t in range(num_layers):
 #       d_in = dim_in if t == 0 else dim_out
 #       K = min(model.max_k, t+1)

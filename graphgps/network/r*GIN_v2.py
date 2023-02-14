@@ -27,7 +27,7 @@ class DelayGIN(nn.Module):
 
     def __init__(self, dim_in, dim_out):
         super().__init__()
-        assert not cfg.rbar_v2, "rbar_v2 not implemented yet"
+        assert not cfg.nu_v2, "nu_v2 not implemented yet"
         self.encoder = FeatureEncoder(dim_in)
         dim_in = self.encoder.dim_in
 
@@ -125,7 +125,7 @@ class DelayGINConv(MessagePassing):
                  **kwargs):
         kwargs.setdefault('aggr', 'add')
         super(DelayGINConv, self).__init__(**kwargs)
-        self.rbar = cfg.rbar if cfg.rbar != -1 else float('inf')
+        self.nu = cfg.nu if cfg.nu != -1 else float('inf')
         self.nn_post = modules['gin_nn_post']
         self.mlp_s = modules['mlp_s'] # for the self-connection ((1+eps) weighted)
         self.mlp_k = modules['mlp_k'] # for the k-hop aggregations (list)
@@ -164,7 +164,7 @@ class DelayGINConv(MessagePassing):
             if A(k).shape[1] == 0:
                 continue # skip if no edges
             else:
-                delay = max(k - self.rbar, 0)
+                delay = max(k - self.nu, 0)
                 out += mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
 
         x_r = x[1]

@@ -29,7 +29,7 @@ class RSPN(nn.Module):
 
     def __init__(self, dim_in, dim_out):
         super().__init__()
-        assert not cfg.rbar_v2, "rbar_v2 not implemented yet"
+        assert not cfg.nu_v2, "nu_v2 not implemented yet"
         self.encoder = FeatureEncoder(dim_in)
         dim_in = self.encoder.dim_in
 

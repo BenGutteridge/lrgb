@@ -51,9 +51,9 @@ class DelayGNNStage(nn.Module):
             for k in range(inner, outer+1):
                 # W = next(modules)
                 if A(k).shape[1] > 0: # iff there are edges of type k
-                    delay = max(k-self.rbar,0)
-                    if cfg.rbar_v2:
-                        delay = int((k-1)//self.rbar)
+                    delay = max(k-self.nu,0)
+                    if cfg.nu_v2:
+                        delay = int((k-1)//self.nu)
                     batch.x = batch.x + W(k,t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer

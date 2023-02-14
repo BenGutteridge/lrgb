@@ -13,7 +13,7 @@ def set_cfg_alpha_beta(cfg):
     # Customized options
     # ----------------------------------------------------------------------- #
 
-    # max rbar for the betaGCN model - i.e. vanilla GCN w/ adjacency for FC graph up to beta hops
+    # max nu for the betaGCN model - i.e. vanilla GCN w/ adjacency for FC graph up to beta hops
     cfg.beta = 1
     # max no. of hops to aggregate over in every layer for alphaGCN
     cfg.alpha = 1 # defaults to n_layers if this is not changed

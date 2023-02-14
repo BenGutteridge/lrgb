@@ -3,7 +3,7 @@ from yacs.config import CfgNode as CN
 from torch_geometric.graphgym.register import register_config
 
 
-def set_cfg_rbar(cfg):
+def set_cfg_nu(cfg):
     r'''
     This function sets the default config value for customized options
     :return: customized configuration use by the experiment.
@@ -14,8 +14,8 @@ def set_cfg_rbar(cfg):
     # ----------------------------------------------------------------------- #
 
     # example argument
-    cfg.rbar = 1
-    cfg.rbar_v2 = False # determines whether to use (k-1)//rbar as delay (True), or max(k, 0) (False)
+    cfg.nu = 1
+    cfg.nu_v2 = False # determines whether to use (k-1)//nu as delay (True), or max(k, 0) (False)
 
 
-register_config('rbar', set_cfg_rbar)
+register_config('nu', set_cfg_nu)

@@ -41,9 +41,11 @@ def get_run_name(cfg_fname, default):
     model = cfg.model.type
   if '+' in cfg.dataset.node_encoder_name: # note if PE used
     model += '_%s' % cfg.dataset.node_encoder_name.split('+')[-1]
-  if cfg.rbar != 1:
-    rbar = '%02d' % cfg.rbar if cfg.rbar != -1 else 'inf'
-    model += '_r*=%s' % rbar
+  if cfg.nu != 1:
+    nu = '%02d' % cfg.nu if cfg.nu != -1 else 'inf'
+    model += '_nu=%s' % nu
+  if cfg.rho != -1:
+    model += '_rho=%02d' % cfg.rho
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
   run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp)

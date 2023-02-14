@@ -53,9 +53,9 @@ class RelationalDelayGNNLiteStage(nn.Module):
             # k > 1 
             for k in range(2, (t+1)+1):
                 if A(k).shape[1] > 0: # prevents adding I*W*H (bc of self added connections to zero adj)
-                    delay = max(k-self.rbar,0)
-                    if cfg.rbar_v2:
-                        delay = int((k-1)//self.rbar)
+                    delay = max(k-self.nu,0)
+                    if cfg.nu_v2:
+                        delay = int((k-1)//self.nu)
                     batch.x = batch.x + nu(k,t) * W(t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
