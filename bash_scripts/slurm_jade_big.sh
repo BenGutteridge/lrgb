@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=nu1rho3LapFunc
+#SBATCH --job-name=nu1rho7LapFunc
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -46,7 +46,7 @@ dir=datasets
 out_dir="results/new_rho"
 L=$SLURM_ARRAY_TASK_ID
 nu=1
-rho=3
+rho=7
 
 python3.9 main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
