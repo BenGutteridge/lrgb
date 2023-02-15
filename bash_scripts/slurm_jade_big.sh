@@ -16,7 +16,7 @@ conda activate lrgb2
 nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
-pe=LapPE
+pe=none
 task='func'
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
