@@ -40,32 +40,19 @@ def init_khop_GCN_v3(model, skip_first_hop=False):
   return model
 
 
-def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, max_k=None, skip_first_hop=False):
+def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
-  if max_k is None:
-    model.max_k = num_layers
-  else:
-    model.max_k = max_k
-    print('WARNING: Using max_k = %d; was this intentional?' % max_k)
-  if cfg.max_graph_diameter <= model.max_k:
-    print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
-    model.max_k = cfg.max_graph_diameter
-  # set hidden_dim if using fixed param count
-  # if cfg.fixed_params:
-  #   n_params = cfg.fixed_mp_params_num
-  #   dim_out = (n_params/(model.max_k * num_layers))**0.5
-  #   print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
   model.rho = cfg.rho if cfg.rho != -1 else float('inf')
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
 
   W_kt = {}
   t0 = 1 if skip_first_hop else 0
-  inner = 1
+  inner = 2
   for t in range(t0, num_layers):
       d_in = dim_in if t == 0 else dim_out
-      outer = min(model.max_k, t+1)
-      inner += 1 if ((outer-inner) == cfg.rho) else 0
+      W_kt["k=1, t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+      inner, outer = 2+max(0, t-model.rho), t+1
       for k in range(inner, outer+1):
           W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
   model.W_kt = nn.ModuleDict(W_kt)
@@ -161,3 +148,13 @@ def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_firs
 #   model.nu = nn.ParameterDict(nu)
 
 #   return model
+
+## stuff about max_k: no longer want this
+  # if max_k is None:
+  #   model.max_k = num_layers
+  # else:
+  #   model.max_k = max_k
+  #   print('WARNING: Using max_k = %d; was this intentional?' % max_k)
+  # if cfg.max_graph_diameter <= model.max_k:
+  #   print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
+  #   model.max_k = cfg.max_graph_diameter

@@ -10,6 +10,7 @@ def get_num_fc_drew(L):
   Lq = min(rho, L)    # number of quadratically scaling param layers
   Ll = max(0, L-rho)  # number of linearly scaling param layers
   num_fc = (Lq**2+Lq)/2 + rho*Ll # number of d**2 layers
+  num_fc += Ll # if the k=1 connection is maintained throughout
   return num_fc
 
 def return_hidden_dim(N):
