@@ -43,7 +43,7 @@ file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 layer=my_gcnconv
 
 dir=datasets
-out_dir="results/pcqm"
+out_dir="results/new_rho"
 L=$SLURM_ARRAY_TASK_ID
 rbar=1
 rho=7
