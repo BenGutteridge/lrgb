@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PCnuinfLappe
+#SBATCH --job-name=PCnuinf
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -31,9 +31,9 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
