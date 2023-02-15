@@ -27,6 +27,6 @@ dims=(  300 260 230 205 190 175 170 160 150 142)
 layers=(5   7   9   11  13  15  17  19  21  23)
 
 # # fixed d
-# python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+# python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
 # # fixed params
 python3.9 main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" gnn.layers_mp ${layers[$SLURM_ARRAY_TASK_ID]} optim.max_epoch 300 gnn.dim_inner ${dims[$SLURM_ARRAY_TASK_ID]} tensorboard_each_run False train.mode my_custom

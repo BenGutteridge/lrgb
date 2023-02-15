@@ -46,6 +46,6 @@ optim:
   min_lr: 1e-5
 tensorboard_each_run: False
 tensorboard_agg: True
-# rbar: 1   unused
+# nu: 1   unused
 alpha: 11  # defaults to n_layers when alpha=1
 

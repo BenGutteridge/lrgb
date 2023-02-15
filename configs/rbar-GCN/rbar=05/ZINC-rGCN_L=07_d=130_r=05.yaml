@@ -42,5 +42,5 @@ optim:
   optimizer: adam
   base_lr: 0.01
   max_epoch: 200
-rbar: 5
-rbar_v2: True
+nu: 5
+nu_v2: True

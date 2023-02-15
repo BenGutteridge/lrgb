@@ -46,6 +46,6 @@ optim:
   min_lr: 1e-5
 tensorboard_each_run: False
 tensorboard_agg: True
-rbar: -1 # changes to inf in code
+nu: -1 # changes to inf in code
 use_edge_labels: True
 

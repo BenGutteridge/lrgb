@@ -46,4 +46,4 @@ optim:
   min_lr: 1e-5
 tensorboard_each_run: False
 tensorboard_agg: True
-rbar: 3
+nu: 3

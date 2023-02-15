@@ -22,7 +22,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 pe=none
 task='func'
 # task='struct'
-rbar=1
+nu=1
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
@@ -30,7 +30,7 @@ file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 dir=datasets
 d=64
 L=$SLURM_ARRAY_TASK_ID
-# rbar=-1
-rbar=$(($SLURM_ARRAY_TASK_ID/2))
-echo "r*=$rbar"
-python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" rbar $rbar gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
+# nu=-1
+nu=$(($SLURM_ARRAY_TASK_ID/2))
+echo "r*=$nu"
+python main.py --cfg "$file" --repeat 3 device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $d tensorboard_each_run False train.mode my_custom
