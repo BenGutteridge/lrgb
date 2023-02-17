@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=nu1rho5LapPEFunc
+#SBATCH --job-name=VOCn1r5LapPE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -20,11 +20,11 @@ pe=LapPE
 task='func'
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
-file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
+# file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 # file='configs/GCN/vocsuperpixels-GCN.yaml'
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
-# file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
