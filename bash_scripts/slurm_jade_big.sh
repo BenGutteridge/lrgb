@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=nuinfrho10Func
+#SBATCH --job-name=nu1rho5LapPEFunc
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -16,7 +16,7 @@ conda activate lrgb2
 nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
-pe=none
+pe=LapPE
 task='func'
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
@@ -45,7 +45,7 @@ layer=my_gcnconv
 dir=datasets
 out_dir="results/new_rho"
 L=$SLURM_ARRAY_TASK_ID
-nu=-1
+nu=1
 rho=5
 
 python3.9 main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
