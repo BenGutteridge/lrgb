@@ -137,7 +137,7 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (mode
 
 # argpath='configs/GCN/pcqm-contact-GCN.yaml'
 
-# argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 repeat = 1
 import argparse
@@ -157,15 +157,15 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         # 'out_dir results/no_batchnorm',
         'dataset.dir datasets',
-        'train.mode my_custom',
+        # 'train.mode my_custom',
         # 'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type rel_delay_gnn',
         # 'gnn.layer_type my_gcnconv',
         # 'nu 1',
-        'gnn.dim_inner 16',
-        'gnn.layers_mp 5',
+        # 'gnn.dim_inner 16',
+        # 'gnn.layers_mp 3',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -178,24 +178,27 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        'fixed_params.N 500_000',
+        # 'fixed_params.N 500_000',
 
-        'rho 10'
+        # 'rho 10'
         ]
 
-    # argpath = 'configs/DelayGCN/peptides-func-DelayGCN+LapPE.yaml'
-    # argpath = 'configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
-    # argpath = 'configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
-    # argpath= 'configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-    # debug_args = [
+    argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+
+    debug_args = [
     #     'gnn.layer_type my_gcnconv',
     #     'nu -1',
     #     'gnn.layers_mp 2', # og 8
     #     'optim.max_epoch 300',
     #     'train.mode my_custom'
     #     # 'fixed_params.N 500_000',
-    # ]
-    # if debug_args: extra_args += debug_args
+
+    'out_dir results/new_rho',
+    'gnn.layers_mp 5',
+    'nu 1',
+    'rho 5',
+    ]
+    if debug_args: extra_args += debug_args
 
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

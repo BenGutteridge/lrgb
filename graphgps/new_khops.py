@@ -45,7 +45,7 @@ def add_k_hop_edges(dataset, K, format, name):
   print('Checking correct conversion...')
   count  = 0
   for i in tqdm(range(len(dataset))):
-    if not torch.equal(dataset.get(i).edge_attr, dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]]):
+    if not torch.equal(dataset.get(i).edge_attr.float(), dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]].float()):
       # print('Graph %d not changed in dataset._data_list; setting manually' % i)
       count += 1
       dataset._data_list[i] = Data(x=dataset.get(i).x,
