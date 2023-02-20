@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PFrcatL11nu1lap
+#SBATCH --job-name=PFL11nu1lap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -48,9 +48,9 @@ out_dir="results/pept-JK"
 L=11
 nu=1
 # rho=5
-rho = $SLURM_ARRAY_TASK_ID
+rho=$SLURM_ARRAY_TASK_ID
 
-echo python3.9 main.py --cfg "$file" --repeat 3 jk_mode 'rho_cat' fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+python3.9 main.py --cfg "$file" --repeat 3 jk_mode $1 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
