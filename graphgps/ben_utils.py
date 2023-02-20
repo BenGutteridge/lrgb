@@ -5,14 +5,40 @@ from torch_geometric.graphgym.config import cfg
 import os
 from torch_geometric.data import Data
 
+def get_task_id():
+  if cfg.dataset.name.startswith('peptides'):
+    return 'pept'
+  elif cfg.dataset.format == 'PyG-VOCSuperpixels':
+    return 'voc'
+  elif cfg.dataset.format == 'PyG-COCOSuperpixels':
+    return 'coco'
+  elif cfg.dataset.name == 'PCQM4Mv2Contact-shuffle':
+    return 'pcqm'
+  else:
+    raise NotImplementedError
+
 from param_calcs import return_hidden_dim
 def set_d_fixed_params(cfg):
+  set_jumping_knowledge()
   N = cfg.fixed_params.N
   if N > 0:
     cfg.gnn.dim_inner = return_hidden_dim(N)
     print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
   else:
       print('Using given hidden dim of %d' % cfg.gnn.dim_inner)
+
+default_heads = {
+  'pept': 'graph',
+  'voc': 'inductive_node',
+}
+
+def set_jumping_knowledge():
+  if cfg.jk_mode == 'none':
+    return # uses default head
+  task = get_task_id()
+  try: cfg.gnn.head = '%s_jk_%s' % (cfg.jk_mode, default_heads[task])
+  except: assert False, 'Error: JK head for %s not yet defined.' % task
+
 
 def custom_set_out_dir(cfg, cfg_fname, name_tag, default=False):
     """Set custom main output directory path to cfg.
@@ -46,9 +72,12 @@ def get_run_name(cfg_fname, default):
     model += '_nu=%s' % nu
   if cfg.rho != -1:
     model += '_rho=%02d' % cfg.rho
+  if cfg.jk_mode != 'none':
+    model += '_JK=%s' % cfg.jk_mode
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
-  run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp)
+  # run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # with BS
+  run_name = "%s%s_%s_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # without BS
   cut = ['ides', 'ural', 'tional', 'PyG-', 'OGB-']
   for c in cut:
     run_name = run_name.replace(c, '')

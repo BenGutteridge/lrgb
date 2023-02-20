@@ -3,6 +3,7 @@
 from ogb.utils.features import get_atom_feature_dims
 from graphgps.encoder.voc_superpixels_encoder import VOC_node_input_dim
 from torch_geometric.graphgym.config import cfg
+from graphgps.ben_utils import get_task_id
 
 def get_num_fc_drew(L):
   """Base number of FC layers in DRew MP"""
@@ -25,22 +26,29 @@ def return_hidden_dim(N):
   else:
     raise ValueError('Unknown stage/layer type combination; stage_type: {0}, layer_type: {1}'.format(cfg.gnn.stage_type, cfg.gnn.layer_type))
   
+  # accounting for concatenation-based jumping knowledge MLPs in the head
+  if 'cat_jk' in cfg.gnn.head:
+    n_jk_terms = cfg.gnn.layers_mp
+    if 'rho' in cfg.gnn.head: n_jk_terms -= cfg.rho
+    num_fc += n_jk_terms 
+
   # other params and summation
   post_mp = cfg.gnn.layers_post_mp - 1       # 2-layer MLP at end -- not counting final layer to num classes
   num_bn = cfg.gnn.batchnorm * num_fc        # batch norm layers
-  if cfg.dataset.name.startswith('peptides'):
+  task = get_task_id()
+  if task == 'pept':
     node_embed = sum(get_atom_feature_dims())
     head = 10 # number of classes -- 11 for struct, close enough
     d = solve_quadratic(num_fc+post_mp, num_bn+node_embed+head, -N)
-  elif cfg.dataset.format == 'PyG-VOCSuperpixels':
+  elif task == 'voc':
     node_embed = VOC_node_input_dim
     head = 21 # number of classes
     d = solve_quadratic(num_fc+post_mp, num_bn+node_embed+head+post_mp, -N)
-  elif cfg.dataset.format == 'PyG-COCOSuperpixels':
+  elif task == 'coco':
     node_embed = VOC_node_input_dim
     head = 81 # number of classes
     d = solve_quadratic(num_fc+post_mp, num_bn+node_embed+head+post_mp, -N)
-  elif cfg.dataset.name == 'PCQM4Mv2Contact-shuffle':
+  elif task == 'pcqm':
     node_embed = sum(get_atom_feature_dims())
     post_mp += 1 # head is a fc, post-mp layer
     d = solve_quadratic(num_fc+post_mp, num_bn+node_embed+post_mp, -N)

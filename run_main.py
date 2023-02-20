@@ -137,7 +137,7 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (mode
 
 # argpath='configs/GCN/pcqm-contact-GCN.yaml'
 
-argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 repeat = 1
 import argparse
@@ -165,7 +165,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type my_gcnconv',
         # 'nu 1',
         # 'gnn.dim_inner 16',
-        # 'gnn.layers_mp 3',
+        'gnn.layers_mp 5',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -178,14 +178,28 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        # 'fixed_params.N 500_000',
+        'fixed_params.N 500_000',
 
-        # 'rho 10'
+        'rho 2',
+        'jk_mode rho_cat', # none, [rho_][max, cat] 
         ]
 
-    argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+    # argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
-    debug_args = [
+# TODO: SORT
+#  {'pept': 'graph', 
+#  'voc': 'inductive_node'}
+# {
+#     'none': cfg.gnn.head,
+#     'max': 'jk_max',
+#     'cat': 'jk_cat_graph',
+#     'rho_max': 'rho_jk_max_graph'
+#     'rho_cat': 'rho_jk_cat_graph'
+#     }
+
+# it's just '%s_%s' % (cfg.jk_head, )
+
+    # debug_args = [
     #     'gnn.layer_type my_gcnconv',
     #     'nu -1',
     #     'gnn.layers_mp 2', # og 8
@@ -193,12 +207,12 @@ def parse_args() -> argparse.Namespace:
     #     'train.mode my_custom'
     #     # 'fixed_params.N 500_000',
 
-    'out_dir results/new_rho',
-    'gnn.layers_mp 5',
-    'nu 1',
-    'rho 5',
-    ]
-    if debug_args: extra_args += debug_args
+    # 'out_dir results/new_rho',
+    # 'gnn.layers_mp 5',
+    # 'nu 1',
+    # 'rho 5',
+    # ]
+    # if debug_args: extra_args += debug_args
 
     extra_args = ' '.join(extra_args)
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())

@@ -8,6 +8,7 @@ from .example import GNNLayer
 # from .utils import init_khop_GCN
 from .utils import init_khop_GCN_v2
 
+custom_heads = ['jk_maxpool_graph']
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class DelayGNNStage(nn.Module):
@@ -62,6 +63,8 @@ class DelayGNNStage(nn.Module):
             for x_i in x+[batch.x]:
                 energies.append(dirichlet(x_i, L))
             batch.dirichlet_energies = np.array(energies)
+        if 'jk' in cfg.gnn.head:
+            return batch, x # for heads using Jumping Knowledge at final layer
         return batch
 
 register_stage('delay_gnn', DelayGNNStage)
