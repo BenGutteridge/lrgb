@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PCnuinf
+#SBATCH --job-name=VocJK
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -27,11 +27,11 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/vocsuperpixels-GCN.yaml'
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
-# file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
@@ -46,12 +46,12 @@ file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 layer=my_gcnconv
 
 dir=datasets
-out_dir="results/pcqm"
+out_dir="results"
 L=$SLURM_ARRAY_TASK_ID
-nu=-1
-rho=-1
+nu=1
+rho=5
 
-python main.py --cfg "$file" --repeat 3 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+python main.py --cfg "$file" --repeat 3 jk_mode rho_cat fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
