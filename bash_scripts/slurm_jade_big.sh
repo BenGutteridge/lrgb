@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=kmaxL7nuinf
+#SBATCH --job-name=rho1L23nu1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -45,11 +45,10 @@ layer=my_gcnconv
 dir=datasets
 out_dir="results"
 # L=$SLURM_ARRAY_TASK_ID
-L=7
-nu=-1
-# rho=5
+L=23
+nu=1
 # rho=$SLURM_ARRAY_TASK_ID
-rho=0
+rho=1
 jk=none
 k_max=$SLURM_ARRAY_TASK_ID
 
