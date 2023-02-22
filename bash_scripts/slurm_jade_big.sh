@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=K-L23nu1NoPE
+#SBATCH --job-name=kmaxL23nu1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
