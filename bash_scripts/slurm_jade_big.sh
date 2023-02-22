@@ -53,6 +53,7 @@ rho=0
 jk=none
 k_max=$SLURM_ARRAY_TASK_ID
 
+echo python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
