@@ -20,7 +20,7 @@ def get_num_fc_drew(L):
   for t in range(L): # ignores skipped first layer for relational. TODO: sort
     k_nbhs = get_k_neighbourhoods(t)
     toprint = ' '.join([str(i).ljust(2) if i in k_nbhs else 'X'.ljust(2) for i in range(1, k_nbhs[-1]+1)])
-    print('\tLayer %d: %s' % (t, toprint))
+    print('\t%02d: %s' % (t, toprint))
     num_fc += len(k_nbhs)
   # rho = cfg.rho if cfg.rho != -1 else 1e6 # inplace of inf to avoid 0*inf=nan error later
   # Lq = min(rho, L)    # number of quadratically scaling param layers
