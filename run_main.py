@@ -108,13 +108,13 @@ model = 'DelayGCN'
 # model='SAN'
 # model='alphaGCN'
 
-# VOC superpixels
-argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# # VOC superpixels
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
 # # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
-# # Peptides-struct
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
@@ -165,7 +165,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type my_gcnconv',
         # 'nu 1',
         # 'gnn.dim_inner 16',
-        'gnn.layers_mp 5',
+        'gnn.layers_mp 10',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -180,7 +180,8 @@ def parse_args() -> argparse.Namespace:
 
         'fixed_params.N 500_000',
 
-        'rho 2',
+        'rho 5',
+        'k_max 2',
         'jk_mode rho_cat', # none, [rho_][max, cat] 
         ]
 

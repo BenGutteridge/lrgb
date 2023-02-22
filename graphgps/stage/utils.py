@@ -4,6 +4,8 @@ from torch_geometric.graphgym.config import cfg
 # from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
+sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
+from param_calcs import get_k_neighbourhoods
 
 
 # def setup(model, dim_in, dim_out, num_layers, max_k=None):
@@ -39,23 +41,37 @@ def init_khop_GCN_v3(model, skip_first_hop=False):
   model.W_kt = nn.ModuleDict(W_kt)
   return model
 
+# TODO: delete if new one works
+# def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
+#   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
+#   model.num_layers = num_layers
+#   model.rho = cfg.rho if cfg.rho != -1 else float('inf')
+#   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
+
+#   W_kt = {}
+#   t0 = 1 if skip_first_hop else 0
+#   inner = 2
+#   for t in range(t0, num_layers):
+#       d_in = dim_in if t == 0 else dim_out
+#       W_kt["k=1, t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+#       inner, outer = 2+max(0, t-model.rho), t+1
+#       for k in range(inner, outer+1):
+#           W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+#   model.W_kt = nn.ModuleDict(W_kt)
+#   return model
 
 def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
   model.num_layers = num_layers
-  model.rho = cfg.rho if cfg.rho != -1 else float('inf')
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
 
   W_kt = {}
   t0 = 1 if skip_first_hop else 0
-  inner = 2
   for t in range(t0, num_layers):
-      d_in = dim_in if t == 0 else dim_out
-      W_kt["k=1, t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-      inner, outer = 2+max(0, t-model.rho), t+1
-      for k in range(inner, outer+1):
-          W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-  model.W_kt = nn.ModuleDict(W_kt)
+    d_in = dim_in if t == 0 else dim_out
+    for k in get_k_neighbourhoods(t):
+      W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+    model.W_kt = nn.ModuleDict(W_kt)
   return model
 
 def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):

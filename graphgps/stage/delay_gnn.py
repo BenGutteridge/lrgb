@@ -7,8 +7,9 @@ import torch
 from .example import GNNLayer
 # from .utils import init_khop_GCN
 from .utils import init_khop_GCN_v2
-
+sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 custom_heads = ['jk_maxpool_graph']
+from param_calcs import get_k_neighbourhoods
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class DelayGNNStage(nn.Module):
@@ -39,16 +40,14 @@ class DelayGNNStage(nn.Module):
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
         W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
-        
+
         # run through layers
-        t, x, inner = 0, [], 1 # length t list with x_0, x_1, ..., x_t
+        t, x = 0, [] # length t list with x_0, x_1, ..., x_t
         # modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
-            inner, outer = 2+max(0, t-cfg.rho), t+1 # slice of non-k=1 k-neighbourhoods to aggregate
-            k_neighbourhoods = [1] + list(range(inner, outer+1))
-            for k in k_neighbourhoods:
+            for k in get_k_neighbourhoods(t):
                 # W = next(modules)
                 if A(k).shape[1] > 0: # iff there are edges of type k
                     delay = max(k-self.nu,0)

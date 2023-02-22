@@ -16,7 +16,7 @@ def set_cfg_alpha_beta(cfg):
     # max nu for the betaGCN model - i.e. vanilla GCN w/ adjacency for FC graph up to beta hops
     cfg.beta = 1
     # max no. of hops to aggregate over in every layer for alphaGCN
-    cfg.alpha = 1 # defaults to n_layers if this is not changed
+    # cfg.alpha = 1 # defaults to n_layers if this is not changed # NB. REPLACED WITH k_max
 
     # # if True: for alphaGCN, rather than having alpha as a learnable vector summing to 1, just use a 1-vector
     # cfg.fixed_alpha = False

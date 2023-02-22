@@ -21,7 +21,7 @@ class AlphaGNNStage(nn.Module):
         # W_t only, not W_{k,t}
         # alpha_k sums to 1 and weights Sk
         # all Sk used at every layer - nondynamic
-        alpha = num_layers if cfg.alpha==1 else cfg.alpha
+        alpha = min(num_layers, cfg.k_max)
         print('Running alphaGNN, alpha = ', alpha)
         self = init_khop_nondynamic_GCN(self, 
                                         dim_in, dim_out, 

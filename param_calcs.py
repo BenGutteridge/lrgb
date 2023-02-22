@@ -4,14 +4,30 @@ from ogb.utils.features import get_atom_feature_dims
 from graphgps.encoder.voc_superpixels_encoder import VOC_node_input_dim
 from torch_geometric.graphgym.config import cfg
 from graphgps.ben_utils import get_task_id
+sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
+
+def get_k_neighbourhoods(t):
+  rho_nbhs = list(range(max(1, t+1+1-cfg.rho), t+1+1))
+  sp_nbhs = list(range(1, min(t+1, cfg.k_max)+1))
+  return sort_and_removes_dupes(rho_nbhs + sp_nbhs)
 
 def get_num_fc_drew(L):
   """Base number of FC layers in DRew MP"""
-  rho = cfg.rho if cfg.rho != -1 else 1e6 # inplace of inf to avoid 0*inf=nan error later
-  Lq = min(rho, L)    # number of quadratically scaling param layers
-  Ll = max(0, L-rho)  # number of linearly scaling param layers
-  num_fc = (Lq**2+Lq)/2 + rho*Ll # number of d**2 layers
-  num_fc += Ll # if the k=1 connection is maintained throughout
+  num_fc = 0
+  print('k_max = %02d, rho = %02d\nLayer k-neighbourhoods:' % (cfg.k_max, cfg.rho))
+  assert cfg.rho < L and cfg.rho >= 0, "Error: rho >= L or < 0"
+  assert cfg.k_max >= 0, 'Error: k_max < 0'
+  for t in range(L): # ignores skipped first layer for relational. TODO: sort
+    k_nbhs = get_k_neighbourhoods(t)
+    toprint = ' '.join([str(i).ljust(2) if i in k_nbhs else 'X'.ljust(2) for i in range(1, k_nbhs[-1]+1)])
+    print('\tLayer %d: %s' % (t, toprint))
+    num_fc += len(k_nbhs)
+  # rho = cfg.rho if cfg.rho != -1 else 1e6 # inplace of inf to avoid 0*inf=nan error later
+  # Lq = min(rho, L)    # number of quadratically scaling param layers
+  # Ll = max(0, L-rho)  # number of linearly scaling param layers
+  # num_fc = (Lq**2+Lq)/2 + rho*Ll # number of d**2 layers
+  # if cfg.rho > 0:
+  #   num_fc += cfg.k_max*Ll # if the k=1 connection is maintained throughout
   return num_fc
 
 def return_hidden_dim(N):
@@ -29,7 +45,7 @@ def return_hidden_dim(N):
   # accounting for concatenation-based jumping knowledge MLPs in the head
   if 'cat_jk' in cfg.gnn.head:
     n_jk_terms = cfg.gnn.layers_mp
-    if 'rho' in cfg.gnn.head: n_jk_terms -= cfg.rho
+    if 'rho' in cfg.gnn.head: n_jk_terms -= (cfg.rho + cfg.k_max - 1)
     num_fc += n_jk_terms 
 
   # other params and summation

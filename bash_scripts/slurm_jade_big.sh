@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PFL11nu1lap
+#SBATCH --job-name=K-L23nu1NoPE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -16,7 +16,7 @@ conda activate lrgb2
 nvcc --version
 python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
-pe=LapPE
+pe=none
 task='func'
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
@@ -43,14 +43,17 @@ file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 layer=my_gcnconv
 
 dir=datasets
-out_dir="results/pept-JK"
+out_dir="results"
 # L=$SLURM_ARRAY_TASK_ID
-L=11
+L=23
 nu=1
 # rho=5
-rho=$SLURM_ARRAY_TASK_ID
+# rho=$SLURM_ARRAY_TASK_ID
+rho=0
+jk=none
+k_max=$SLURM_ARRAY_TASK_ID
 
-python3.9 main.py --cfg "$file" --repeat 3 jk_mode $1 fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom

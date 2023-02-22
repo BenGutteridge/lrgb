@@ -13,7 +13,16 @@ def set_cfg_dropedge(cfg):
     # Customized options
     # ----------------------------------------------------------------------- #
 
-    # rho determines the max number of k-hop neighbourhoods per layer
-    cfg.rho = -1 # default -1, which means no limit, ie vanilla DRew
+    cfg.rho = 0 # default no extra outer-most layers
+    cfg.k_max = int(1e6) # default (stand-in for) inf, no outer limit
 
-register_config('rho', set_cfg_dropedge)
+    """
+    DRew:               k_max = inf, rho = 0
+    rhoDRew (v1):       k_max = 0 (where we don't keep k=1 neighbourhood)
+    rhoDRew (v2):       k_max = 1 
+    'core' DRew:        rho = 0 (max_k is outer limit, no aggregations beyound k_max hops)
+
+    N.B. I much prefer the name rho for  what is currently k_max and pi /omega/rho_outer for what is currently rho
+    """
+
+register_config('dropedge', set_cfg_dropedge)

@@ -196,8 +196,8 @@ def load_dataset_master(format, name, dataset_dir):
     multi_hop_models = ['flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
                         'R-SPN_dense', 'R*-SPN', 'R-SPN']
     if cfg.gnn.stage_type in multi_hop_stages or cfg.model.type in multi_hop_models:
-        max_k = max(cfg.gnn.layers_mp, cfg.alpha)
-        dataset = add_k_hop_edges(dataset, max_k, format, name)
+        k_max = min(cfg.gnn.layers_mp, cfg.k_max) if cfg.rho < 1 else cfg.gnn.layers_mp
+        dataset = add_k_hop_edges(dataset, k_max, format, name)
     log_loaded_dataset(dataset, format, name)
 
     # Precompute necessary statistics for positional encodings.

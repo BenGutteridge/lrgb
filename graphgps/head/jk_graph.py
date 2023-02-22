@@ -29,11 +29,11 @@ class GNNGraphHeadJK(nn.Module):
     """
     def __init__(self, dim_in, dim_out):
         super(GNNGraphHeadJK, self).__init__()
-        if 'rho' in cfg.gnn.head: assert ((cfg.rho > 0) & (cfg.rho+1 < cfg.gnn.layers_mp)), 'Error, invalid arguments for JK head %s: L=%d and rho=%d' % (cfg.gnn.head, cfg.gnn.layers_mp, cfg.rho)
+        if 'rho' in cfg.gnn.head: assert ((cfg.rho > 0) & (cfg.rho+cfg.k_max < cfg.gnn.layers_mp)), 'Error, invalid arguments for JK head %s: L=%d and rho=%d' % (cfg.gnn.head, cfg.gnn.layers_mp, cfg.rho)
         print('Using jumping knowledge, JK aggregation mode: %s' % cfg.gnn.head)
         if 'cat' in cfg.gnn.head:
             n_agg_terms = cfg.gnn.layers_mp
-            if 'rho' in cfg.gnn.head: n_agg_terms -= cfg.rho
+            if 'rho' in cfg.gnn.head: n_agg_terms -= (cfg.rho + cfg.k_max - 1)
             self.jumping_knowledge = nn.Sequential(
                 JumpingKnowledge('cat'), # stack node feats then linear layer to compress again
                 nn.Linear(dim_in * n_agg_terms, dim_in)
@@ -54,7 +54,7 @@ class GNNGraphHeadJK(nn.Module):
         batch, h = batch # unroll tuple - takes the current batch output and each layer's node feats, h
         if 'rho' in cfg.gnn.head:
             # assumes rho+1 neighbourhoods aggregated (3 outermost + k=1) and appends from before first dropped neighbourhood
-            h = h[cfg.rho+1:] + [batch.x]
+            h = h[cfg.rho+cfg.k_max:] + [batch.x]
         else: 
             h = h[1:] + [batch.x]
         h_jk = self.jumping_knowledge(h) # don't include pre-MP; include final output
@@ -83,12 +83,12 @@ class GNNInductiveNodeHeadJK(nn.Module):
 
     def __init__(self, dim_in, dim_out):
         super(GNNInductiveNodeHeadJK, self).__init__()
-        if 'rho' in cfg.gnn.head: assert ((cfg.rho > 0) & (cfg.rho+1 < cfg.gnn.layers_mp)), 'Error, invalid arguments for JK head %s: L=%d and rho=%d' % (cfg.gnn.head, cfg.gnn.layers_mp, cfg.rho)
+        if 'rho' in cfg.gnn.head: assert ((cfg.rho >= 0) & (cfg.rho+cfg.k_max < cfg.gnn.layers_mp)), 'Error, invalid arguments for JK head %s: L=%d and rho=%d' % (cfg.gnn.head, cfg.gnn.layers_mp, cfg.rho)
         layers_post_mp = cfg.gnn.layers_post_mp
         print('Using jumping knowledge, JK aggregation mode: %s' % cfg.gnn.head)
         if 'cat_jk' in cfg.gnn.head:
             n_agg_terms = cfg.gnn.layers_mp
-            if 'rho' in cfg.gnn.head: n_agg_terms -= cfg.rho
+            if 'rho' in cfg.gnn.head: n_agg_terms -= (cfg.rho + cfg.k_max - 1)
             self.jumping_knowledge = nn.Sequential(
                 JumpingKnowledge('cat'), # stack node feats then linear layer to compress again
                 nn.Linear(dim_in * n_agg_terms, dim_in)
@@ -109,7 +109,7 @@ class GNNInductiveNodeHeadJK(nn.Module):
         batch, h = batch # unroll tuple - takes the current batch output and each layer's node feats, h
         if 'rho' in cfg.gnn.head:
             # assumes rho+1 neighbourhoods aggregated (3 outermost + k=1) and appends from before first dropped neighbourhood
-            h = h[cfg.rho+1:] + [batch.x]
+            h = h[cfg.rho+cfg.k_max:] + [batch.x]
         else: 
             h = h[1:] + [batch.x]
         h = self.jumping_knowledge(h)
