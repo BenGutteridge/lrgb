@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=catrho10L23nu1
+#SBATCH --job-name=catrho5L23nu1
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -48,7 +48,7 @@ out_dir="results"
 L=23
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
-rho=10
+rho=5
 jk=cat
 k_max=$SLURM_ARRAY_TASK_ID
 
