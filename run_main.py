@@ -112,12 +112,12 @@ model = 'DelayGCN'
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# # PCQM-Contact
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# PCQM-Contact
+argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
@@ -155,7 +155,7 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        # 'out_dir results/no_batchnorm',
+        'out_dir results',
         'dataset.dir datasets',
         'train.mode my_custom',
         'optim.max_epoch 1',
@@ -163,9 +163,9 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type rel_delay_gnn',
         # 'gnn.layer_type my_gcnconv',
-        # 'nu 1',
-        'gnn.dim_inner 8',
-        'gnn.layers_mp 5',
+        'nu -1',
+        # 'gnn.dim_inner 8',
+        'gnn.layers_mp 25',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -174,15 +174,16 @@ def parse_args() -> argparse.Namespace:
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
-        # 'train.auto_resume True',
+        'train.auto_resume True',
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
         # 'fixed_params.N 500_000',
-        'use_agg_weights True',
+        # 'use_agg_weights True',
         # 'rho 5',
         # 'k_max 2',
         # 'jk_mode rho_cat', # none, [rho_][max, cat] 
+
         ]
 
     # argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
