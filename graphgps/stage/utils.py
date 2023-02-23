@@ -8,60 +8,8 @@ sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 from param_calcs import get_k_neighbourhoods
 
 
-# def setup(model, dim_in, dim_out, num_layers, max_k=None):
-#   model.num_layers = num_layers
-#   model.dim_in = dim_in
-#   model.max_k = num_layers if max_k is None else max_k
-#   if cfg.max_graph_diameter <= model.max_k:
-#     print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
-#     model.max_k = cfg.max_graph_diameter
-#   # set hidden_dim if using fixed param count
-#   if cfg.fixed_params:
-#     n_params = cfg.fixed_mp_params_num
-#     model.hidden_dim = (n_params/(model.max_k * num_layers))**0.5
-#     print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, model.hidden_dim))
-#   else:
-#     model.hidden_dim = dim_out
-#   return model
-
-# FINISH
-def init_khop_GCN_v3(model, skip_first_hop=False):
-  """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
-  W_kt = {}
-  if cfg.nu == -1: # can't set inf in cfg
-    model.nu = float('inf')
-  else:
-    model.nu = cfg.nu # default 1
-  t0 = 1 if skip_first_hop else 0
-  for t in range(t0, model.num_layers):
-      d_in = model.dim_in if t == 0 else model.hidden_dim
-      K = min(model.max_k, t+1)
-      for k in range(1, K+1):
-          W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, model.hidden_dim) # regular GCN layers
-  model.W_kt = nn.ModuleDict(W_kt)
-  return model
-
-# TODO: delete if new one works
-# def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
-#   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
-#   model.num_layers = num_layers
-#   model.rho = cfg.rho if cfg.rho != -1 else float('inf')
-#   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
-
-#   W_kt = {}
-#   t0 = 1 if skip_first_hop else 0
-#   inner = 2
-#   for t in range(t0, num_layers):
-#       d_in = dim_in if t == 0 else dim_out
-#       W_kt["k=1, t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-#       inner, outer = 2+max(0, t-model.rho), t+1
-#       for k in range(inner, outer+1):
-#           W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-#   model.W_kt = nn.ModuleDict(W_kt)
-#   return model
-
-def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
-  """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
+def init_DRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
+  """The (nu)DRew-GCN param initialiser, used for delay_gnn"""
   model.num_layers, use_weights = num_layers, cfg.use_agg_weights
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
   W_kt = {}
@@ -76,6 +24,24 @@ def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   model.W_kt = nn.ModuleDict(W_kt)
   if use_weights: model.alpha_t = nn.ParameterList(alpha_t)
   return model
+
+def init_shareDRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
+  """The (nu)DRew-GCN param initialiser, but with weight sharing"""
+  model.num_layers, use_weights = num_layers, cfg.use_agg_weights
+  model.nu = cfg.nu if cfg.nu != -1 else float('inf')
+  W_t = {}
+  if use_weights: alpha_t = []
+  t0 = 1 if skip_first_hop else 0
+  for t in range(t0, num_layers):
+    d_in = dim_in if t == 0 else dim_out
+    k_neighbourhoods = get_k_neighbourhoods(t)
+    W_t["t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
+    if use_weights: alpha_t.append(torch.nn.Parameter(torch.randn(len(k_neighbourhoods)), requires_grad=True)) # TODO: is to.device needed after randn()?
+  model.W_t = nn.ModuleDict(W_t)
+  if use_weights: model.alpha_t = nn.ParameterList(alpha_t)
+  return model
+
+########## Retired ##########
 
 def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
   """For the non-dynamic k-hop model: alpha_k_gnn.
@@ -127,9 +93,6 @@ def init_khop_GCN_lite(model, dim_in, dim_out, num_layers, max_k=None, skip_firs
   model.W_t = nn.ModuleDict(W_t)
   model.nu_kt = nn.ParameterDict(nu_kt)
   return model
-
-
-########## Retired ##########
 
 # # retired
 # def init_khop_GCN(model, dim_in, dim_out, num_layers, max_k=None):

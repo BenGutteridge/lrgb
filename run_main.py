@@ -112,12 +112,12 @@ model = 'DelayGCN'
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# PCQM-Contact
-argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# # PCQM-Contact
+# argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
@@ -161,11 +161,11 @@ def parse_args() -> argparse.Namespace:
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
-        # 'gnn.stage_type rel_delay_gnn',
+        'gnn.stage_type delay_share_gnn',
         # 'gnn.layer_type my_gcnconv',
         'nu -1',
-        # 'gnn.dim_inner 8',
-        'gnn.layers_mp 25',
+        # 'gnn.dim_inner 114',
+        'gnn.layers_mp 8',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -178,7 +178,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        # 'fixed_params.N 500_000',
+        # 'fixed_params.N 0',
+        'fixed_params.N 500_000',
         # 'use_agg_weights True',
         # 'rho 5',
         # 'k_max 2',

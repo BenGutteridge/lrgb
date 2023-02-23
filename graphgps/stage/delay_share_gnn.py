@@ -6,13 +6,13 @@ from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
 # from .utils import init_khop_GCN
-from .utils import init_DRewGCN
+from .utils import init_DRewGCN, init_shareDRewGCN
 sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 custom_heads = ['jk_maxpool_graph']
 from param_calcs import get_k_neighbourhoods
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
-class DelayGNNStage(nn.Module):
+class DelayShareGNNStage(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
 
@@ -23,7 +23,7 @@ class DelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_DRewGCN(self, dim_in, dim_out, num_layers)
+        self = init_shareDRewGCN(self, dim_in, dim_out, num_layers)
 
     def forward(self, batch, dirichlet_energy=False):
         """
@@ -34,7 +34,7 @@ class DelayGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
-        W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
+        W = lambda t : self.W_t["t=%d"%(t)]
 
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
@@ -50,7 +50,7 @@ class DelayGNNStage(nn.Module):
                     delay = max(k-self.nu,0)
                     if cfg.nu_v2:
                         delay = int((k-1)//self.nu)
-                    batch.x = batch.x + alpha[i] * W(k,t)(batch, x[t-delay], A(k)).x
+                    batch.x = batch.x + alpha[i] * W(t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
@@ -63,7 +63,7 @@ class DelayGNNStage(nn.Module):
             return batch, x # for heads using Jumping Knowledge at final layer
         return batch
 
-register_stage('delay_gnn', DelayGNNStage)
+register_stage('delay_share_gnn', DelayShareGNNStage)
 
 import numpy as np
 

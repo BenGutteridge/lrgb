@@ -37,7 +37,9 @@ def return_hidden_dim(N):
   L = cfg.gnn.layers_mp
   if cfg.gnn.stage_type == 'delay_gnn':
     num_fc = get_num_fc_drew(L)
-  elif cfg.gnn.layer_type == 'gcnconv':
+  elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
+    num_fc = L
+  elif cfg.gnn.layer_type in 'gcnconv':
     num_fc = L
   else:
     raise ValueError('Unknown stage/layer type combination; stage_type: {0}, layer_type: {1}'.format(cfg.gnn.stage_type, cfg.gnn.layer_type))

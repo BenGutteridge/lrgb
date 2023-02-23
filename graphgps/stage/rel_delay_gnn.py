@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_GCN_v2
+from .utils import init_DRewGCN
 
 class RelationalDelayGNNStage(nn.Module):
     """
@@ -17,7 +17,7 @@ class RelationalDelayGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_khop_GCN_v2(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
+        self = init_DRewGCN(self, dim_in, dim_out, num_layers, skip_first_hop=True) # skip L=0 since using custom A_{k=1}
         print('Edge types: ', cfg.edge_types, '\nAdding edge types to model...')
         W_edge = {}
         for e in cfg.edge_types:
