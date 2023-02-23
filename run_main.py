@@ -117,7 +117,7 @@ model = 'DelayGCN'
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # PCQM-Contact
-argpath = "/Users/beng/Documents/lrgb/configs/%s/pcqm-contact-%s.yaml" % (model, model)
+argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
