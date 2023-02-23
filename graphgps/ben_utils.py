@@ -72,7 +72,7 @@ def get_run_name(cfg_fname, default):
     model += '_nu=%s' % nu
   if cfg.k_max < cfg.gnn.layers_mp:
     model += '_kmax=%02d' % cfg.k_max
-  if cfg.rho != -1 or cfg.rho != 0:
+  if cfg.rho > 0:
     model += '_rho=%02d' % cfg.rho
   if cfg.jk_mode != 'none':
     model += '_JK=%s' % cfg.jk_mode
