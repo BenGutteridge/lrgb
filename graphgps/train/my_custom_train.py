@@ -154,7 +154,7 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
         if cfg.use_agg_weights:
             print('alpha_{t=3}: ', model._modules['mp'].alpha_t[3].data)
             for alpha_t in model._modules['mp'].alpha_t:
-                alphas.append(alpha_t.data)
+                alphas.append(alpha_t.data.detach().cpu())
         start_time = time.perf_counter()
         train_epoch(loggers[0], loaders[0], model, optimizer, scheduler,
                     cfg.optim.batch_accumulation)
