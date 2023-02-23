@@ -119,9 +119,10 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
     for cur_epoch in range(start_epoch, cfg.optim.max_epoch):
         #####################
         # TODO: REMOVE LATER
-        print('alpha_{t=3}: ', model._modules['mp'].alpha_t[3].data)
-        for alpha_t in model._modules['mp'].alpha_t:
-            alphas.append(alpha_t.data)
+        if cfg.use_agg_weights:
+            print('alpha_{t=3}: ', model._modules['mp'].alpha_t[3].data)
+            for alpha_t in model._modules['mp'].alpha_t:
+                alphas.append(alpha_t.data)
         #####################
         start_time = time.perf_counter()
         train_epoch(loggers[0], loaders[0], model, optimizer, scheduler,
@@ -208,7 +209,7 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
         run.finish()
         run = None
 
-    torch.save(alphas, cfg.run_dir+'/alphas.pt')
+    if alphas: torch.save(alphas, cfg.run_dir+'/alphas.pt')
     logging.info('Task done, results saved in {}'.format(cfg.run_dir))
 
 register_train('custom', custom_train)
