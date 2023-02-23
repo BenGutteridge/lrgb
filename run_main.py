@@ -157,7 +157,7 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         # 'out_dir results/no_batchnorm',
         'dataset.dir datasets',
-        # 'train.mode my_custom',
+        'train.mode my_custom',
         'optim.max_epoch 1',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
