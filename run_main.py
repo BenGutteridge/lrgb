@@ -179,10 +179,10 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.batchnorm False',
 
         'fixed_params.N 500_000',
-
-        'rho 5',
-        'k_max 2',
-        'jk_mode rho_cat', # none, [rho_][max, cat] 
+        # 'use_agg_weights True',
+        # 'rho 5',
+        # 'k_max 2',
+        # 'jk_mode rho_cat', # none, [rho_][max, cat] 
         ]
 
     # argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'

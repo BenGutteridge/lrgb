@@ -31,10 +31,6 @@ class DelayGNNStage(nn.Module):
         x_{t+1} = x_t + f(x_t, x_{t-1})
         first pass: uses regular edge index for each layer
         """
-        # # old k-hop method: inefficient
-        # from graphgym.ben_utils import get_k_hop_adjacencies
-        # k_hop_edges, _ = get_k_hop_adjacencies(batch.edge_index, self.max_k)
-        # A = lambda k : k_hop_edges[k-1]
 
         # new k-hop method: efficient
         # k-hop adj matrix
@@ -47,13 +43,15 @@ class DelayGNNStage(nn.Module):
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
-            for k in get_k_neighbourhoods(t):
-                # W = next(modules)
+            k_neighbourhoods = get_k_neighbourhoods(t)
+            alpha = self.alpha_t[t] if cfg.use_agg_weights else torch.ones(len(k_neighbourhoods)) # learned weighting or equal weighting
+            alpha = F.softmax(alpha)
+            for i, k in enumerate(k_neighbourhoods):
                 if A(k).shape[1] > 0: # iff there are edges of type k
                     delay = max(k-self.nu,0)
                     if cfg.nu_v2:
                         delay = int((k-1)//self.nu)
-                    batch.x = batch.x + W(k,t)(batch, x[t-delay], A(k)).x
+                    batch.x = batch.x + alpha[i] * W(k,t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
             if cfg.gnn.l2norm: # normalises after every layer
                 batch.x = F.normalize(batch.x, p=2, dim=-1)

@@ -16,6 +16,7 @@ def set_cfg_nu(cfg):
     # example argument
     cfg.nu = 1
     cfg.nu_v2 = False # determines whether to use (k-1)//nu as delay (True), or max(k, 0) (False)
+    cfg.use_agg_weights = False # determines whether to use convex combination of weights for k-hop aggregation or not
 
 
 register_config('nu', set_cfg_nu)

@@ -62,16 +62,19 @@ def init_khop_GCN_v3(model, skip_first_hop=False):
 
 def init_khop_GCN_v2(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The k-hop GCN param initialiser, used for k_gnn and delay_gnn"""
-  model.num_layers = num_layers
+  model.num_layers, use_weights = num_layers, cfg.use_agg_weights
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
-
   W_kt = {}
+  if use_weights: alpha_t = []
   t0 = 1 if skip_first_hop else 0
   for t in range(t0, num_layers):
     d_in = dim_in if t == 0 else dim_out
-    for k in get_k_neighbourhoods(t):
+    k_neighbourhoods = get_k_neighbourhoods(t)
+    for k in k_neighbourhoods:
       W_kt["k=%d, t=%d" % (k,t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-    model.W_kt = nn.ModuleDict(W_kt)
+    if use_weights: alpha_t.append(torch.nn.Parameter(torch.randn(len(k_neighbourhoods)), requires_grad=True)) # TODO: is to.device needed after randn()?
+  model.W_kt = nn.ModuleDict(W_kt)
+  if use_weights: model.alpha_t = nn.ParameterList(alpha_t)
   return model
 
 def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
