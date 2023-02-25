@@ -40,10 +40,14 @@ def train_epoch(logger, loader, model, optimizer, scheduler, batch_accumulation)
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
             optimizer.zero_grad()
+        if hasattr(scheduler, 'get_last_lr'):
+            sched_get_last_lr = scheduler.get_last_lr()
+        else:
+            sched_get_last_lr = [group['lr'] for group in scheduler.optimizer.param_groups]
         logger.update_stats(true=_true,
                             pred=_pred,
                             loss=loss.detach().cpu().item(),
-                            lr=scheduler.get_last_lr()[0],
+                            lr=sched_get_last_lr[0],
                             time_used=time.time() - time_start,
                             params=cfg.params,
                             dataset_name=cfg.dataset.name)

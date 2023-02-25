@@ -56,17 +56,18 @@ def scheduler_reduce_on_plateau(optimizer, scheduler_config: SchedulerConfig):
             min_lr=cfg.optim.min_lr,
             verbose=True
         )
-        if not hasattr(scheduler, 'get_last_lr'):
-            # ReduceLROnPlateau doesn't have `get_last_lr` method as of current
-            # pytorch1.10; we add it here for consistency with other schedulers.
-            def get_last_lr(self):
-                """ Return last computed learning rate by current scheduler.
-                """
-                return self._last_lr
+        # #  BG: Commented out, plays havoc with ckpt loading
+        # if not hasattr(scheduler, 'get_last_lr'):
+        #     # ReduceLROnPlateau doesn't have `get_last_lr` method as of current
+        #     # pytorch1.10; we add it here for consistency with other schedulers.
+        #     def get_last_lr(self):
+        #         """ Return last computed learning rate by current scheduler.
+        #         """
+        #         return self._last_lr
 
-            scheduler.get_last_lr = get_last_lr.__get__(scheduler)
-            scheduler._last_lr = [group['lr']
-                                  for group in scheduler.optimizer.param_groups]
+        #     scheduler.get_last_lr = get_last_lr.__get__(scheduler)
+        #     scheduler._last_lr = [group['lr']
+        #                           for group in scheduler.optimizer.param_groups]
 
         return scheduler
 

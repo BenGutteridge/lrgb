@@ -2,6 +2,7 @@ import torch
 from torch_geometric.utils import to_dense_adj, dense_to_sparse
 from tqdm import tqdm
 from torch_geometric.graphgym.config import cfg
+import os
 from os.path import join, exists
 from torch_geometric.data import Data
 
@@ -18,12 +19,34 @@ def add_k_hop_edges(dataset, K, format, name):
       filedir = join(cluster_filedir, 'k_hop_indices')
 
   # check if files exist already
-  if not exists(join(filedir, "%s-%s_k=%02d.pt" % (format, name, K))):
-    print('Edge index files not found for %s-%s_k=%02d; making them now...' % (format, name, K))
+  file_exists = [exists(join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))) for k in range(1,K+1)] # list of K bools
+  if not all(file_exists): # checks all files are there
+    last_nonexistent_file = max(loc for loc, val in enumerate(file_exists) if val == False)+1
+    print('Edge index file(s) not found for %s-%s_k=%02d (or lower); making file(s) now...' % (format, name, last_nonexistent_file))
     get_k_hop_edges(dataset, K, filedir, format, name) # if they don't, make them
 
-  # load files
-  all_graphs = [torch.load(join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))) for k in range(1,K+1)] # [K,N,2,d]
+  # load files TODO: test this properly
+  all_graphs = []
+  print('Loading k-hop data files...')
+  for k in tqdm(range(1,K+1)):
+    filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))
+    try:
+      all_graphs.append(torch.load(filepath)) # [K,N,2,d]
+    except: 
+      files_to_remake = [k]
+      for j in range(K, k, -1):
+        try: 
+          torch.load(join(filedir, "%s-%s_k=%02d.pt" % (format, name, k)))
+        except:
+          files_to_remake.append(j)
+      print('Issue with following files, deleting and remaking them...\nk = ', files_to_remake)
+      for j in files_to_remake:
+        filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, j))
+        os.remove(filepath)
+      get_k_hop_edges(dataset, max(files_to_remake), filedir, format, name)
+      filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))
+      all_graphs.append(torch.load(filepath)) # [K,N,2,d]
+
   all_hops = [list(n) for n in zip(*all_graphs)] # Transposing. n is graph; all_hops indexed by graph. [N,K,2,d]
   labels = []   # get k-hop labels
   for n in all_hops:
