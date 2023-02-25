@@ -54,8 +54,6 @@ k_max=1000000 # default 1e6
 ckpt_period=10
 
 
-echo python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk train.auto_resume True fixed_params.N 500_000 rho $rho gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
-
 python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
