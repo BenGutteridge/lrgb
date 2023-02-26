@@ -66,10 +66,10 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # FOR STANDARD BASELINES
 # python main.py --cfg "$file" --repeat 3 out_dir $out_dir device cuda dataset.dir "$dir" optim.max_epoch 300 tensorboard_each_run True
 
-A=True
+A=False
 S=delay_share_gnn
 C=True
-out_dir=ASC
+out_dir=SC
 nu=1
 L=17
 python main.py --cfg configs/rbar-GCN/peptides-func-DelayGCN+none.yaml --repeat 3 gnn.stage_type $S agg_weights.use $A agg_weights.convex_combo $C fixed_params.N 500_000 gnn.layer_type my_gcnconv out_dir "results/$out_dir" device cuda dataset.dir datasets nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom train.auto_resume True train.ckpt_period 10
