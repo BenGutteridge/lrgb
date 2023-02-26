@@ -10,7 +10,7 @@ from param_calcs import get_k_neighbourhoods
 
 def init_DRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The (nu)DRew-GCN param initialiser, used for delay_gnn"""
-  model.num_layers, use_weights = num_layers, cfg.use_agg_weights
+  model.num_layers, use_weights = num_layers, cfg.agg_weights.use
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
   W_kt = {}
   if use_weights: alpha_t = []
@@ -27,7 +27,7 @@ def init_DRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
 
 def init_shareDRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The (nu)DRew-GCN param initialiser, but with weight sharing"""
-  model.num_layers, use_weights = num_layers, cfg.use_agg_weights
+  model.num_layers, use_weights = num_layers, cfg.agg_weights.use
   model.nu = cfg.nu if cfg.nu != -1 else float('inf')
   W_t = {}
   if use_weights: alpha_t = []

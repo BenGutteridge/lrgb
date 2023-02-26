@@ -76,6 +76,10 @@ def get_run_name(cfg_fname, default):
     model += '_rho=%02d' % cfg.rho
   if cfg.jk_mode != 'none':
     model += '_JK=%s' % cfg.jk_mode
+  if cfg.agg_weights.use:
+    model += '_weights'
+  if cfg.agg_weights.convex_combo:
+    model += '_CC'
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
   # run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # with BS

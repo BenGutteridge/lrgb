@@ -155,8 +155,7 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
     perf = [[] for _ in range(num_splits)]
     alphas = []
     for cur_epoch in range(start_epoch, cfg.optim.max_epoch):
-        if cfg.use_agg_weights:
-            print('alpha_{t=3}: ', model._modules['mp'].alpha_t[3].data)
+        if cfg.agg_weights.use:
             for alpha_t in model._modules['mp'].alpha_t:
                 alphas.append(alpha_t.data.detach().cpu())
         start_time = time.perf_counter()
@@ -252,7 +251,12 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
         run.finish()
         run = None
 
-    if alphas: torch.save(alphas, cfg.run_dir+'/alphas.pt')
+    if alphas: 
+        path = cfg.run_dir+'/alphas.txt'
+        print('Saving aggregation weights at %s...' % path)
+        with open(path, 'w') as f:
+            f.write('\n'.join([str(torch.nn.functional.softmax(alphas[i], dim=0)) for i in range(len(alphas))]))
+
     logging.info('Task done, results saved in {}'.format(cfg.run_dir))
 
 register_train('my_custom', custom_train)

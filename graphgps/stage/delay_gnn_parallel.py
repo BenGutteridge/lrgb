@@ -6,13 +6,13 @@ from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
 # from .utils import init_khop_GCN
-from .utils import init_DRewGCN, init_shareDRewGCN
+from .utils import init_DRewGCN
 sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 custom_heads = ['jk_maxpool_graph']
 from param_calcs import get_k_neighbourhoods
 
 # @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
-class DelayShareGNNStage(nn.Module):
+class DelayGNNStage(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
 
@@ -23,7 +23,7 @@ class DelayShareGNNStage(nn.Module):
     """
     def __init__(self, dim_in, dim_out, num_layers):
         super().__init__()
-        self = init_shareDRewGCN(self, dim_in, dim_out, num_layers)
+        self = init_DRewGCN(self, dim_in, dim_out, num_layers)
 
     def forward(self, batch, dirichlet_energy=False):
         """
@@ -34,36 +34,45 @@ class DelayShareGNNStage(nn.Module):
         # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr==k]
-        W = lambda t : self.W_t["t=%d"%(t)]
+        W = lambda k, t : self.W_kt["k=%d, t=%d"%(k,t)]
 
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
-        # modules = self.children()
+        n = batch.x.shape
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
             k_neighbourhoods = get_k_neighbourhoods(t)
             alpha = self.alpha_t[t] if cfg.agg_weights.use else torch.ones(len(k_neighbourhoods)) # learned weighting or equal weighting
             alpha = F.softmax(alpha, dim=0)
+            x_cat, A_cat = [], []
             for i, k in enumerate(k_neighbourhoods):
-                if A(k).shape[1] > 0: # iff there are edges of type k
-                    delay = max(k-self.nu,0)
-                    if cfg.nu_v2:
-                        delay = int((k-1)//self.nu)
-                    batch.x = batch.x + alpha[i] * W(t)(batch, x[t-delay], A(k)).x
-            batch.x = x[t] + nn.ReLU()(batch.x)
-            if cfg.gnn.l2norm: # normalises after every layer
-                batch.x = F.normalize(batch.x, p=2, dim=-1)
-        if dirichlet_energy:
-            L, energies = get_laplacian(A(1)), []
-            for x_i in x+[batch.x]:
-                energies.append(dirichlet(x_i, L))
-            batch.dirichlet_energies = np.array(energies)
-        if 'jk' in cfg.gnn.head:
-            return batch, x # for heads using Jumping Knowledge at final layer
-        return batch
+                delay = max(k-self.nu,0)
+                x_cat.append(x[t-delay])
+                A_cat.append(A(k))
+            x_cat, A_cat = torch.cat(x_cat), torch.diag(A_cat)
+            # batch.x = # can you change the size of the batch? Do you need to?
+            h = W(t)(batch, x_cat, A_cat) 
 
-register_stage('delay_share_gnn', DelayShareGNNStage)
+
+        #         if A(k).shape[1] > 0: # iff there are edges of type k
+        #             delay = max(k-self.nu,0)
+        #             if cfg.nu_v2:
+        #                 delay = int((k-1)//self.nu)
+        #             batch.x = batch.x + alpha[i] * W(k,t)(batch, x[t-delay], A(k)).x
+        #     batch.x = x[t] + nn.ReLU()(batch.x)
+        #     if cfg.gnn.l2norm: # normalises after every layer
+        #         batch.x = F.normalize(batch.x, p=2, dim=-1)
+        # if dirichlet_energy:
+        #     L, energies = get_laplacian(A(1)), []
+        #     for x_i in x+[batch.x]:
+        #         energies.append(dirichlet(x_i, L))
+        #     batch.dirichlet_energies = np.array(energies)
+        # if 'jk' in cfg.gnn.head:
+        #     return batch, x # for heads using Jumping Knowledge at final layer
+        # return batch
+
+register_stage('delay_gnn_parallel', DelayGNNStage)
 
 import numpy as np
 

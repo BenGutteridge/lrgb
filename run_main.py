@@ -103,8 +103,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
-model = 'GCN'
+model = 'DelayGCN'
+# model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -158,7 +158,7 @@ def parse_args() -> argparse.Namespace:
         'out_dir results',
         'dataset.dir datasets',
         'train.mode my_custom',
-        'optim.max_epoch 300',
+        'optim.max_epoch 2',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type delay_share_gnn',
@@ -174,18 +174,18 @@ def parse_args() -> argparse.Namespace:
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
         # 'seed 5',
-        'train.auto_resume True',
+        # 'train.auto_resume True',
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
         'fixed_params.N 0',
         # 'fixed_params.N 500_000',
-        # 'use_agg_weights True',
+        'agg_weights.use True',
+        'agg_weights.convex_combo True'
         # 'rho 5',
         # 'k_max 2',
         # 'jk_mode rho_cat', # none, [rho_][max, cat] 
-        'optim.scheduler reduce_on_plateau',
-        'train.ckpt_period 1',
+        # 'train.ckpt_period 1',
         ]
 
     # argpath='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
