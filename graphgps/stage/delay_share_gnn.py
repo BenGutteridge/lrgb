@@ -45,6 +45,7 @@ class DelayShareGNNStage(nn.Module):
             k_neighbourhoods = get_k_neighbourhoods(t)
             alpha = self.alpha_t[t] if cfg.agg_weights.use else torch.ones(len(k_neighbourhoods)) # learned weighting or equal weighting
             alpha = F.softmax(alpha, dim=0)
+            alpha = alpha if cfg.agg_weights.convex_combo else alpha * len(k_neighbourhoods) # convex comb, or scale by no. of terms (e.g. unity weights for agg_weights.use=False)
             for i, k in enumerate(k_neighbourhoods):
                 if A(k).shape[1] > 0: # iff there are edges of type k
                     delay = max(k-self.nu,0)
