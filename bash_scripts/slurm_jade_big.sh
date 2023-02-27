@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VnuiGG
+#SBATCH --job-name=Vnu1GG
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -52,7 +52,7 @@ layer=drewgatedgcnconv
 dir=datasets
 out_dir="results"
 L=$SLURM_ARRAY_TASK_ID
-nu=-1
+nu=1
 rho=0
 jk=none
 k_max=1000000 # default 1e6
