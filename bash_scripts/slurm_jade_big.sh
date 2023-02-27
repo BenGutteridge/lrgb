@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=pcnu1R2
+#SBATCH --job-name=FnuiGG
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -28,7 +28,7 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
@@ -39,22 +39,28 @@ file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/SAN/pcqm-contact-SAN.yaml'
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
+file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
+
+
 # layer=gcnconv
-layer=my_gcnconv
+# layer=my_gcnconv
+layer=drewgatedgcnconv
 
 dir=datasets
 out_dir="results"
 L=$SLURM_ARRAY_TASK_ID
-# L=23
-nu=1
-# rho=$SLURM_ARRAY_TASK_ID
+nu=-1
 rho=0
 jk=none
 k_max=1000000 # default 1e6
 ckpt_period=10
 
+gnn=drew_gated_gnn
 
-python3.9 main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+python3.9 main.py --cfg "$file" --repeat 3 model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
 # python3.9 main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom

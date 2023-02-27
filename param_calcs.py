@@ -48,6 +48,8 @@ def return_hidden_dim(N):
     num_fc = get_num_fc_drew(L)
   elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
     num_fc = L
+  elif cfg.model.type == 'drew_gated_gnn':
+    num_fc = 4*L # A,B,D,E (no C currently)
   elif cfg.gnn.layer_type in 'gcnconv':
     num_fc = L
   else:
