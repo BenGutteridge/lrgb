@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=SnuiGG
+#SBATCH --job-name=Vnu1GG
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -40,8 +40,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
-file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
-# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
+file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 
