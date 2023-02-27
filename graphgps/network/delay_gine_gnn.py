@@ -8,7 +8,7 @@ from torch_geometric.graphgym.register import register_network
 from graphgps.layer.delay_gine_conv_layer import DelayGINEConvLayer
 from graphgps.custom_conv.gin_agg import GINEAggregation
 
-class MyCustomGNN(torch.nn.Module):
+class DelayGINEGNN(torch.nn.Module):
     """
     GNN model that customizes the torch_geometric.graphgym.models.gnn.GNN
     to support specific handling of new conv layers.
@@ -57,4 +57,4 @@ class MyCustomGNN(torch.nn.Module):
         return batch
 
 
-register_network('my_custom_gnn', MyCustomGNN)
+register_network('delay_gine_gnn', DelayGINEGNN)

@@ -17,16 +17,6 @@ def get_task_id():
   else:
     raise NotImplementedError
 
-from param_calcs import return_hidden_dim
-def set_d_fixed_params(cfg):
-  set_jumping_knowledge()
-  N = cfg.fixed_params.N
-  if N > 0:
-    cfg.gnn.dim_inner = return_hidden_dim(N)
-    print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
-  else:
-      print('Using given hidden dim of %d' % cfg.gnn.dim_inner)
-
 default_heads = {
   'pept': 'graph',
   'voc': 'inductive_node',

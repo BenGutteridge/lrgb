@@ -3,8 +3,17 @@
 from ogb.utils.features import get_atom_feature_dims
 from graphgps.encoder.voc_superpixels_encoder import VOC_node_input_dim
 from torch_geometric.graphgym.config import cfg
-from graphgps.ben_utils import get_task_id
+from graphgps.ben_utils import get_task_id, set_jumping_knowledge
 sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
+
+def set_d_fixed_params(cfg):
+  set_jumping_knowledge()
+  N = cfg.fixed_params.N
+  if N > 0:
+    cfg.gnn.dim_inner = return_hidden_dim(N)
+    print('Hidden dim manually set to %d for fixed param count of %dk' % (cfg.gnn.dim_inner, int(N/1000)))
+  else:
+      print('Using given hidden dim of %d' % cfg.gnn.dim_inner)
 
 def get_k_neighbourhoods(t):
   rho_nbhs = list(range(max(1, t+1+1-cfg.rho), t+1+1))
