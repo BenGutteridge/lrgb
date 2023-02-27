@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=S1SC
+#SBATCH --job-name=S1AC
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -67,10 +67,10 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # python main.py --cfg "$file" --repeat 3 out_dir $out_dir device cuda dataset.dir "$dir" optim.max_epoch 300 tensorboard_each_run True
 
 cfg=configs/rbar-GCN/peptides-struct-DelayGCN+none.yaml
-A=False
-S=delay_share_gnn
+A=True
+S=delay_gnn
 C=True
-out_dir=SC
+out_dir=AC
 nu=1
 L=13
 python main.py --cfg $cfg --repeat 3 gnn.stage_type $S agg_weights.use $A agg_weights.convex_combo $C fixed_params.N 500_000 gnn.layer_type my_gcnconv out_dir "results/$out_dir" device cuda dataset.dir datasets nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom train.auto_resume True train.ckpt_period 10
