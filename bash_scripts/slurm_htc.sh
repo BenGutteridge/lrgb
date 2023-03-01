@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --account=engs-oxnsg
 
-cd $DATA/repos/clean_lrgb
+cd $DATA/repos/clean_lrgb/lrgb
 
 module purge
 module load Anaconda3
