@@ -33,7 +33,9 @@ class GNNGraphHeadJK(nn.Module):
         print('Using jumping knowledge, JK aggregation mode: %s' % cfg.gnn.head)
         if 'cat' in cfg.gnn.head:
             n_agg_terms = cfg.gnn.layers_mp
-            if 'rho' in cfg.gnn.head: n_agg_terms -= (cfg.rho + cfg.k_max - 1)
+            if 'rho' in cfg.gnn.head: 
+                assert cfg.rho_max >= cfg.gnn.layers_mp, 'Error, JK-rho-cat not yet defined for when rho_max argument is set.'
+                n_agg_terms -= (cfg.rho + cfg.k_max - 1)
             self.jumping_knowledge = nn.Sequential(
                 JumpingKnowledge('cat'), # stack node feats then linear layer to compress again
                 nn.Linear(dim_in * n_agg_terms, dim_in)

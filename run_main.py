@@ -145,7 +145,7 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 # argpath = 'configs/GatedGCN/peptides-func-GatedGCN.yaml'
 # argpath = 'configs/DRewGatedGCN/voc-DRewGatedGCN.yaml'
 
-argpath = 'configs/SAN/vocsuperpixels-SAN.yaml'
+# argpath = 'configs/SAN/vocsuperpixels-SAN.yaml'
 
 repeat = 1
 import argparse
@@ -165,7 +165,7 @@ def parse_args() -> argparse.Namespace:
     extra_args = [
         # 'out_dir results',
         'dataset.dir datasets',
-        # 'train.mode my_custom',
+        'train.mode my_custom',
         # 'optim.max_epoch 2',
         # 'model.type drew_gated_gnn',
         # 'gnn.stage_type my_stack',
@@ -174,7 +174,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type my_gcnconv',
         # 'nu 2',
         # 'gnn.dim_inner 4',
-        # 'gnn.layers_mp 14',
+        'gnn.layers_mp 14',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -188,12 +188,14 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.batchnorm False',
 
         # 'fixed_params.N 0',
-        # 'fixed_params.N 500_000',
+        'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
-        # 'rho 10',
-        # 'k_max 0',
-        # 'jk_mode rho_cat', # none, [rho_][max, cat] 
+        'rho 3',
+        'rho_max 10',
+        'k_max 3',
+
+        'jk_mode cat', # none, [rho_][max, cat] 
         # 'train.ckpt_period 1',
         ]
 

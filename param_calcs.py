@@ -16,7 +16,7 @@ def set_d_fixed_params(cfg):
       print('Using given hidden dim of %d' % cfg.gnn.dim_inner)
 
 def get_k_neighbourhoods(t):
-  rho_nbhs = list(range(max(1, t+1+1-cfg.rho), t+1+1))
+  rho_nbhs = list(range(max(1, t+1+1-cfg.rho), min(t+1+1, cfg.rho_max)))
   sp_nbhs = list(range(1, min(t+1, cfg.k_max)+1))
   return sort_and_removes_dupes(rho_nbhs + sp_nbhs)
 

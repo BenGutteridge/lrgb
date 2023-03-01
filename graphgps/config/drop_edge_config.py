@@ -13,8 +13,9 @@ def set_cfg_dropedge(cfg):
     # Customized options
     # ----------------------------------------------------------------------- #
 
-    cfg.rho = 0 # default no extra outer-most layers
-    cfg.k_max = int(1e6) # default (stand-in for) inf, no outer limit
+    cfg.rho = 0             # default no extra outer-most layers
+    cfg.rho_max = int(1e6)  # If rho > 0, this gives a max k-neighbourhood to go up to; i.e. the wavefront stops at that point. Default: inf
+    cfg.k_max = int(1e6)    # default (stand-in for) inf, no outer limit
 
     """
     DRew:               k_max = inf, rho = 0
