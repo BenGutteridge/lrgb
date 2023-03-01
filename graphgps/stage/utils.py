@@ -36,7 +36,8 @@ def init_shareDRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
     d_in = dim_in if t == 0 else dim_out
     k_neighbourhoods = get_k_neighbourhoods(t)
     W_t["t=%d" % (t)] = GNNLayer(d_in, dim_out) # regular GCN layers
-    if use_weights: alpha_t.append(torch.nn.Parameter(torch.randn(len(k_neighbourhoods)), requires_grad=True)) # TODO: is to.device needed after randn()?
+    # if use_weights: alpha_t.append(torch.nn.Parameter(torch.randn(len(k_neighbourhoods)), requires_grad=True)) # random init from normal dist
+    if use_weights: alpha_t.append(torch.nn.Parameter(torch.randn(len(k_neighbourhoods)), requires_grad=True)) # unity init
   model.W_t = nn.ModuleDict(W_t)
   if use_weights: model.alpha_t = nn.ParameterList(alpha_t)
   return model
