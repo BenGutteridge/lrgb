@@ -57,7 +57,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # k_max=1000000 # default 1e6
 # ckpt_period=10
 
-python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 1 device cuda train.auto_resume True out_dir results/retry
+python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
 
 # python main.py --cfg "$file" --repeat 3 k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
 
