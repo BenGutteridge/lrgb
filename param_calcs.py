@@ -48,8 +48,10 @@ def return_hidden_dim(N):
     num_fc = get_num_fc_drew(L)
   elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
     num_fc = L
-  elif cfg.model.type == 'drew_gated_gnn':
+  elif (cfg.model.type == 'drew_gated_gnn') ^ (cfg.gnn.layer_type == 'gatedgcnconv_noedge'): # logical XOR
     num_fc = 4*L # A,B,D,E (no C currently)
+  elif cfg.gnn.layer_type == 'gatedgcnconv':
+    num_fc = 5*L # A,B,C,D,E #TODO check. surely C won't be d**2, it'll be d*|E|?
   elif cfg.gnn.layer_type in 'gcnconv':
     num_fc = L
   else:

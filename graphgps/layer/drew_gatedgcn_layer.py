@@ -17,14 +17,21 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         Residual Gated Graph ConvNets
         https://arxiv.org/pdf/1711.07553.pdf
     """
-    def __init__(self, in_dim, out_dim, dropout, residual,
+    def __init__(self, t, in_dim, out_dim, dropout, residual,
                  equivstable_pe=False, **kwargs):
         super().__init__(**kwargs)
+        self.share_weights = bool('share' in cfg.gnn.layer_type)
         self.A = pyg_nn.Linear(in_dim, out_dim, bias=True)
-        self.B = pyg_nn.Linear(in_dim, out_dim, bias=True)
         # self.C = pyg_nn.Linear(in_dim, out_dim, bias=True) # leave for now
         self.D = pyg_nn.Linear(in_dim, out_dim, bias=True)
-        self.E = pyg_nn.Linear(in_dim, out_dim, bias=True)
+        if self.share_weights:
+            self.B = pyg_nn.Linear(in_dim, out_dim, bias=True)
+            self.E = pyg_nn.Linear(in_dim, out_dim, bias=True)
+        else:
+            k_neighbourhoods = get_k_neighbourhoods(t)
+            self.B = nn.ModuleDict({str(k): pyg_nn.Linear(in_dim, out_dim, bias=True) for k in k_neighbourhoods})
+            self.E = nn.ModuleDict({str(k): pyg_nn.Linear(in_dim, out_dim, bias=True) for k in k_neighbourhoods})
+
 
         # Handling for Equivariant and Stable PE using LapPE
         # ICLR 2022 https://openreview.net/pdf?id=e95i1IHcWj
@@ -58,14 +65,25 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
 
         k_neighbourhoods = get_k_neighbourhoods(t)
         delay = lambda k : max(k-self.nu, 0)
+        if self.share_weights:
+            B = lambda _ : self.B
+        else:
+            B = lambda k : self.B[k]
+
         x_states = [] 
         for k in k_neighbourhoods:
             x_states.append(t-delay(k))
         x_states = set(sorted(x_states)) # remove dupes
         Bx, Ex = {}, {} # ones which use the 'target' node and may require delay
-        for l in x_states: # makes dict of necessary Bx^{t-\tau}
-            Bx[l] = self.B(xs[l])
-            Ex[l] = self.E(xs[l])
+        
+        # for l in x_states: # makes dict of necessary Bx^{t-\tau}
+        #     Bx[l] = self.B(xs[l])
+        #     Ex[l] = self.E(xs[l])
+
+        for k in k_neighbourhoods:
+            Bx[k] = B(k)(xs[t-delay(k)])
+            Ex[k] = B(k)(xs[t-delay(k)])
+        
         Ax = self.A(x)
         # Ce = self.C(e)x
         Dx = self.D(x) # these use the local node i and do not require varying k-neighbourhoods
@@ -79,9 +97,13 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         node_dim = 0 # default is -2 which is equivalent
         Dx_i = {k : Dx.index_select(node_dim, i_idxs[batch.edge_attr==k]) for k in k_neighbourhoods} # local node, always current timestep
 
-        # Ex, Bx only need indexing by different amounts of delay, _j correspond to the k-neighbourhood adjacency and so only need indexing by k (t-delay(k) always the same for each k)
-        Ex_j = {k : Ex[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
-        Bx_j = {k : Bx[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+        # # Ex, Bx only need indexing by different amounts of delay, _j correspond to the k-neighbourhood adjacency and so only need indexing by k (t-delay(k) always the same for each k)
+        # Ex_j = {k : Ex[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+        # Bx_j = {k : Bx[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+
+        Ex_j = {k : Ex[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+        Bx_j = {k : Bx[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+        
         if pe_LapPE: # TODO
             PE_i = pe_LapPE.index_select(node_dim, i_idxs)
             PE_j = pe_LapPE.index_select(node_dim, i_idxs)
@@ -203,3 +225,4 @@ class DRewGatedGCNGraphGymLayer(nn.Module):
 
 
 register_layer('drewgatedgcnconv', DRewGatedGCNGraphGymLayer)
+register_layer('share_drewgatedgcnconv', DRewGatedGCNGraphGymLayer)

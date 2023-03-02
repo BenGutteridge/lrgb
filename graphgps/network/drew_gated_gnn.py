@@ -34,9 +34,8 @@ class DRewGatedGNN(torch.nn.Module):
         conv_model = DRewGatedGCNLayer
         self.model_type = cfg.gnn.layer_type
         layers = []
-        for _ in range(cfg.gnn.layers_mp):
-            layers.append(conv_model(dim_in,
-                                     dim_in,
+        for t in range(cfg.gnn.layers_mp):
+            layers.append(conv_model(t, dim_in, dim_in,
                                      dropout=cfg.gnn.dropout,
                                      residual=cfg.gnn.residual))
         self.gnn_layers = torch.nn.ModuleList(layers)
