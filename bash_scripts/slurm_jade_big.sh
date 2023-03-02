@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V1GG
+#SBATCH --job-name=V1GGnoCC
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -42,7 +42,7 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 # file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
 file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 
 # layer=gcnconv
@@ -50,7 +50,7 @@ file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 layer=drewgatedgcnconv
 
 dir=datasets
-out_dir="results"
+out_dir=results/no_CC
 L=$SLURM_ARRAY_TASK_ID
 nu=1
 rho=0
