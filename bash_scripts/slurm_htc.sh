@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V1DGGnoCC
+#SBATCH --job-name=V1LapDGGnoCC
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -44,8 +44,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
-# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
@@ -63,7 +63,7 @@ nu=1
 rho=0
 jk=none
 k_max=1000000 # default 1e6
-ckpt_period=10
+ckpt_period=5
 
 gnn=drew_gated_gnn
 # gnn=gnn
