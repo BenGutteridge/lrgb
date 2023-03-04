@@ -68,18 +68,9 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         if self.share_weights:
             B = lambda _ : self.B
         else:
-            B = lambda k : self.B[k]
+            B = lambda k : self.B[str(k)]
 
-        x_states = [] 
-        for k in k_neighbourhoods:
-            x_states.append(t-delay(k))
-        x_states = set(sorted(x_states)) # remove dupes
-        Bx, Ex = {}, {} # ones which use the 'target' node and may require delay
-        
-        # for l in x_states: # makes dict of necessary Bx^{t-\tau}
-        #     Bx[l] = self.B(xs[l])
-        #     Ex[l] = self.E(xs[l])
-
+        Bx, Ex = {}, {}
         for k in k_neighbourhoods:
             Bx[k] = B(k)(xs[t-delay(k)])
             Ex[k] = B(k)(xs[t-delay(k)])
@@ -96,10 +87,6 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         i_idxs, j_idxs = edge_index[1,:], edge_index[0,:] # 0 is j, 1 is i by pytorch's convention
         node_dim = 0 # default is -2 which is equivalent
         Dx_i = {k : Dx.index_select(node_dim, i_idxs[batch.edge_attr==k]) for k in k_neighbourhoods} # local node, always current timestep
-
-        # # Ex, Bx only need indexing by different amounts of delay, _j correspond to the k-neighbourhood adjacency and so only need indexing by k (t-delay(k) always the same for each k)
-        # Ex_j = {k : Ex[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
-        # Bx_j = {k : Bx[t-delay(k)].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
 
         Ex_j = {k : Ex[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
         Bx_j = {k : Bx[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}

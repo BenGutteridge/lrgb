@@ -33,12 +33,6 @@ def get_num_fc_drew(L):
     toprint = ' '.join([str(i).ljust(2) if i in k_nbhs else 'X'.ljust(2) for i in range(1, k_nbhs[-1]+1)])
     print('\t%02d: %s' % (t, toprint))
     num_fc += len(k_nbhs)
-  # rho = cfg.rho if cfg.rho != -1 else 1e6 # inplace of inf to avoid 0*inf=nan error later
-  # Lq = min(rho, L)    # number of quadratically scaling param layers
-  # Ll = max(0, L-rho)  # number of linearly scaling param layers
-  # num_fc = (Lq**2+Lq)/2 + rho*Ll # number of d**2 layers
-  # if cfg.rho > 0:
-  #   num_fc += cfg.k_max*Ll # if the k=1 connection is maintained throughout
   return num_fc
 
 def return_hidden_dim(N):
@@ -46,12 +40,14 @@ def return_hidden_dim(N):
   # number of FC layers in message passing
   N *= 0.99 # a little spare
   L = cfg.gnn.layers_mp
-  if cfg.gnn.stage_type == 'delay_gnn':
+  if (cfg.gnn.stage_type == 'delay_gnn') & (cfg.model.type == 'gnn'):
     num_fc = get_num_fc_drew(L)
   elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
     num_fc = L
-  elif (cfg.model.type == 'drew_gated_gnn') ^ (cfg.gnn.layer_type == 'gatedgcnconv_noedge'): # logical XOR
+  elif cfg.gnn.layer_type in ['share_drewgatedgcnconv', 'gatedgcnconv_noedge']:
     num_fc = 4*L # A,B,D,E (no C currently)
+  elif cfg.gnn.layer_type == 'drewgatedgcnconv':
+    num_fc = 2*L + get_num_fc_drew(L)*2 # A,D and B_{k},E_{k}
   elif cfg.gnn.layer_type == 'gatedgcnconv':
     num_fc = 5*L # A,B,C,D,E #TODO check. surely C won't be d**2, it'll be d*|E|?
   elif cfg.gnn.layer_type in 'gcnconv':
