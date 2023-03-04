@@ -68,7 +68,7 @@ rho_max=1000000
 jk=none
 k_max=5 # default 1e6
 ckpt_period=10
-# edge_encoder=False
+edge_encoder=False
 
 # gnn=drew_gated_gnn
 # gnn=my_custom_gnn
