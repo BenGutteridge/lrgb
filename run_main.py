@@ -113,8 +113,8 @@ model = 'DelayGCN'
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -138,7 +138,7 @@ model = 'DelayGCN'
 
 # argpath='configs/GCN/pcqm-contact-GCN.yaml'
 
-argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 # argpath = 'configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
 # argpath = 'configs/GatedGCN/peptides-func-GatedGCN.yaml'
@@ -166,16 +166,16 @@ def parse_args() -> argparse.Namespace:
         'dataset.dir datasets',
         'train.mode my_custom',
         # 'optim.max_epoch 2',
-        'model.type drew_gated_gnn',
+        # 'model.type drew_gated_gnn',
         # 'model.type my_custom_gnn',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type delay_share_gnn',
         # 'gnn.layer_type my_gcnconv',
-        'gnn.layer_type share_drewgatedgcnconv',
+        # 'gnn.layer_type share_drewgatedgcnconv',
         # 'nu 2',
-        'gnn.dim_inner 4',
-        'gnn.layers_mp 3',
+        # 'gnn.dim_inner 4',
+        'gnn.layers_mp 14',
         'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -188,13 +188,13 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        'fixed_params.N 0',
-        # 'fixed_params.N 500_000',
+        # 'fixed_params.N 0',
+        'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
-        # 'rho 3',
-        # 'rho_max 10',
-        # 'k_max 3',
+        'rho 3',
+        'rho_max 10',
+        'k_max 3',
 
         # 'jk_mode cat', # none, [rho_][max, cat] 
         # 'train.ckpt_period 1',
