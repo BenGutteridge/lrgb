@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V1DGGNOSHARE
+#SBATCH --job-name=V1DGGSHARE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
@@ -47,10 +47,10 @@ file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
-layer=drewgatedgcnconv
+layer=share_drewgatedgcnconv
 
 dir=datasets
-out_dir=results/nonshare_DRewGGCN
+out_dir=results/share_DRewGGCN
 # L=$SLURM_ARRAY_TASK_ID
 L=8
 nu=1
