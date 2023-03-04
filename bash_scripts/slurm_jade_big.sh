@@ -28,7 +28,7 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
@@ -41,7 +41,7 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 
 # file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 
@@ -52,7 +52,7 @@ layer=drewgatedgcnconv
 dir=datasets
 out_dir=results/no_CC
 L=$SLURM_ARRAY_TASK_ID
-nu=1
+nu=-1
 rho=0
 jk=none
 k_max=1000000 # default 1e6

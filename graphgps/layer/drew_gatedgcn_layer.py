@@ -124,7 +124,7 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         # self.e = e_ij
         
         # AGGREGATE
-        dim_size = Bx[list(Bx.keys())[0]].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
+        dim_size = Bx[1].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
         alpha = torch.ones(len(k_neighbourhoods)) # TODO implement alpha params
         alpha = F.softmax(alpha, dim=0)
         if not cfg.agg_weights.convex_combo: alpha = alpha * alpha.shape[0]
