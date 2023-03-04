@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V
+#SBATCH --job-name=FnuiCWk5
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
