@@ -72,8 +72,10 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
             B = lambda k : self.B[str(k)]
             E = lambda k : self.E[str(k)]
 
-        Bx = lambda k: B(k)(xs[t-delay(k)])
-        Ex = lambda k: E(k)(xs[t-delay(k)])
+        Bx, Ex = {}, {}
+        for k in k_neighbourhoods:
+            Bx[k] = B(k)(xs[t-delay(k)])
+            Ex[k] = E(k)(xs[t-delay(k)])
         
         Ax = self.A(x)
         # Ce = self.C(e)x
@@ -83,41 +85,45 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         # ICLR 2022 https://openreview.net/pdf?id=e95i1IHcWj
         pe_LapPE = batch.pe_EquivStableLapPE if self.EquivStablePE else None
 
-        # make Dx_i, Ex_j, Bx_j
+        # make Dx_i, Ex_j 
         i_idxs, j_idxs = edge_index[1,:], edge_index[0,:] # 0 is j, 1 is i by pytorch's convention
         node_dim = 0 # default is -2 which is equivalent
-        Dx_i = lambda k : Dx.index_select(node_dim, i_idxs[batch.edge_attr==k])
-        Ex_j = lambda k : Ex(k).index_select(node_dim, j_idxs[batch.edge_attr==k]) # D,E for calculating edge gates e_ij
-        Bx_j = lambda k : Bx(k).index_select(node_dim, j_idxs[batch.edge_attr==k]) # B for weighting edge gates
+        Dx_i = {k : Dx.index_select(node_dim, i_idxs[batch.edge_attr==k]) for k in k_neighbourhoods} # local node, always current timestep
+
+        Ex_j = {k : Ex[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
+        Bx_j = {k : Bx[k].index_select(node_dim, j_idxs[batch.edge_attr==k]) for k in k_neighbourhoods}
         
         if pe_LapPE: # TODO
             PE_i = pe_LapPE.index_select(node_dim, i_idxs)
             PE_j = pe_LapPE.index_select(node_dim, i_idxs)
 
         # MESSAGES
-        sigma_ij = lambda k : torch.sigmoid(Dx_i(k) + Ex_j(k)) # \sigma(e_ij)
+        sigma_ij = {}
+        for k in k_neighbourhoods:
+            e_ij_k = Dx_i[k] + Ex_j[k] # + Ce
+            sigma_ij[k] = torch.sigmoid(e_ij_k)
 
         # # Handling for Equivariant and Stable PE using LapPE
         # # ICLR 2022 https://openreview.net/pdf?id=e95i1IHcWj
         if self.EquivStablePE:
             r_ij = ((PE_i - PE_j) ** 2).sum(dim=-1, keepdim=True)
             r_ij = self.mlp_r_ij(r_ij)  # the MLP is 1 dim --> hidden_dim --> 1 dim
-            sigma_ij = lambda k : torch.sigmoid(Dx_i(k) + Ex_j(k)) * r_ij
+            sigma_ij = sigma_ij * r_ij
 
         # self.e = e_ij
         
         # AGGREGATE
-        dim_size = xs[0].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
+        dim_size = Bx[1].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
         alpha = torch.ones(len(k_neighbourhoods)) # TODO implement alpha params
         alpha = F.softmax(alpha, dim=0)
         if not cfg.agg_weights.convex_combo: alpha = alpha * alpha.shape[0]
         x = 0
         for k_i, k in enumerate(k_neighbourhoods):
-            sum_sigma_x = sigma_ij(k) * Bx_j(k)
+            sum_sigma_x = sigma_ij[k] * Bx_j[k]
             numerator_eta_xj = scatter(sum_sigma_x, i_idxs[batch.edge_attr==k], 
                                     0, None, dim_size,
                                     reduce='sum')
-            sum_sigma = sigma_ij(k)
+            sum_sigma = sigma_ij[k]
             denominator_eta_xj = scatter(sum_sigma, i_idxs[batch.edge_attr==k],
                                         0, None, dim_size,
                                         reduce='sum')
@@ -141,6 +147,54 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
 
         return batch
 
+    def message(self, Dx_i, Ex_j, PE_i, PE_j, Ce):
+        """
+        {}x_i           : [n_edges, out_dim]
+        {}x_j           : [n_edges, out_dim]
+        {}e             : [n_edges, out_dim]
+        """
+        e_ij = Dx_i + Ex_j + Ce
+        sigma_ij = torch.sigmoid(e_ij)
+
+        # Handling for Equivariant and Stable PE using LapPE
+        # ICLR 2022 https://openreview.net/pdf?id=e95i1IHcWj
+        if self.EquivStablePE:
+            r_ij = ((PE_i - PE_j) ** 2).sum(dim=-1, keepdim=True)
+            r_ij = self.mlp_r_ij(r_ij)  # the MLP is 1 dim --> hidden_dim --> 1 dim
+            sigma_ij = sigma_ij * r_ij
+
+        self.e = e_ij
+        return sigma_ij
+
+    def aggregate(self, sigma_ij, index, Bx_j, Bx):
+        """
+        sigma_ij        : [n_edges, out_dim]  ; is the output from message() function
+        index           : [n_edges]
+        {}x_j           : [n_edges, out_dim]
+        """
+        dim_size = Bx.shape[0]  # or None ??   <--- Double check this
+
+        sum_sigma_x = sigma_ij * Bx_j
+        numerator_eta_xj = scatter(sum_sigma_x, index, 0, None, dim_size,
+                                   reduce='sum')
+
+        sum_sigma = sigma_ij
+        denominator_eta_xj = scatter(sum_sigma, index, 0, None, dim_size,
+                                     reduce='sum')
+
+        out = numerator_eta_xj / (denominator_eta_xj + 1e-6)
+        return out
+
+    def update(self, aggr_out, Ax):
+        """
+        aggr_out        : [n_nodes, out_dim] ; is the output from aggregate() function after the aggregation
+        {}x             : [n_nodes, out_dim]
+        """
+        x = Ax + aggr_out
+        e_out = self.e
+        del self.e
+        return x, e_out
+
 
 class DRewGatedGCNGraphGymLayer(nn.Module):
     """GatedGCN layer.
@@ -159,5 +213,5 @@ class DRewGatedGCNGraphGymLayer(nn.Module):
         return self.model(batch)
 
 
-register_layer('drewgatedgcnconv', DRewGatedGCNGraphGymLayer)
-register_layer('share_drewgatedgcnconv', DRewGatedGCNGraphGymLayer)
+# register_layer('drewgatedgcnconv', DRewGatedGCNGraphGymLayer)
+# register_layer('share_drewgatedgcnconv', DRewGatedGCNGraphGymLayer)
