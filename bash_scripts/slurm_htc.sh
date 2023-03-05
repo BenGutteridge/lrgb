@@ -60,7 +60,7 @@ layer=share_drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
 dir=datasets
-out_dir=results
+out_dir=results/share
 L=8
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
