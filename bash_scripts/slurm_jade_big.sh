@@ -47,6 +47,7 @@ file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
+layer=drewgatedgcnconv
 layer=share_drewgatedgcnconv
 
 dir=datasets
