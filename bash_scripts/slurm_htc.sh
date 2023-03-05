@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V1DGGshare
+#SBATCH --job-name=V1DGGkmax
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -55,7 +55,7 @@ file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
-layer=share_drewgatedgcnconv
+layer=drewgatedgcnconv
 # layer=drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
@@ -64,10 +64,10 @@ out_dir=results/share
 L=8
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
-rho=0
+rho=1
 rho_max=1000000
 jk=none
-k_max=1000000 # default 1e6
+k_max=5 # default 1e6
 ckpt_period=10
 edge_encoder=False
 
