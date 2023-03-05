@@ -51,7 +51,7 @@ def get_run_name(cfg_fname, default):
     return os.path.splitext(os.path.basename(cfg_fname))[0]
   elif cfg.model.type == 'gnn':
     model = cfg.gnn.stage_type if cfg.beta==1 else 'beta=%d' % cfg.beta
-  elif 'custom_gnn' in cfg.model.type:
+  elif ('custom_gnn' in cfg.model.type) | cfg.model_type=='drew_gated_gnn':
     model = cfg.gnn.layer_type
   else:
     model = cfg.model.type
