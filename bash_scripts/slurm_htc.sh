@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=ValphaS
+#SBATCH --job-name=Valpha
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -55,8 +55,8 @@ file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
-layer=share_drewgatedgcnconv
-# layer=drewgatedgcnconv
+# layer=share_drewgatedgcnconv
+layer=drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
 dir=datasets
