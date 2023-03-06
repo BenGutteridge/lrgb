@@ -115,6 +115,7 @@ if __name__ == '__main__':
     args = parse_args()
     # Load config file
     set_cfg(cfg)
+    cfg.run_dir = cfg.out_dir # prevents error when loading config.yaml file generated from run
     load_cfg(cfg, args)
     set_d_fixed_params(cfg)
     custom_set_out_dir(cfg, args.cfg_file, cfg.name_tag)

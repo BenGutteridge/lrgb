@@ -162,7 +162,7 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        # 'out_dir results',
+        'out_dir results',
         'dataset.dir datasets',
         'train.mode my_custom',
         # 'optim.max_epoch 2',
@@ -201,7 +201,7 @@ def parse_args() -> argparse.Namespace:
         # 'train.ckpt_period 1',
         ]
 
-    argpath='results/PCQM4Mv2Contact-shuffle_delay_gnn_nu=inf_d=114_L=08/config.yaml'
+    argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
 
 # TODO: SORT
 #  {'pept': 'graph', 
@@ -240,6 +240,7 @@ if __name__ == '__main__':
     args = parse_args()
     # Load config file
     set_cfg(cfg)
+    cfg.run_dir = cfg.out_dir # prevents error when loading config.yaml file generated from run
     load_cfg(cfg, args)
     set_d_fixed_params(cfg) # for setting d with fixed param budget
     custom_set_out_dir(cfg, args.cfg_file, cfg.name_tag)
