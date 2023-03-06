@@ -33,7 +33,7 @@ task=struct
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
@@ -47,21 +47,21 @@ task=struct
 # # DRewGated, VOC 
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
 
 # layer=gcnconv
-# layer=my_gcnconv
+layer=my_gcnconv
 # layer=share_drewgatedgcnconv
-layer=drewgatedgcnconv
+# layer=drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
 dir=datasets
 out_dir=results/alpha
-L=8
+L=$SLURM_ARRAY_TASK_ID
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
