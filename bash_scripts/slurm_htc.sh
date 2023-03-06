@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Valpha
+#SBATCH --job-name=PCalpha
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
