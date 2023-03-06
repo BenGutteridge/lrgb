@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PCkmaxni
+#SBATCH --job-name=PCLapPE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=48:00:00
@@ -33,9 +33,9 @@ task=struct
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
@@ -64,10 +64,10 @@ out_dir=results
 L=20
 nu=-1
 # rho=$SLURM_ARRAY_TASK_ID
-rho=1
+rho=0
 rho_max=1000000
 jk=none
-k_max=5 # default 1e6
+k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
 
