@@ -193,7 +193,7 @@ def load_dataset_master(format, name, dataset_dir):
         'rel_delay_gnn',
         'rel_delay_gnn_lite',
     ]
-    multi_hop_models = ['drew_gated_gnn',
+    multi_hop_models = ['drew_gated_gnn', 'alpha_gated_gnn',
                         'flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
                         'R-SPN_dense', 'R*-SPN', 'R-SPN']
     if (cfg.gnn.stage_type in multi_hop_stages) or ('delay' in cfg.gnn.stage_type) or (cfg.model.type in multi_hop_models):
