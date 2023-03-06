@@ -107,7 +107,7 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         # self.e = e_ij
         
         # AGGREGATE
-        dim_size = xs[0].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
+        dim_size = self.get_dim_size(xs)
         alpha = torch.ones(len(k_neighbourhoods)) # TODO implement alpha params
         alpha = F.softmax(alpha, dim=0)
         if not cfg.agg_weights.convex_combo: alpha = alpha * alpha.shape[0]
@@ -140,6 +140,15 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         # batch.edge_attr = e
 
         return batch
+
+    def get_dim_size(self, xs):
+        try: 
+            dim_size = xs[0].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
+        except: # when doing alpha
+            for x_t in xs:
+                if x_t is not None: 
+                    dim_size = x_t.shape[0]
+                    return dim_size
 
 
 class DRewGatedGCNGraphGymLayer(nn.Module):

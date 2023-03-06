@@ -46,6 +46,8 @@ def return_hidden_dim(N):
     num_fc = L
   elif cfg.gnn.layer_type in ['share_drewgatedgcnconv', 'gatedgcnconv_noedge']:
     num_fc = 4*L # A,B,D,E (no C currently)
+  elif cfg.model.type == 'alpha_gated_gnn':
+    num_fc = 2*min(L, cfg.k_max)*L + 2*L
   elif cfg.gnn.layer_type == 'drewgatedgcnconv':
     num_fc = 2*L + get_num_fc_drew(L)*2 # A,D and B_{k},E_{k}
   elif cfg.gnn.layer_type == 'gatedgcnconv':

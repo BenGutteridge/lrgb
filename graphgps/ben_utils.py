@@ -53,6 +53,8 @@ def get_run_name(cfg_fname, default):
     model = cfg.gnn.stage_type if cfg.beta==1 else 'beta=%d' % cfg.beta
   elif ('custom_gnn' in cfg.model.type) | (cfg.model.type=='drew_gated_gnn'):
     model = cfg.gnn.layer_type
+  elif cfg.model.type=='alpha_gated_gnn':
+    model = cfg.gnn.layer_type.replace('drew', 'alpha')
   else:
     model = cfg.model.type
   if '+' in cfg.dataset.node_encoder_name: # note if PE used
