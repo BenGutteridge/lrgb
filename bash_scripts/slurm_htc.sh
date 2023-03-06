@@ -67,7 +67,7 @@ nu=1
 rho=0
 rho_max=1000000
 jk=none
-k_max=1000000 # default 1e6
+k_max=5 # default 1e6
 ckpt_period=10
 edge_encoder=False
 
