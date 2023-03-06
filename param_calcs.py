@@ -52,6 +52,8 @@ def return_hidden_dim(N):
     num_fc = 5*L # A,B,C,D,E #TODO check. surely C won't be d**2, it'll be d*|E|?
   elif cfg.gnn.layer_type in 'gcnconv':
     num_fc = L
+  elif cfg.gnn.stage_type == 'alpha_gnn':
+    num_fc = min(L, cfg.k_max) * L
   else:
     raise ValueError('Unknown stage/layer type combination; stage_type: {0}, layer_type: {1}'.format(cfg.gnn.stage_type, cfg.gnn.layer_type))
   

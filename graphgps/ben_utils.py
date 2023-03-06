@@ -74,8 +74,8 @@ def get_run_name(cfg_fname, default):
     model += '_CC'
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
-  # run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # with BS
-  run_name = "%s%s_%s_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # without BS
+  run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # with BS
+  # run_name = "%s%s_%s_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # without BS
   cut = ['ides', 'ural', 'tional', 'PyG-', 'OGB-']
   for c in cut:
     run_name = run_name.replace(c, '')

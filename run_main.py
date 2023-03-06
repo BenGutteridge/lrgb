@@ -170,6 +170,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type my_custom_gnn',
         # 'gnn.stage_type my_stack',
         # 'gnn.stage_type delay_gnn',
+        'gnn.stage_type alpha_gnn',
         # 'gnn.stage_type delay_share_gnn',
         # 'gnn.layer_type my_gcnconv',
         # 'gnn.layer_type drewgatedgcnconv',        
@@ -190,18 +191,18 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.batchnorm False',
 
         # 'fixed_params.N 0',
-        # 'fixed_params.N 500_000',
+        'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',
         # 'rho_max 10',
-        # 'k_max 3',
+        'k_max 5',
 
         # 'jk_mode cat', # none, [rho_][max, cat] 
         # 'train.ckpt_period 1',
         ]
 
-    argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
+    # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
 
 # TODO: SORT
 #  {'pept': 'graph', 

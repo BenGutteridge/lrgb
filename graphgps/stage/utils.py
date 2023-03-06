@@ -55,12 +55,12 @@ def init_khop_nondynamic_GCN(model, dim_in, dim_out, num_layers, max_k=None):
     print("Warning: max_graph_diameter = %d; <= max_k, so setting max_k to max_graph_diameter" % cfg.max_graph_diameter)
     model.max_k = cfg.max_graph_diameter
   # set hidden_dim if using fixed param count
-  if cfg.fixed_params:
-    assert dim_in == dim_out # if this isn't the case I've goofed somewhere
-    n_params = cfg.fixed_mp_params_num
-    num_W = model.max_k*((model.max_k+1)/2 + (num_layers - model.max_k))
-    dim_out = (n_params/num_W)**0.5
-    print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
+  # if cfg.fixed_params: # now defunct
+  #   assert dim_in == dim_out # if this isn't the case I've goofed somewhere
+  #   n_params = cfg.fixed_mp_params_num
+  #   num_W = model.max_k*((model.max_k+1)/2 + (num_layers - model.max_k))
+  #   dim_out = (n_params/num_W)**0.5
+  #   print('Using fixed mp param count of %d: hidden_dim = %d' % (n_params, dim_in))
   # make the W_k
   W = []
   for t in range(num_layers):
