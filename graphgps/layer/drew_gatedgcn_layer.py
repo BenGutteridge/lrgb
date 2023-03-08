@@ -52,7 +52,6 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
 
     def forward(self, t, xs, batch): # needs to take current layer and custom x list
         x, edge_index = batch.x, batch.edge_index
-        x_og = x
         # e = batch.edge_attr
         """
         x               : [n_nodes, in_dim]
@@ -130,9 +129,10 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
             x = Ax + x
         except:
             print('x:\n', x.shape, '\nAx:\n', Ax.shape)
-            print('x_og:\n', x_og.shape)
+            print('x_og:\n', batch.x.shape)
             print('t: ', t)
-            
+            print('xs sizes: ', [xi.shape for xi in xs])
+
         x = self.bn_node_x(x)
         x = F.relu(x)
         x = F.dropout(x, self.dropout, training=self.training)
