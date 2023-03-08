@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PClap
+#SBATCH --job-name=PC20lapseeds
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -59,10 +59,10 @@ layer=my_gcnconv
 # layer=drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
-seed=0
+seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
-out_dir=results/PC_Lap/
-L=$SLURM_ARRAY_TASK_ID
+out_dir=results/PC_Lap/seed=$seed
+L=20
 nu=-1
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
