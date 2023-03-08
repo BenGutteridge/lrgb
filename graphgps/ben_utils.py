@@ -79,7 +79,7 @@ def get_run_name(cfg_fname, default):
   if 'alt_postlayer' in cfg.gnn.stage_type:
     if cfg.alt_postlayer.bn:
       model += '_ALT_BN'
-    if cfg.alt_postlayer.bn:
+    if cfg.alt_postlayer.act:
       model += '_ALT_ACT'
   run_name = "%s%s_%s_bs=%04d_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.train.batch_size, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # with BS
   # run_name = "%s%s_%s_d=%03d_L=%02d" % (cfg.dataset.format, dataset_name, model, cfg.gnn.dim_inner, cfg.gnn.layers_mp) # without BS
