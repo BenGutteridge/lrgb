@@ -61,7 +61,7 @@ layer=share_drewgatedgcnconv
 
 seed=0
 dir=datasets
-out_dir=results/Vslic30
+out_dir=results/slic
 L=8
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
@@ -73,7 +73,7 @@ ckpt_period=10
 edge_encoder=False
 epochs=300
 
-slic=30
+slic=10
 
 gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
