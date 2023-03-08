@@ -138,11 +138,10 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 
 # argpath='configs/GCN/pcqm-contact-GCN.yaml'
 
-# argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 # argpath = 'configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
 # argpath = 'configs/GatedGCN/peptides-func-GatedGCN.yaml'
-# argpath = 'configs/DRewGatedGCN/voc-DRewGatedGCN.yaml'
 
 # argpath = 'configs/SAN/vocsuperpixels-SAN.yaml'
 # argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
@@ -171,10 +170,10 @@ def parse_args() -> argparse.Namespace:
         # 'model.type alpha_gated_gnn',
         # 'model.type my_custom_gnn',
         # 'gnn.stage_type my_stack',
-        'gnn.stage_type delay_gnn_alt_postlayer',
+        # 'gnn.stage_type delay_gnn_alt_postlayer',
         # 'gnn.stage_type alpha_gnn',
         # 'gnn.stage_type delay_share_gnn',
-        'gnn.layer_type my_gcnconv',
+        # 'gnn.layer_type my_gcnconv',
         # 'gnn.layer_type drewgatedgcnconv',        
         # 'gnn.layer_type share_drewgatedgcnconv',
         # 'nu 2',
@@ -202,8 +201,9 @@ def parse_args() -> argparse.Namespace:
 
         # 'jk_mode cat', # none, [rho_][max, cat] 
         # 'train.ckpt_period 1',
-        'alt_postlayer.bn True',
-        'alt_postlayer.act True',
+        # 'alt_postlayer.bn True',
+        # 'alt_postlayer.act True',
+        'dataset.slic_compactness 10',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'

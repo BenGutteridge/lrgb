@@ -19,17 +19,19 @@ def add_k_hop_edges(dataset, K, format, name):
       filedir = join(cluster_filedir, 'k_hop_indices')
 
   # check if files exist already
-  file_exists = [exists(join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))) for k in range(1,K+1)] # list of K bools
+  slic = '-slic=%02d' % cfg.dataset.slic_compactness if ((format == 'PyG-VOCSuperpixels') & (cfg.dataset.slic_compactness != 10)) else ''
+  extra = ''.join([slic])
+  file_exists = [exists(join(filedir, "%s-%s%s_k=%02d.pt" % (format, name, extra, k))) for k in range(1,K+1)] # list of K bools
   if not all(file_exists): # checks all files are there
     last_nonexistent_file = max(loc for loc, val in enumerate(file_exists) if val == False)+1
-    print('Edge index file(s) not found for %s-%s_k=%02d (or lower); making file(s) now...' % (format, name, last_nonexistent_file))
-    get_k_hop_edges(dataset, K, filedir, format, name) # if they don't, make them
+    print('Edge index file(s) not found for %s-%s%s_k=%02d (or lower); making file(s) now...' % (format, name, extra, last_nonexistent_file))
+    get_k_hop_edges(dataset, K, filedir, format, name, extra) # if they don't, make them
 
   # load files TODO: test this properly
   all_graphs = []
   print('Loading k-hop data files...')
   for k in tqdm(range(1,K+1)):
-    filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))
+    filepath = join(filedir, "%s-%s%s_k=%02d.pt" % (format, name, extra, k))
     try:
       all_graphs.append(torch.load(filepath)) # [K,N,2,d]
     except: 
@@ -81,7 +83,7 @@ def add_k_hop_edges(dataset, K, format, name):
   return dataset
 
 
-def get_k_hop_edges(dataset, K, filedir, format, name):
+def get_k_hop_edges(dataset, K, filedir, format, name, extra):
   """take regular dataset, save k-hop edges"""
   # we're saving a list of k-hop edge indices
   edge_indices = dataset.data.edge_index
@@ -110,7 +112,7 @@ def get_k_hop_edges(dataset, K, filedir, format, name):
       matrices.append(tmp)
       idxs[k-1].append(idx)
   for k, ei_k in enumerate(idxs, 1):
-    filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))
+    filepath = join(filedir, "%s-%s%s_k=%02d.pt" % (format, name, extra, k))
     if not exists(filepath):
       print('Saving edge indices for k=%d to %s...' % (k, filepath))
       torch.save(ei_k, filepath)
