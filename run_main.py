@@ -179,7 +179,7 @@ def parse_args() -> argparse.Namespace:
         'gnn.layer_type share_drewgatedgcnconv',
         # 'nu 2',
         'gnn.dim_inner 4',
-        'gnn.layers_mp 4',
+        'gnn.layers_mp 8',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',

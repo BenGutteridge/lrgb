@@ -125,7 +125,10 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
             x = x + alpha[k_i] * eta_xj
 
         # UPDATE
-        x = Ax + x
+        try:
+            x = Ax + x
+        except:
+            print('x:\n', x.shape, '\nAx:\n', Ax.shape)
         x = self.bn_node_x(x)
         x = F.relu(x)
         x = F.dropout(x, self.dropout, training=self.training)
