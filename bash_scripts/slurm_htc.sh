@@ -3,7 +3,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
-#SBATCH --partition=small
+#SBATCH --partition=short
 # must be on htc, only one w/ GPUs
 #SBATCH --clusters=htc
 # set number of GPUs
