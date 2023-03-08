@@ -2,11 +2,11 @@
 #SBATCH --job-name=V30paper
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
-#SBATCH --time=24:00:00
-#SBATCH --partition=big
+#SBATCH --time=144:00:00
+#SBATCH --partition=small
 # must be on htc, only one w/ GPUs
 # set number of GPUs
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 
 cd ..
 module load cuda/10.2
