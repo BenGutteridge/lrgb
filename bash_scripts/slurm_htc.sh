@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=PCpaper
+#SBATCH --job-name=PClap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -33,9 +33,9 @@ task=struct
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
@@ -59,10 +59,10 @@ layer=my_gcnconv
 # layer=drewgatedgcnconv
 # layer=gatedgcnconv_noedge
 
-seed=$SLURM_ARRAY_TASK_ID
+seed=0
 dir=datasets
 out_dir=results/pcqm_PAPER/seed=$seed
-L=20
+L=$SLURM_ARRAY_TASK_ID
 nu=-1
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
@@ -71,13 +71,14 @@ jk=none
 k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
+epochs=150
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
 # gnn=my_custom_gnn
 gnn=gnn
 
-python main.py --cfg "$file" --repeat 1  seed $seed dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom
+python main.py --cfg "$file" --repeat 1  seed $seed dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode my_custom
 
 # FOR NO BN
 # python main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
