@@ -40,7 +40,7 @@ def return_hidden_dim(N):
   # number of FC layers in message passing
   N *= 0.99 # a little spare
   L = cfg.gnn.layers_mp
-  if (cfg.gnn.stage_type == 'delay_gnn') & (cfg.model.type == 'gnn'):
+  if cfg.gnn.stage_type.startswith('delay_gnn') & (cfg.model.type == 'gnn'):
     num_fc = get_num_fc_drew(L)
   elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
     num_fc = L
