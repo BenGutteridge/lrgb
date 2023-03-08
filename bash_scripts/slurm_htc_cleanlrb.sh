@@ -20,6 +20,7 @@ source activate $DATA/longrange
 nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
+seed=0
 slic=30
 epochs=300
 # Just for runing pure SAN

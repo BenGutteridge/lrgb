@@ -145,6 +145,7 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 
 # argpath = 'configs/SAN/vocsuperpixels-SAN.yaml'
 # argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
 repeat = 1
 import argparse
@@ -165,8 +166,8 @@ def parse_args() -> argparse.Namespace:
         'out_dir results',
         'dataset.dir datasets',
         'train.mode my_custom',
-        # 'optim.max_epoch 2',
-        # 'model.type drew_gated_gnn',
+        'optim.max_epoch 2',
+        'model.type drew_gated_gnn',
         # 'model.type alpha_gated_gnn',
         # 'model.type my_custom_gnn',
         # 'gnn.stage_type my_stack',
@@ -175,10 +176,10 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.stage_type delay_share_gnn',
         # 'gnn.layer_type my_gcnconv',
         # 'gnn.layer_type drewgatedgcnconv',        
-        # 'gnn.layer_type share_drewgatedgcnconv',
+        'gnn.layer_type share_drewgatedgcnconv',
         # 'nu 2',
-        # 'gnn.dim_inner 4',
-        'gnn.layers_mp 8',
+        'gnn.dim_inner 4',
+        'gnn.layers_mp 4',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -191,8 +192,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        # 'fixed_params.N 0',
-        'fixed_params.N 500_000',
+        'fixed_params.N 0',
+        # 'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',
