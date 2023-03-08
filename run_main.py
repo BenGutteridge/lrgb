@@ -203,7 +203,7 @@ def parse_args() -> argparse.Namespace:
         # 'train.ckpt_period 1',
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
-        'dataset.slic_compactness 10',
+        'dataset.slic_compactness 30',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
