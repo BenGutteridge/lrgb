@@ -21,5 +21,6 @@ nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 slic=30
+epochs=300
 # Just for runing pure SAN
-python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 dataset.slic_compactness $slic tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retrySANslic30
+python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 seed $seed optim.max_epoch $epochs dataset.slic_compactness $slic tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retrySANslic30
