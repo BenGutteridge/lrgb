@@ -2,8 +2,8 @@
 #SBATCH --job-name=V30Lap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
-#SBATCH --time=144:00:00
-#SBATCH --partition=small
+#SBATCH --time=24:00:00
+#SBATCH --partition=big
 # must be on htc, only one w/ GPUs
 # set number of GPUs
 #SBATCH --gres=gpu:4
