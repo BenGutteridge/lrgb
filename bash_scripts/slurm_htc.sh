@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V30papSEED
+#SBATCH --job-name=V30LaPaSEED
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -47,8 +47,8 @@ task=struct
 # # DRewGated, VOC 
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
-# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
