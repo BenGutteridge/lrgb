@@ -128,6 +128,7 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         try:
             x = Ax + x
         except:
+            print('k neighbourhoods: ', k_neighbourhoods)
             print('x:\n', x.shape, '\nAx:\n', Ax.shape)
             print('x_og:\n', batch.x.shape)
             print('t: ', t)
