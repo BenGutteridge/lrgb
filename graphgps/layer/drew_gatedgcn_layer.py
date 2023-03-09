@@ -128,7 +128,8 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
         try:
             x = Ax + x
         except:
-            print('Bx_j: ', Bx_j)
+            print('k: ', k)
+            print('Bx_j(1): ', Bx_j(k))
             print('eta_xj: ', eta_xj.shape)
             print('sum_sigma: ', sum_sigma.shape)
             print('sum_sigma_x: ', sum_sigma_x.shape)
@@ -157,12 +158,11 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
 
     def get_dim_size(self, xs):
         try: 
-            dim_size = xs[0].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
+            return xs[0].shape[0]  # or None ??   <--- Double check this [BG: their note not mine]
         except: # when doing alpha
             for x_t in xs:
                 if x_t is not None: 
-                    dim_size = x_t.shape[0]
-                    return dim_size
+                    return x_t.shape[0]
 
 
 class DRewGatedGCNGraphGymLayer(nn.Module):
