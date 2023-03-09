@@ -124,22 +124,25 @@ class DRewGatedGCNLayer(pyg_nn.conv.MessagePassing):
             eta_xj = (numerator_eta_xj / (denominator_eta_xj + 1e-6))
             x = x + alpha[k_i] * eta_xj
 
-        # UPDATE
-        try:
-            x = Ax + x
-        except:
-            print('k: ', k)
-            print('Bx_j(1): ', Bx_j(k))
-            print('eta_xj: ', eta_xj.shape)
-            print('sum_sigma: ', sum_sigma.shape)
-            print('sum_sigma_x: ', sum_sigma_x.shape)
-            print('numerator_eta_xj: ', numerator_eta_xj.shape)
-            print('denominator_eta_xj: ', denominator_eta_xj.shape)
-            print('k neighbourhoods: ', k_neighbourhoods)
-            print('x:\n', x.shape, '\nAx:\n', Ax.shape)
-            print('x_og:\n', batch.x.shape)
-            print('t: ', t)
-            print('xs sizes: ', [xi.shape for xi in xs])
+        # # UPDATE
+        
+        # try:
+        #     x = Ax + x
+        # except:
+        #     print('k: ', k)
+        #     print('Bx_j(1): ', Bx_j(k))
+        #     print('eta_xj: ', eta_xj.shape)
+        #     print('sum_sigma: ', sum_sigma.shape)
+        #     print('sum_sigma_x: ', sum_sigma_x.shape)
+        #     print('numerator_eta_xj: ', numerator_eta_xj.shape)
+        #     print('denominator_eta_xj: ', denominator_eta_xj.shape)
+        #     print('k neighbourhoods: ', k_neighbourhoods)
+        #     print('x:\n', x.shape, '\nAx:\n', Ax.shape)
+        #     print('x_og:\n', batch.x.shape)
+        #     print('t: ', t)
+        #     print('xs sizes: ', [xi.shape for xi in xs])
+    
+        x = Ax + x
 
         x = self.bn_node_x(x)
         x = F.relu(x)
