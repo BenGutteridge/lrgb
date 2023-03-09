@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=V30vanilla
+#SBATCH --job-name=V30paper
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -45,9 +45,9 @@ task=struct
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
-# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 # Just for runing pure SAN
@@ -55,13 +55,13 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
-# layer=share_drewgatedgcnconv
+layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-layer=gatedgcnconv
+# layer=gatedgcnconv
 
 seed=0
 dir=datasets
-out_dir=results/slic
+out_dir=results/Vslic30
 L=8
 nu=1
 # rho=$SLURM_ARRAY_TASK_ID
@@ -75,11 +75,11 @@ epochs=300
 
 slic=30
 
-# gnn=drew_gated_gnn
+gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
 # gnn=my_custom_gnn
 # gnn=gnn
-gnn=custom_gnn
+# gnn=custom_gnn
 
 python main.py --cfg "$file" --repeat 3 seed $seed dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode my_custom
 
