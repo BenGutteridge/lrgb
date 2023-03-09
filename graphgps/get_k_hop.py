@@ -40,51 +40,6 @@ def get_edge_labels(dataset):
   return edge_labels
 
 
-# K <= BETA ADJACENCIES
-
-def add_k_leq_beta_adj(dataset, beta=1):
-  """beta = 1 defaults to vanilla GCN"""
-  all_indices = []
-  graph_edge_cutoffs = dataset.slices['edge_index']
-  for i in tqdm(range(len(graph_edge_cutoffs)-1)): # iterating over each graph in the dataset
-    graph_edge_index = dataset.data.edge_index[:, graph_edge_cutoffs[i]:graph_edge_cutoffs[i+1]]
-    if graph_edge_index.shape[-1] == 0:
-      print('Warning: graph with no edges. i: %d, graph_edge_cutoffs[i]: %d, graph_edge_cutoffs[i+1]: %d' % (i, graph_edge_cutoffs[i], graph_edge_cutoffs[i+1]))
-      print('Empty graph skipped.')
-      k_hop_edges = [torch.empty((2,0), dtype=torch.long)]
-    else:
-      k_hop_edges = get_k_leq_beta_adj(graph_edge_index, beta)
-    all_indices.append(k_hop_edges)
-  ei_slices = torch.tensor([0] + [indices.shape[-1] for indices in all_indices]).cumsum(dim=0)
-  all_indices = torch.cat(all_indices, dim=1)
-  dataset.data.edge_index = all_indices
-  # slices
-  dataset.slices['edge_index'] = ei_slices
-  dataset.slices['edge_attr'] = ei_slices
-  try:
-    dataset.data.__delattr__('edge_attr')
-    print('Unused edge attrs deleted')
-  except:
-    print('No edge attrs to delete')
-  assert dataset.data.edge_attr is None
-  return dataset
-  
-
-def get_k_leq_beta_adj(edge_index, beta):
-  """Return k <= beta - hop adjacency matrix"""
-  try:
-    tmp = to_dense_adj(edge_index).float()
-  except:
-    print('Offending tensor:\nedge_index:\n', edge_index, '\nedge_index.shape:', edge_index.shape)
-  adj = tmp.to_sparse().float()
-  for k in range(2, beta+1):
-    tmp += torch.bmm(adj, tmp)
-  for i in range(tmp.shape[-1]):
-    tmp[0, i, i] = 0 # remove self-connections
-  tmp = (tmp>0).float() # remove edge multiples
-  edge_idx, _ = dense_to_sparse(tmp)
-  return edge_idx
-
 
 ### K-HOP ADJACENCIES
 
