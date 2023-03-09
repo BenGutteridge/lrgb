@@ -45,6 +45,7 @@ def custom_set_out_dir(cfg, cfg_fname, name_tag, default=False):
     cfg.out_dir = os.path.join(cfg.out_dir, run_name)
 
 
+
 def get_run_name(cfg_fname, default):
   dataset_name = ('-' + cfg.dataset.name) if cfg.dataset.name!='none' else ''
   if default:
