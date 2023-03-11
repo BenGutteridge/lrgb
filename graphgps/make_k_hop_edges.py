@@ -6,7 +6,7 @@ import os
 from os.path import join, exists
 from torch_geometric.data import Data
 
-def add_k_hop_edges(dataset, K, format, name):
+def make_k_hop_edges(dataset, K, format, name):
   print('Stage type %s, model type %s, using %d-hops' % (cfg.gnn.stage_type, cfg.model.type, K))
   # get k-hop edge amended dataset - either load or make it
   filedir = join(cfg.dataset.dir, 'k_hop_indices')    
@@ -19,7 +19,7 @@ def add_k_hop_edges(dataset, K, format, name):
   if not all(file_exists): # checks all files are there
     last_nonexistent_file = max(loc for loc, val in enumerate(file_exists) if val == False)+1
     print('Edge index file(s) not found for %s-%s%s_k=%02d (or lower); making file(s) now...' % (format, name, extra, last_nonexistent_file))
-    get_k_hop_edges(dataset, K, filedir, format, name, extra) # if they don't, make them
+    compute_k_hop_edges(dataset, K, filedir, format, name, extra) # if they don't, make them
 
   # load files
   all_graphs = []
@@ -39,7 +39,7 @@ def add_k_hop_edges(dataset, K, format, name):
       for j in files_to_remake:
         filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, j))
         os.remove(filepath)
-      get_k_hop_edges(dataset, max(files_to_remake), filedir, format, name)
+      compute_k_hop_edges(dataset, max(files_to_remake), filedir, format, name)
       filepath = join(filedir, "%s-%s_k=%02d.pt" % (format, name, k))
       all_graphs.append(torch.load(filepath)) # [K,N,2,d]
 
@@ -77,7 +77,7 @@ def add_k_hop_edges(dataset, K, format, name):
   return dataset
 
 
-def get_k_hop_edges(dataset, K, filedir, format, name, extra):
+def compute_k_hop_edges(dataset, K, filedir, format, name, extra):
   """take regular dataset, save k-hop edges"""
   # we're saving a list of k-hop edge indices
   edge_indices = dataset.data.edge_index
