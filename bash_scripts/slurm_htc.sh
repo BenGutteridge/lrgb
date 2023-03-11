@@ -62,7 +62,7 @@ layer=my_gcnconv
 seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
 out_dir=results/pc_cc/seed=$seed
-L=20
+L=10
 nu=-1
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
