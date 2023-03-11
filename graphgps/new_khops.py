@@ -9,14 +9,8 @@ from torch_geometric.data import Data
 def add_k_hop_edges(dataset, K, format, name):
   print('Stage type %s, model type %s, using %d-hops' % (cfg.gnn.stage_type, cfg.model.type, K))
   # get k-hop edge amended dataset - either load or make it
-  cluster_filedir = '/data/beng' # data location for aimscdt cluster
-  local_filedir = 'graphgps/loader/k_hop_indices' # data location for verges/mac, local
-  if not exists(cluster_filedir):
-      print('Not on aimscdt cluster, using local data storage.')
-      filedir = local_filedir
-  else:
-      print('On aimscdt cluster, using cluster data storage.')
-      filedir = join(cluster_filedir, 'k_hop_indices')
+  filedir = join(cfg.dataset.dir, 'k_hop_indices')    
+  if not exists(filedir): os.makedirs(filedir) 
 
   # check if files exist already
   slic = '-slic=%02d' % cfg.dataset.slic_compactness if ((format == 'PyG-VOCSuperpixels') & (cfg.dataset.slic_compactness != 10)) else ''
@@ -27,7 +21,7 @@ def add_k_hop_edges(dataset, K, format, name):
     print('Edge index file(s) not found for %s-%s%s_k=%02d (or lower); making file(s) now...' % (format, name, extra, last_nonexistent_file))
     get_k_hop_edges(dataset, K, filedir, format, name, extra) # if they don't, make them
 
-  # load files TODO: test this properly
+  # load files
   all_graphs = []
   print('Loading k-hop data files...')
   for k in tqdm(range(1,K+1)):
@@ -78,7 +72,7 @@ def add_k_hop_edges(dataset, K, format, name):
                                 edge_attr=dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]],
                                 y=dataset.get(i).y)
     assert torch.equal(dataset.get(i).edge_attr, dataset.data.edge_attr[ei_slices[i]:ei_slices[i+1]]) # check that the conversion worked
-  if count > 0: print('Warning: %d/%d graphs not changed in dataset._data_list; have been set manually' % (count, len(dataset)))
+  if count > 0: print('%d/%d graphs not changed in dataset._data_list; have been set manually' % (count, len(dataset))) # this is expected for VOC and COCO
 
   return dataset
 

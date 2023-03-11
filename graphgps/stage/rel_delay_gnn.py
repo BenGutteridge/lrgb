@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_DRewGCN
+from .stage_inits import init_DRewGCN
 
 class RelationalDelayGNNStage(nn.Module):
     """
@@ -30,12 +30,6 @@ class RelationalDelayGNNStage(nn.Module):
         x_{t+1} = x_t + f(x_t, x_{t-1})
         first pass: uses regular edge index for each layer
         """
-        # # old k-hop method: inefficient
-        # from graphgym.ben_utils import get_k_hop_adjacencies
-        # k_hop_edges, _ = get_k_hop_adjacencies(batch.edge_index, self.max_k)
-        # A = lambda k : k_hop_edges[k-1]
-
-        # new k-hop method: efficient
         # k-hop adj matrix
         A = lambda k : batch.edge_index[:, batch.edge_attr[:,0]==k] # edge attr now includes both k-hop and edge type
         A_edge = lambda e : batch.edge_index[:, batch.edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges

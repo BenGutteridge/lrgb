@@ -4,7 +4,7 @@ from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-from .utils import init_khop_nondynamic_GCN
+from .stage_inits import init_alphaGCN
 
 class AlphaGNNStage(nn.Module):
     """
@@ -23,7 +23,7 @@ class AlphaGNNStage(nn.Module):
         # all Sk used at every layer - nondynamic
         alpha = min(num_layers, cfg.k_max)
         print('Running alphaGNN, alpha = ', alpha)
-        self = init_khop_nondynamic_GCN(self, 
+        self = init_alphaGCN(self, 
                                         dim_in, dim_out, 
                                         num_layers, 
                                         max_k=alpha)

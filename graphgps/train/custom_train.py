@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import time
 import logging
+import os
+from tqdm import tqdm
 
 from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.loss import compute_loss
@@ -38,10 +40,14 @@ def train_epoch(logger, loader, model, optimizer, scheduler, batch_accumulation)
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
             optimizer.zero_grad()
+        if hasattr(scheduler, 'get_last_lr'):
+            sched_get_last_lr = scheduler.get_last_lr()
+        else:
+            sched_get_last_lr = [group['lr'] for group in scheduler.optimizer.param_groups]
         logger.update_stats(true=_true,
                             pred=_pred,
                             loss=loss.detach().cpu().item(),
-                            lr=scheduler.get_last_lr()[0],
+                            lr=sched_get_last_lr[0],
                             time_used=time.time() - time_start,
                             params=cfg.params,
                             dataset_name=cfg.dataset.name)
@@ -76,6 +82,38 @@ def eval_epoch(logger, loader, model, split='val'):
                             dataset_name=cfg.dataset.name,
                             **extra_stats)
         time_start = time.time()
+
+import inspect
+
+@torch.no_grad()
+def dirichlet_epoch(logger, loader, model, split='val'):
+    model.eval()
+    dirichlet_energies = np.zeros(cfg.gnn.layers_mp+1) # after each layer + before first
+    num_graphs = get_num_graphs(loader)
+    for batch in tqdm(loader):
+        batch.split = split
+        batch.to(torch.device(cfg.device))
+        if cfg.gnn.head == 'inductive_edge':
+            print('WARNING: dirichlet epoch not supported')
+            return
+        else:
+            for module in model.children():
+                if 'dirichlet_energy' in list(inspect.getfullargspec(module.forward).args):
+                    batch = module(batch, dirichlet_energy=True)
+                    dirichlet_energies += batch.dirichlet_energies
+                else:
+                    batch = module(batch)
+    dirichlet_energies /=  num_graphs
+    print('Dirichlet energies:')
+    for l, de in enumerate(list(dirichlet_energies)):
+        print('After %02d layers: %.4f' % (l, de))
+    np.savetxt(os.path.join(cfg.run_dir, "dirichlet.csv"), dirichlet_energies, delimiter=",")
+
+def get_num_graphs(loader):
+    num = 0
+    for l in loader:
+        num += l.y.shape[0]
+    return num
 
 
 def custom_train(loggers, loaders, model, optimizer, scheduler):
@@ -115,7 +153,11 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
     split_names = ['val', 'test']
     full_epoch_times = []
     perf = [[] for _ in range(num_splits)]
+    alphas = []
     for cur_epoch in range(start_epoch, cfg.optim.max_epoch):
+        if cfg.agg_weights.use:
+            for alpha_t in model._modules['mp'].alpha_t:
+                alphas.append(alpha_t.data.detach().cpu())
         start_time = time.perf_counter()
         train_epoch(loggers[0], loaders[0], model, optimizer, scheduler,
                     cfg.optim.batch_accumulation)
@@ -192,6 +234,14 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
                                      f"gamma={gtl.attention.gamma.item()}")
     logging.info(f"Avg time per epoch: {np.mean(full_epoch_times):.2f}s")
     logging.info(f"Total train loop time: {np.sum(full_epoch_times) / 3600:.2f}h")
+    torch.save(model.state_dict(), os.path.join(cfg.run_dir, 'model.pt'))
+    # put the DE calc here
+    if cfg.dirichlet.use:
+        try:
+            print('Calculating Dirichlet energy on test dataset...')
+            dirichlet_epoch(loggers[-1], loaders[-1], model, split=split_names[-1])
+        except:
+            print('Failed to calculate Dirichlet energy on test dataset...')
     for logger in loggers:
         logger.close()
     if cfg.train.ckpt_clean:
@@ -201,6 +251,13 @@ def custom_train(loggers, loaders, model, optimizer, scheduler):
         run.finish()
         run = None
 
+    if alphas: 
+        path = cfg.run_dir+'/alphas.txt'
+        print('Saving aggregation weights at %s...' % path)
+        with open(path, 'w') as f:
+            f.write('\n'.join([str(torch.nn.functional.softmax(alphas[i], dim=0)) for i in range(len(alphas))]))
+
     logging.info('Task done, results saved in {}'.format(cfg.run_dir))
 
+register_train('my_custom', custom_train)
 register_train('custom', custom_train)
