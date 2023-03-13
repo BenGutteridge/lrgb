@@ -20,7 +20,7 @@ from torch_geometric.graphgym.utils.comp_budget import params_count
 from torch_geometric.graphgym.utils.device import auto_select_device
 from torch_geometric.graphgym.register import train_dict
 from torch_geometric import seed_everything
-from graphgps.ben_utils import custom_set_out_dir
+from graphgps.drew_utils import custom_set_out_dir
 from param_calcs import set_d_fixed_params
 
 from graphgps.finetuning import load_pretrained_model_cfg, \
@@ -104,17 +104,17 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-# model = 'DelayGCN'
-model = 'GCN'
+model = 'DelayGCN'
+# model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# VOC superpixels
-argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# # VOC superpixels
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -170,7 +170,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type drew_gated_gnn',
         # 'model.type alpha_gated_gnn',
         # 'model.type my_custom_gnn',
-        # 'gnn.stage_type my_stack',
+        # 'gnn.stage_type custom_stack',
         # 'gnn.stage_type delay_gnn_alt_postlayer',
         # 'gnn.stage_type alpha_gnn',
         # 'gnn.stage_type delay_share_gnn',
@@ -179,7 +179,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type share_drewgatedgcnconv',
         # 'nu 2',
         # 'gnn.dim_inner 4',
-        'gnn.layers_mp 8',
+        # 'gnn.layers_mp 8',
         # 'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -193,7 +193,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.batchnorm False',
 
         # 'fixed_params.N 0',
-        'fixed_params.N 500_000',
+        # 'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',
@@ -204,7 +204,7 @@ def parse_args() -> argparse.Namespace:
         # 'train.ckpt_period 1',
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
-        'dataset.slic_compactness 30',
+        # 'dataset.slic_compactness 30',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'

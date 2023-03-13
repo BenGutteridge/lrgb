@@ -5,8 +5,8 @@ from torch_geometric.graphgym.register import register_config
 
 def set_cfg_fixed_params(cfg):
     r'''
-    This function sets the default config value for customized options
-    :return: customized configuration use by the experiment.
+    Sets the fixed parameter count that models must adhere to. Hidden dimension calculated automatically from this.
+    If N = 0, the specified hidden dimension is used
     '''
     # ----------------------------------------------------------------------- #
     # Customized options

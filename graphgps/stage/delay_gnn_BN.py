@@ -7,7 +7,7 @@ from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
 # from .utils import init_khop_GCN
-from .utils import init_DRewGCN
+from .stage_inits import init_DRewGCN
 sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 custom_heads = ['jk_maxpool_graph']
 from param_calcs import get_k_neighbourhoods

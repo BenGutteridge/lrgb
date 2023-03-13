@@ -46,5 +46,5 @@ class GNNStackStage(nn.Module):
           batch.dirichlet_energies = np.array(energies)
         return batch
     
-register.register_stage('my_stack', GNNStackStage)
+register.register_stage('custom_stack', GNNStackStage)
 register.register_stage('stack_residual', GNNStackStage)

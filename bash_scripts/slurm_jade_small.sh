@@ -41,8 +41,8 @@ python3.9 -c "import torch; print(torch.__version__); print(torch.cuda.is_availa
 
 # file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/peptides-struct-DRewGatedGCN.yaml'
-# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
-file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
+file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
+# file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
 
 # layer=gcnconv

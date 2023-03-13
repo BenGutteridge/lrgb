@@ -24,8 +24,8 @@ from graphgps.transform.posenc_stats import compute_posenc_stats
 from graphgps.transform.transforms import (pre_transform_in_memory,
                                            typecast_x, concat_x_and_pos,
                                            clip_graphs_to_size)
-from graphgps.ben_utils import get_edge_labels
-from graphgps.new_khops import add_k_hop_edges
+from graphgps.drew_utils import get_edge_labels
+from graphgps.make_k_hop_edges import make_k_hop_edges
 
 
 def log_loaded_dataset(dataset, format, name):
@@ -186,10 +186,8 @@ def load_dataset_master(format, name, dataset_dir):
 
     multi_hop_stages = [
         'alpha_gnn',
-        'alpha_k_gnn',
         'delay_gnn',
         'k_gnn',
-        'delite_gnn',
         'rel_delay_gnn',
         'rel_delay_gnn_lite',
     ]
@@ -198,7 +196,7 @@ def load_dataset_master(format, name, dataset_dir):
                         'R-SPN_dense', 'R*-SPN', 'R-SPN']
     if (cfg.gnn.stage_type in multi_hop_stages) or ('delay' in cfg.gnn.stage_type) or (cfg.model.type in multi_hop_models):
         k_max = min(cfg.gnn.layers_mp, cfg.k_max) if cfg.rho < 1 else min(cfg.gnn.layers_mp, cfg.rho_max)
-        dataset = add_k_hop_edges(dataset, k_max, format, name)
+        dataset = make_k_hop_edges(dataset, k_max, format, name)
     log_loaded_dataset(dataset, format, name)
 
     # Precompute necessary statistics for positional encodings.
@@ -629,32 +627,3 @@ def join_dataset_splits(datasets):
     datasets[0].split_idxs = split_idxs
 
     return datasets[0]
-
-
-# dropped
-#    if cfg.gnn.stage_type in multi_hop_stages or cfg.model.type in multi_hop_models:
-#         max_k = max(cfg.gnn.layers_mp, cfg.alpha)
-#         print('Stage type %s, model type %s, using %d-hops' % (cfg.gnn.stage_type, cfg.model.type, max_k))
-#         # get k-hop edge amended dataset - either load or make it
-#         cluster_filedir = '/data/beng' # data location for aimscdt cluster
-#         local_filedir = 'graphgps/loader/k_hop_datasets' # data location for verges/mac, local
-#         if not osp.exists(cluster_filedir):
-#             print('Not on aimscdt cluster, using local data storage.')
-#             filedir = local_filedir
-#         else:
-#             print('On aimscdt cluster, using cluster data storage.')
-#             filedir = osp.join(cluster_filedir, 'k_hop_datasets')
-#         filepath = osp.join(filedir, "%s-%s_max_k=%d%s.pt" % (format, name, max_k, is_edge_str))
-#         if osp.exists(filepath):
-#             print('Loading k-hop dataset from file %s...' % filepath)
-#             dataset = torch.load(filepath)
-#         else:
-#             print('Making k-hop dataset, max_k=%d' % (max_k))
-#             dataset = add_k_hop_edges(dataset, K=max_k, edge_labels=edge_labels) # ****************************************
-#             print('Saving k-hop dataset as %s...' % filepath)
-#             if not osp.exists(filedir):
-#                 os.mkdir(filedir)
-#             torch.save(dataset, filepath)
-#     elif cfg.beta > 1:
-#         print('Stage type %s, using beta=%d' % (cfg.gnn.stage_type, cfg.beta))
-#         dataset = add_k_leq_beta_adj(dataset, beta=cfg.beta)
