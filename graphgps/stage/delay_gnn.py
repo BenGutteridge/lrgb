@@ -11,7 +11,6 @@ sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 custom_heads = ['jk_maxpool_graph']
 from param_calcs import get_k_neighbourhoods
 
-# @register_stage('delay_gnn')      # xt+1 = f(x)       (NON-RESIDUAL)
 class DelayGNNStage(nn.Module):
     """
     Stage that stack GNN layers and includes a 1-hop skip (Delay GNN for max K = 2)
@@ -38,14 +37,13 @@ class DelayGNNStage(nn.Module):
 
         # run through layers
         t, x = 0, [] # length t list with x_0, x_1, ..., x_t
-        # modules = self.children()
         for t in range(self.num_layers):
             x.append(batch.x)
             batch.x = torch.zeros_like(x[t])
             k_neighbourhoods = get_k_neighbourhoods(t)
-            alpha = self.alpha_t[t] if cfg.agg_weights.use else torch.ones(len(k_neighbourhoods)) # learned weighting or equal weighting
+            alpha = self.alpha_t[t] if cfg.agg_weights.use else torch.ones(len(k_neighbourhoods)) # learned weights or equal weights (default equal)
             alpha = F.softmax(alpha, dim=0)
-            alpha = alpha if cfg.agg_weights.convex_combo else alpha * len(k_neighbourhoods) # convex comb, or scale by no. of terms (e.g. unity weights for agg_weights.use=False)
+            alpha = alpha if cfg.agg_weights.convex_combo else alpha * len(k_neighbourhoods) # convex combination or not (default unity weights, no CC)
             for i, k in enumerate(k_neighbourhoods):
                 if A(k).shape[1] > 0: # iff there are edges of type k
                     delay = max(k-self.nu,0)
@@ -53,7 +51,7 @@ class DelayGNNStage(nn.Module):
                         delay = int((k-1)//self.nu)
                     batch.x = batch.x + alpha[i] * W(k,t)(batch, x[t-delay], A(k)).x
             batch.x = x[t] + nn.ReLU()(batch.x)
-            if cfg.gnn.l2norm: # normalises after every layer
+            if cfg.gnn.l2norm:
                 batch.x = F.normalize(batch.x, p=2, dim=-1)
         if dirichlet_energy:
             L, energies = get_laplacian(A(1)), []
@@ -73,8 +71,6 @@ def dirichlet(x, L):
     at each layer and outputs array of dirichlet energies"""
     x = tonp(x)
     assert x.shape[0] == L.shape[0] == L.shape[1]
-    # print('x: ', type(x))
-    # print('L: ', type(L))
     E = np.dot(np.dot(x.T, L), x)
     E = np.trace(E) / np.linalg.norm(x, ord='fro')**2
     return E
@@ -89,8 +85,6 @@ def tonp(tsr):
         return tsr
     elif isinstance(tsr, np.matrix):
         return np.array(tsr)
-    # elif isinstance(tsr, scipy.sparse.csc.csc_matrix):
-    #     return np.array(tsr.todense())
 
     assert isinstance(tsr, torch.Tensor)
     tsr = tsr.cpu()

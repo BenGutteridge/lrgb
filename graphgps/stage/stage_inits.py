@@ -4,9 +4,9 @@ from torch_geometric.graphgym.config import cfg
 # from torch_geometric.graphgym.register import register_stage
 import torch
 from .example import GNNLayer
-sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 from param_calcs import get_k_neighbourhoods
 
+sort_and_removes_dupes = lambda mylist : sorted(list(dict.fromkeys(mylist)))
 
 def init_DRewGCN(model, dim_in, dim_out, num_layers, skip_first_hop=False):
   """The (nu)DRew-GCN param initialiser, used for delay_gnn"""

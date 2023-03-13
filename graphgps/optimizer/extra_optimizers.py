@@ -6,8 +6,8 @@ from torch_geometric.graphgym import cfg
 try:
     from torch_geometric.graphgym.optimizer import OptimizerConfig, SchedulerConfig
 except:
-    print("No torch_geometric.graphgym.optimizer, trying torch_geometric.graphgym.optim...")
-    from torch_geometric.graphgym.optim import OptimizerConfig, SchedulerConfig
+    print("No torch_geometric.graphgym.optimizer, trying torch_geometric.graphgym.contrib.optimizer...")
+    from torch_geometric.graphgym.contrib.optimizer import OptimizerConfig, SchedulerConfig
 from torch_geometric.graphgym.register import (register_optimizer,
                                                register_scheduler)
 
