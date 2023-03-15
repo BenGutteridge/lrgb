@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VdiglE
+#SBATCH --job-name=VdiglNOE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -48,8 +48,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
-file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
+file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
@@ -62,7 +62,7 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # layer=my_gcnconv
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-layer=gatedgcnconv
+layer=gatedgcnconv_noedge
 
 # layer=gatedgcnconv_noedge
 
@@ -88,9 +88,9 @@ slic=30
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
-# gnn=my_custom_gnn
+gnn=my_custom_gnn
 # gnn=gnn
-gnn=custom_gnn
+# gnn=custom_gnn
 
 nu=1
 L=8
