@@ -9,6 +9,7 @@ import torch
 import torch_geometric.transforms as T
 from numpy.random import default_rng
 from ogb.graphproppred import PygGraphPropPredDataset
+from torch_geometric.data import Data
 from torch_geometric.datasets import (GNNBenchmarkDataset, Planetoid, TUDataset,
                                       WikipediaNetwork, ZINC, QM9)
 from torch_geometric.graphgym.config import cfg
@@ -26,6 +27,7 @@ from graphgps.transform.transforms import (pre_transform_in_memory,
                                            clip_graphs_to_size)
 from graphgps.drew_utils import get_edge_labels
 from graphgps.make_k_hop_edges import make_k_hop_edges
+from tqdm import tqdm
 
 
 def log_loaded_dataset(dataset, format, name):
@@ -173,6 +175,20 @@ def load_dataset_master(format, name, dataset_dir):
             raise ValueError(f"Unsupported OGB(-derived) dataset: {name}")
     else:
         raise ValueError(f"Unknown data format: {format}")
+
+    if cfg.dataset.transform.startswith('digl'):
+        avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
+        print('Using GDC transform, average degree %d' % avg_degree)
+        tf = T.GDC(
+            self_loop_weight=1.,
+            normalization_in='sym',
+            normalization_out='col',
+            diffusion_kwargs=dict(method='ppr', alpha=0.15),
+            sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
+            exact=True,
+        ) # using default, except for avg degree
+        dataset = remove_edge_attrs(dataset)
+        pre_transform_in_memory(dataset, tf, show_progress=True)
 
     if cfg.use_edge_labels:
         edge_labels = get_edge_labels(dataset)
@@ -627,3 +643,19 @@ def join_dataset_splits(datasets):
     datasets[0].split_idxs = split_idxs
 
     return datasets[0]
+
+def remove_edge_attrs(dataset):
+    """Removes edge attrs from dataset for experiments which don't use them"""
+    dataset.data.edge_attr = None
+    if any([dataset.get(i).edge_attr is not None for i in range(len(dataset))]):
+        print('Removing edge attrs so GDC preprocessing can be performed...')
+        count = 0
+        for i in tqdm(range(len(dataset))): 
+            if dataset.get(i).edge_attr is not None:
+                count += 1
+                dataset._data_list[i] = Data(x=dataset.get(i).x,
+                                            edge_index=dataset.get(i).edge_index,
+                                            edge_attr=None,
+                                            y=dataset.get(i).y)
+        assert not any([dataset.get(i).edge_attr is not None for i in range(len(dataset))])
+    return dataset
