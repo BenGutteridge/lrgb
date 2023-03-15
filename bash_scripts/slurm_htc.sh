@@ -57,7 +57,7 @@ task=func
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
 
-file='configs/DRewGatedGCN/peptides-${task}-DRewGatedGCN+${pe}.yaml'
+file="configs/DRewGatedGCN/peptides-${task}-DRewGatedGCN+${pe}.yaml"
 
 # layer=gcnconv
 # layer=my_gcnconv
