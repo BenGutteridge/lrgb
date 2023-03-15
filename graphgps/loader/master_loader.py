@@ -195,22 +195,29 @@ def load_dataset_master(format, name, dataset_dir):
     if cfg.dataset.transform.startswith('digl'):
         avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
         print('Using GDC transform, average degree %d' % avg_degree)
-        tf = T.GDC(
-            self_loop_weight=1.,
-            normalization_in='sym',
-            normalization_out='col',
-            diffusion_kwargs=dict(method='ppr', alpha=0.15),
-            sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
-            exact=True,
-        ) # using default, except for avg degree
+        digl_filepath = osp.join(dataset_dir, '%s_%s_%s.pt' % (format, name, cfg.dataset.transform))
+        if osp.exists(digl_filepath):
+            print('Loading GDC transformed dataset feom file %s' % digl_filepath)
+            dataset = torch.load(digl_filepath)
+        else:
+            print('Applying transform...')
+            tf = T.GDC(
+                self_loop_weight=1.,
+                normalization_in='sym',
+                normalization_out='col',
+                diffusion_kwargs=dict(method='ppr', alpha=0.15),
+                sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
+                exact=True,
+            ) # using default, except for avg degree
+            dataset = squeeze_edge_attrs(dataset)
+            pre_transform_in_memory(dataset, tf, show_progress=True)
+            try:
+                torch.save(digl_filepath, dataset)
+            except: print('Failed to save.') # TODO: make this work
         if use_drew or 'noedge' in cfg.gnn.layer_type:
             dataset = remove_edge_attrs(dataset)
         else:
-            dataset = squeeze_edge_attrs(dataset)
-        pre_transform_in_memory(dataset, tf, show_progress=True)
-        if not use_drew:
-            unsqueeze_edge_attrs(dataset)
-
+            dataset = unsqueeze_edge_attrs(dataset)
 
     if cfg.use_edge_labels:
         edge_labels = get_edge_labels(dataset)

@@ -182,7 +182,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type share_drewgatedgcnconv',
         'gnn.layer_type gatedgcnconv_noedge',
         # 'nu 2',
-        # 'gnn.dim_inner 4',
+        'gnn.dim_inner 4',
         # 'gnn.layers_mp 8',
         'dataset.edge_encoder False',
         # 'use_edge_labels True',
@@ -196,8 +196,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        # 'fixed_params.N 0',
-        'fixed_params.N 500_000',
+        'fixed_params.N 0',
+        # 'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',
