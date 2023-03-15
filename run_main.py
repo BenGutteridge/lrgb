@@ -104,8 +104,8 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
-# model = 'GCN'
+# model = 'DelayGCN'
+model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
@@ -196,8 +196,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.l2norm False',
         # 'gnn.batchnorm False',
 
-        'fixed_params.N 0',
-        # 'fixed_params.N 500_000',
+        # 'fixed_params.N 0',
+        'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',

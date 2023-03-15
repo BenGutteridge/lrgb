@@ -211,10 +211,10 @@ def load_dataset_master(format, name, dataset_dir):
             ) # using default, except for avg degree
             dataset = squeeze_edge_attrs(dataset)
             pre_transform_in_memory(dataset, tf, show_progress=True)
-            # try:
-            #     torch.save(digl_filepath, dataset)
-            # except: print('Failed to save.') # TODO: make this work
-        if use_drew or 'noedge' in cfg.gnn.layer_type:
+            try:
+                torch.save(dataset, digl_filepath)
+            except: print('Failed to save.') # TODO: make this work
+        if use_drew or ('noedge' in cfg.gnn.layer_type) or ('peptides' in name):
             dataset = remove_edge_attrs(dataset)
         else:
             dataset = unsqueeze_edge_attrs(dataset)
