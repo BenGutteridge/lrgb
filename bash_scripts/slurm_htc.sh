@@ -48,8 +48,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
-# file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
