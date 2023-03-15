@@ -78,6 +78,7 @@ ckpt_period=10
 edge_encoder=True
 epochs=300
 use_CC=False
+bs=16
 
 avg_deg=$SLURM_ARRAY_TASK_ID
 tf="digl=$avg_deg"
@@ -94,7 +95,7 @@ gnn=custom_gnn
 nu=1
 L=8
 
-python main.py --cfg "$file" --repeat 1 dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run False train.mode custom
+python main.py --cfg "$file" --repeat 1 train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run False train.mode custom
 
 # FOR NO BN
 # python main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
