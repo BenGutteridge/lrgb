@@ -63,6 +63,9 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
 # layer=gatedgcnconv
+
+pip install numba
+
 layer=gatedgcnconv_noedge
 
 seed=0
