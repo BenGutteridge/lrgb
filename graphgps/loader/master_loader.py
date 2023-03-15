@@ -176,6 +176,22 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
 
+    multi_hop_stages = [
+        'alpha_gnn',
+        'delay_gnn',
+        'k_gnn',
+        'rel_delay_gnn',
+        'rel_delay_gnn_lite',
+    ]
+    multi_hop_models = ['drew_gated_gnn', 'alpha_gated_gnn',
+                        'flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
+                        'R-SPN_dense', 'R*-SPN', 'R-SPN']
+    use_drew = any([
+        (cfg.gnn.stage_type in multi_hop_stages),
+        ('delay' in cfg.gnn.stage_type),
+        (cfg.model.type in multi_hop_models),
+    ])
+
     if cfg.dataset.transform.startswith('digl'):
         avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
         print('Using GDC transform, average degree %d' % avg_degree)
@@ -187,8 +203,14 @@ def load_dataset_master(format, name, dataset_dir):
             sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
             exact=True,
         ) # using default, except for avg degree
-        dataset = remove_edge_attrs(dataset)
+        if use_drew or 'noedge' in cfg.gnn.layer_type:
+            dataset = remove_edge_attrs(dataset)
+        else:
+            dataset = squeeze_edge_attrs(dataset)
         pre_transform_in_memory(dataset, tf, show_progress=True)
+        if not use_drew:
+            unsqueeze_edge_attrs(dataset)
+
 
     if cfg.use_edge_labels:
         edge_labels = get_edge_labels(dataset)
@@ -200,17 +222,7 @@ def load_dataset_master(format, name, dataset_dir):
         edge_labels = None
         is_edge_str = ''
 
-    multi_hop_stages = [
-        'alpha_gnn',
-        'delay_gnn',
-        'k_gnn',
-        'rel_delay_gnn',
-        'rel_delay_gnn_lite',
-    ]
-    multi_hop_models = ['drew_gated_gnn', 'alpha_gated_gnn',
-                        'flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
-                        'R-SPN_dense', 'R*-SPN', 'R-SPN']
-    if (cfg.gnn.stage_type in multi_hop_stages) or ('delay' in cfg.gnn.stage_type) or (cfg.model.type in multi_hop_models):
+    if use_drew:
         k_max = min(cfg.gnn.layers_mp, cfg.k_max) if cfg.rho < 1 else min(cfg.gnn.layers_mp, cfg.rho_max)
         dataset = make_k_hop_edges(dataset, k_max, format, name)
     log_loaded_dataset(dataset, format, name)
@@ -658,4 +670,34 @@ def remove_edge_attrs(dataset):
                                             edge_attr=None,
                                             y=dataset.get(i).y)
         assert not any([dataset.get(i).edge_attr is not None for i in range(len(dataset))])
+    return dataset
+
+def squeeze_edge_attrs(dataset):
+    """Removes edge attrs from dataset for experiments which don't use them"""
+    dataset.data.edge_attr = dataset.data.edge_attr.squeeze()
+    if any([dataset.get(i).edge_attr.dim() > 1 for i in range(len(dataset))]):
+        print('Squeezing edge attrs down to 1D...')
+        count = 0
+        for i in tqdm(range(len(dataset))): 
+            if dataset.get(i).edge_attr.dim() > 1:
+                count += 1
+                dataset._data_list[i] = Data(x=dataset.get(i).x,
+                                            edge_index=dataset.get(i).edge_index,
+                                            edge_attr=dataset.get(i).edge_attr.squeeze(),
+                                            y=dataset.get(i).y)
+        assert not any([dataset.get(i).edge_attr.dim() > 1 for i in range(len(dataset))])
+    return dataset
+
+def unsqueeze_edge_attrs(dataset):
+    """Turns back into nx1 2d tensor (ie col vector)"""
+    dataset.data.edge_attr = dataset.data.edge_attr.reshape(-1,1)
+    if any([dataset.get(i).edge_attr.dim() == 1 for i in range(len(dataset))]):
+        print('Reshaping edge attrs...')
+        for i in tqdm(range(len(dataset))): 
+            if dataset.get(i).edge_attr.dim() == 1:
+                dataset._data_list[i] = Data(x=dataset.get(i).x,
+                                            edge_index=dataset.get(i).edge_index,
+                                            edge_attr=dataset.get(i).edge_attr.reshape(-1,1),
+                                            y=dataset.get(i).y)
+        assert all([dataset.get(i).edge_attr.dim() == 2 for i in range(len(dataset))])
     return dataset
