@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=GaFsh
+#SBATCH --job-name=GaSsh
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -24,6 +24,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 L=$1
 nu=$2
 pe=$3
+task=$4
 
 task=func
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
@@ -56,7 +57,7 @@ task=func
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
 
-file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN+${pe}.yaml'
+file='configs/DRewGatedGCN/peptides-${task}-DRewGatedGCN+${pe}.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
@@ -66,7 +67,7 @@ layer=share_drewgatedgcnconv
 
 seed=0
 dir=datasets
-out_dir=results/func_gated
+out_dir=results/struct_gated
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
 rho_max=1000000
