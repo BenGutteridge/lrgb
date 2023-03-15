@@ -19,7 +19,7 @@ except:
         create_scheduler, OptimizerConfig, SchedulerConfig
 from torch_geometric.graphgym.model_builder import create_model
 from torch_geometric.graphgym.train import train
-# from torch_geometric.graphgym.utils.agg_runs import agg_runs #########################* TEMPORARILY REPLACED FOR DEBUGGING
+from torch_geometric.graphgym.utils.agg_runs import agg_runs
 from torch_geometric.graphgym.utils.comp_budget import params_count
 from torch_geometric.graphgym.utils.device import auto_select_device
 from torch_geometric.graphgym.register import train_dict
@@ -162,9 +162,6 @@ if __name__ == '__main__':
             train_dict[cfg.train.mode](loggers, loaders, model, optimizer,
                                        scheduler)
     # Aggregate results from different seeds
-
-    #### MY ONE - DEBUGGING
-    from graphgps.my_agg_runs import agg_runs
 
     agg_runs(cfg.out_dir, cfg.metric_best)
 
