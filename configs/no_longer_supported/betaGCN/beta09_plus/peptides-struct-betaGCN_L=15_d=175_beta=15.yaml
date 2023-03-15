@@ -6,7 +6,7 @@ wandb:
   use: False
   project: peptides-struct
 dataset:
-  dir: /data/beng/datasets
+  dir: datasets
   format: OGB
   name: peptides-structural
   task: graph

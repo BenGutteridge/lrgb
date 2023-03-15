@@ -170,6 +170,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type drew_gated_gnn',
         # 'model.type alpha_gated_gnn',
         # 'model.type my_custom_gnn',
+        'model.type example',
         # 'gnn.stage_type custom_stack',
         # 'gnn.stage_type delay_gnn_alt_postlayer',
         # 'gnn.stage_type alpha_gnn',

@@ -2,7 +2,7 @@ out_dir: results
 metric_best: mae
 metric_agg: argmin
 dataset:
-  dir: /data/beng/datasets
+  dir: datasets
   format: PyG-QM9
   # name: subset
   task: graph
