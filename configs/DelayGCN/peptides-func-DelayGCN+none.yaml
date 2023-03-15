@@ -11,21 +11,9 @@ dataset:
   task_type: classification_multilabel
   transductive: False
   node_encoder: True
-  node_encoder_name: Atom+LapPE
+  node_encoder_name: Atom
   node_encoder_bn: False
   edge_encoder: False
-
-posenc_LapPE:
-  enable: True
-  eigen:
-    laplacian_norm: sym
-    eigvec_norm: L2
-    max_freqs: 10
-  model: DeepSet  # Transformer
-  dim_pe: 16
-  layers: 2
-  n_heads: 4  # Only used when `posenc.model: Transformer`
-  raw_norm_type: none
 train:
   mode: custom
   batch_size: 128

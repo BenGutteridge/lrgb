@@ -1,7 +1,7 @@
 out_dir: results
 metric_best: ap
 wandb:
-  use: False # True
+  use: False
   project: peptides-func
 dataset:
   dir: datasets
@@ -14,7 +14,13 @@ dataset:
   node_encoder_name: Atom+LapPE
   node_encoder_bn: False
   edge_encoder: False
-
+  edge_encoder_name: Bond
+  edge_encoder_bn: False
+train:
+  mode: custom
+  batch_size: 128
+  eval_period: 1
+  ckpt_period: 100
 posenc_LapPE:
   enable: True
   eigen:
@@ -26,27 +32,19 @@ posenc_LapPE:
   layers: 2
   n_heads: 4  # Only used when `posenc.model: Transformer`
   raw_norm_type: none
-train:
-  mode: custom
-  batch_size: 128
-  eval_period: 1
-  ckpt_period: 100
 model:
-  type: gnn
+  type: drew_gated_gnn
   loss_fun: cross_entropy
   graph_pooling: mean
 gnn:
   layers_pre_mp: 0
   layers_mp: 5
   layers_post_mp: 1
-  dim_inner: 175 # 300
-  layer_type: my_gcnconv # gcnconv
-  stage_type: delay_gnn # stack 
-  batchnorm: True
+  dim_inner: 138
+  layer_type: drewgatedgcnconv
   act: relu
+  residual: True
   dropout: 0.0
-  agg: mean
-  normalize_adj: False
 optim:
   optimizer: adamW
   weight_decay: 0.0
@@ -56,6 +54,3 @@ optim:
   reduce_factor: 0.5
   schedule_patience: 20
   min_lr: 1e-5
-tensorboard_each_run: False
-tensorboard_agg: True
-

@@ -23,6 +23,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 L=$1
 nu=$2
+pe=$3
 
 task=func
 # file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
@@ -55,7 +56,7 @@ task=func
 # Just for runing pure SAN
 # python main.py --cfg configs/SAN/vocsuperpixels-SAN.yaml --repeat 3 tensorboard_each_run True dataset.dir ../../lrgb/datasets wandb.use False train.ckpt_period 5 device cuda train.auto_resume True out_dir results/retry
 
-file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN.yaml'
+file='configs/DRewGatedGCN/peptides-func-DRewGatedGCN+${pe}.yaml'
 
 # layer=gcnconv
 # layer=my_gcnconv
