@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VdiglNOE
+#SBATCH --job-name=VdiglE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -62,11 +62,9 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # layer=my_gcnconv
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-# layer=gatedgcnconv
+layer=gatedgcnconv
 
-pip install numba
-
-layer=gatedgcnconv_noedge
+# layer=gatedgcnconv_noedge
 
 seed=0
 dir=datasets
@@ -77,7 +75,7 @@ rho_max=1000000
 jk=none
 k_max=1000000 # default 1e6
 ckpt_period=10
-edge_encoder=False
+edge_encoder=True
 epochs=300
 use_CC=False
 
@@ -89,9 +87,9 @@ slic=30
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
-gnn=my_custom_gnn
+# gnn=my_custom_gnn
 # gnn=gnn
-# gnn=custom_gnn
+gnn=custom_gnn
 
 nu=1
 L=8
