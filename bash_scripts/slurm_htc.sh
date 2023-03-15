@@ -78,7 +78,7 @@ ckpt_period=10
 edge_encoder=True
 epochs=300
 use_CC=False
-bs=16
+bs=32
 
 avg_deg=$SLURM_ARRAY_TASK_ID
 tf="digl=$avg_deg"
