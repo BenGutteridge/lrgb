@@ -75,7 +75,7 @@ def get_run_name(cfg_fname, default):
   if cfg.agg_weights.convex_combo:
     model += '_CC'
   if cfg.dataset.transform != 'none':
-    model += '_%s' % cfg.dataset.transform
+    model += '_%s_alpha=p%02d' % (cfg.dataset.transform, cfg.digl.alpha*100)
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
   if 'alt_postlayer' in cfg.gnn.stage_type:
