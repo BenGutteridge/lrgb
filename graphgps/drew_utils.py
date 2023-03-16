@@ -78,6 +78,8 @@ def get_run_name(cfg_fname, default):
     model += '_%s_alpha=p%02d' % (cfg.dataset.transform, cfg.digl.alpha*100)
   if cfg.spn.K != 0:
     model += '_K=%02d' % cfg.spn.K
+  if cfg.gnn.batchnorm:
+    model += '_bn'
   if 'alt_postlayer' in cfg.gnn.stage_type:
     if cfg.alt_postlayer.bn:
       model += '_ALT_BN'
