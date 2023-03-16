@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VdiglNOE
+#SBATCH --job-name=VLapDiNOE
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -48,8 +48,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
-# file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
