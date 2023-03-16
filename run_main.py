@@ -109,12 +109,12 @@ model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# # VOC superpixels
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# VOC superpixels
+argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -171,7 +171,7 @@ def parse_args() -> argparse.Namespace:
         # 'optim.max_epoch 2',
         # 'model.type drew_gated_gnn',
         # 'model.type alpha_gated_gnn',
-        'model.type example',
+        # 'model.type example',
         # 'model.type my_custom_gnn',
         # 'model.type example',
         # 'gnn.stage_type custom_stack',
@@ -210,7 +210,8 @@ def parse_args() -> argparse.Namespace:
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
         # 'dataset.slic_compactness 30',
-        # 'dataset.transform digl=10',
+        'dataset.transform digl=2',
+        'digl.alpha 0.05',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'

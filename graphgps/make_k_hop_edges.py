@@ -14,7 +14,9 @@ def make_k_hop_edges(dataset, K, format, name):
 
   # check if files exist already
   slic = '-slic=%02d' % cfg.dataset.slic_compactness if ((format == 'PyG-VOCSuperpixels') & (cfg.dataset.slic_compactness != 10)) else ''
-  preproc = '-preproc=%s' % cfg.dataset.transform if cfg.dataset.transform != 'none' else ''
+  if cfg.dataset.transform != 'none':
+    preproc = '-preproc=%s_alpha=%f' % cfg.dataset.transform % cfg.digl.alpha
+  else: preproc = ''
   extra = ''.join([slic, preproc])
   file_exists = [exists(join(filedir, "%s-%s%s_k=%02d.pt" % (format, name, extra, k))) for k in range(1,K+1)] # list of K bools
   if not all(file_exists): # checks all files are there

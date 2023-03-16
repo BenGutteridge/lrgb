@@ -195,7 +195,8 @@ def load_dataset_master(format, name, dataset_dir):
     if cfg.dataset.transform.startswith('digl'):
         avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
         print('Using GDC transform, average degree %d' % avg_degree)
-        digl_filepath = osp.join(dataset_dir, '%s_%s_%s.pt' % (format, name, cfg.dataset.transform))
+        alpha_str = '_alpha=p%02d'%int(cfg.digl.alpha*100) if cfg.digl.alpha != 0.15 else ''
+        digl_filepath = osp.join(dataset_dir, '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
         if osp.exists(digl_filepath):
             print('Loading GDC transformed dataset feom file %s' % digl_filepath)
             dataset = torch.load(digl_filepath)
@@ -205,7 +206,7 @@ def load_dataset_master(format, name, dataset_dir):
                 self_loop_weight=1.,
                 normalization_in='sym',
                 normalization_out='col',
-                diffusion_kwargs=dict(method='ppr', alpha=0.15),
+                diffusion_kwargs=dict(method='ppr', alpha=cfg.digl.alpha),
                 sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
                 exact=True,
             ) # using default, except for avg degree
