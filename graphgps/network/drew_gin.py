@@ -19,10 +19,11 @@ from torch_geometric.nn.dense.linear import Linear
 from torch_geometric.nn.inits import reset
 
 from torch_sparse import SparseTensor, matmul
+from functools import partial
 
-class RDelaySPN(nn.Module):
+class DRewGIN(nn.Module):
     """
-    R-r*SPN
+    
 
     num parameters scales as d**2 * L(|E| + (L+1)/2) for hidden dim d, L layers, num edges types E
     """
@@ -45,7 +46,7 @@ class RDelaySPN(nn.Module):
 
         layers = []
         for t in range(cfg.gnn.layers_mp):
-            layers.append(RDelaySPNConvLayer(t, dim_in))
+            layers.append(DRewGINLayer(t, dim_in))
         self.gnn_layers = torch.nn.ModuleList(layers)     
 
         GNNHead = register.head_dict[cfg.gnn.head]
@@ -62,14 +63,14 @@ class RDelaySPN(nn.Module):
             batch.x = F.relu(batch.x)
             batch.x = F.dropout(batch.x, p=cfg.gnn.dropout, training=self.training)
             if cfg.gnn.residual:
-                batch.x = xs[-1] + batch.x  # residual connection
+                batch.x = xs[-1] + batch.x  # residual connection. Essentially done already with MLP_s
         batch = self.post_mp(batch)
         return batch
 
 
-register_network('R*-SPN', RDelaySPN)
+register_network('drew_gin', DRewGIN)
 
-class RDelaySPNConvLayer(nn.Module):
+class DRewGINLayer(nn.Module):
     """
     Just a nn.Module wrapper for the MessagePassing SPNConv
     """
@@ -81,16 +82,23 @@ class RDelaySPNConvLayer(nn.Module):
             # nn.ReLU(),
             # pyg_nn.Linear(d, d),
             )
-        alpha = torch.nn.Parameter(torch.randn(t+1))
-        mlp_s = nn.Sequential(pyg_nn.Linear(d, d), nn.ReLU()) # self-connection
-        mlp_k = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), nn.ReLU()) for k in range(2, t+2)]) # k-hop connections
-        mlp_e = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), nn.ReLU()) for _ in range(len(cfg.edge_types))]) # 1-hop edge-type connections
+        lin = partial(pyg_nn.Linear, d, d)
+        if cfg.gnn.batchnorm:
+            bn = partial(nn.BatchNorm1d, d, eps=cfg.bn.eps, momentum=cfg.bn.mom)
+        else:
+            bn = nn.Identity
+
+        # alpha = torch.nn.Parameter(torch.randn(t+1))
+        mlp_s = nn.Sequential(lin(), bn(), nn.ReLU()) # self-connection
+        mlp_k = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), bn(), nn.ReLU()) for k in range(1, t+2)]) # k-hop connections
+        # mlp_e = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), bn(), nn.ReLU()) for _ in range(len(cfg.edge_types))]) # 1-hop edge-type connections
         all_modules = dict(gin_nn_post=gin_nn_post, # making an attr of the module so it shows in model summary (hopefully)
-                            alpha=alpha,
+                            # alpha=alpha,
                             mlp_s=mlp_s,
                             mlp_k=mlp_k,
-                            mlp_e=mlp_e)
-        self.model = RDelaySPNConv(all_modules)
+                            # mlp_e=mlp_e,
+                            )
+        self.model = DRewGINConv(all_modules)
 
     def forward(self, t, xs, batch):
         batch.x = self.model(t, xs, batch.edge_index, 
@@ -99,7 +107,7 @@ class RDelaySPNConvLayer(nn.Module):
         return batch
 
 
-class RDelaySPNConv(MessagePassing):
+class DRewGINConv(MessagePassing):
     r"""The graph isomorphism operator from the `"How Powerful are
     Graph Neural Networks?" <https://arxiv.org/abs/1810.00826>`_ paper
 
@@ -131,13 +139,13 @@ class RDelaySPNConv(MessagePassing):
                  eps: float = 0., train_eps: bool = False,
                  **kwargs):
         kwargs.setdefault('aggr', 'add')
-        super(RDelaySPNConv, self).__init__(**kwargs)
+        super(DRewGINConv, self).__init__(**kwargs)
         self.nu = cfg.nu if cfg.nu != -1 else float('inf')
         self.nn_post = modules['gin_nn_post']
-        self.alpha = modules['alpha'] # for the k-hop aggregations weights
+        # self.alpha = modules['alpha'] # for the k-hop aggregations weights
         self.mlp_s = modules['mlp_s'] # for the self-connection ((1+eps) weighted)
         self.mlp_k = modules['mlp_k'] # for the k-hop aggregations (list)
-        self.mlp_e = modules['mlp_e'] # for the edge-type aggregations (list)
+        # self.mlp_e = modules['mlp_e'] # for the edge-type aggregations (list)
         self.initial_eps = eps
         if train_eps:
             self.eps = torch.nn.Parameter(torch.Tensor([eps]))
@@ -162,24 +170,17 @@ class RDelaySPNConv(MessagePassing):
         # # propagate_type: (x: OptPairTensor, edge_attr: OptTensor)
 
         A = lambda k : edge_indices[:, edge_attr==k]
-        A_edge = lambda e : edge_indices[:, edge_attr[:,1]==int(e)] # using -1 to distinguish k>1 hop edges
-        mlp = lambda k : self.mlp_k[k-2] # k=2 is the first element in the list
-        mlp_e = lambda i : self.mlp_e[i]
-        alpha_weights = F.softmax(self.alpha, dim=0) # convex combination
-        alpha = lambda k : alpha_weights[k-1] # k=1 is the first element in the list
+        mlp = lambda k : self.mlp_k[k-1] # k=1 is the first element in the list
+        # alpha_weights = F.softmax(self.alpha, dim=0) # convex combination
+        # alpha = lambda k : alpha_weights[k-1] # k=1 is the first element in the list
 
         # weighted self connection
         out = (1 + self.eps) * self.mlp_s(x)
 
-        # TODO add alpha weights
-        # k=1
-        for i, e in enumerate(cfg.edge_types):
-            out += alpha(1) * mlp_e(i)(self.propagate(A_edge(e), x=x, size=size))
-        # k>1
-        for k in range(2, t+2): # doesn't skip if A(k) empty - by design
-            if A(k).shape[1] == 0:
+        for k in range(1, t+2): # doesn't skip if A(k) empty - by design
+            if A(k).shape[1] > 0: # shouldn't happen unless L > graph diameter
                 delay = max(k - self.nu, 0)
-                out += alpha(k) * mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
+                out += mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
 
         return self.nn_post(out)
 

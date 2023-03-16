@@ -185,7 +185,7 @@ def load_dataset_master(format, name, dataset_dir):
     ]
     multi_hop_models = ['drew_gated_gnn', 'alpha_gated_gnn',
                         'flattened_delay_gin', 'flattened_delay_gine', 'flattened_delay_gin_v2',
-                        'R-SPN_dense', 'R*-SPN', 'R-SPN']
+                        'R-SPN_dense', 'R*-SPN', 'R-SPN', 'drew_gin']
     use_drew = any([
         (cfg.gnn.stage_type in multi_hop_stages),
         ('delay' in cfg.gnn.stage_type),
