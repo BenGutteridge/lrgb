@@ -147,7 +147,7 @@ argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model
 # argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # argpath = 'configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 
-argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
 repeat = 1
 import argparse
@@ -171,7 +171,8 @@ def parse_args() -> argparse.Namespace:
         # 'optim.max_epoch 2',
         # 'model.type drew_gated_gnn',
         # 'model.type alpha_gated_gnn',
-        'model.type my_custom_gnn',
+        'model.type example',
+        # 'model.type my_custom_gnn',
         # 'model.type example',
         # 'gnn.stage_type custom_stack',
         # 'gnn.stage_type delay_gnn',
@@ -180,7 +181,7 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type my_gcnconv',
         # 'gnn.layer_type drewgatedgcnconv',        
         # 'gnn.layer_type share_drewgatedgcnconv',
-        'gnn.layer_type gatedgcnconv_noedge',
+        # 'gnn.layer_type gatedgcnconv_noedge',
         # 'nu 2',
         'gnn.dim_inner 4',
         # 'gnn.layers_mp 8',
@@ -209,7 +210,7 @@ def parse_args() -> argparse.Namespace:
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
         # 'dataset.slic_compactness 30',
-        'dataset.transform digl=6',
+        # 'dataset.transform digl=10',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
