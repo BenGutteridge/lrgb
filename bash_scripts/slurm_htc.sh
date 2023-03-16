@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VLapDiNOE
+#SBATCH --job-name=VdiglGCN
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -30,7 +30,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
-# file='configs/GCN/vocsuperpixels-GCN.yaml'
+file='configs/GCN/vocsuperpixels-GCN.yaml'
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
@@ -49,7 +49,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # # DRewGated, VOC 
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
-file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
@@ -58,11 +58,11 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 
 # file="configs/DRewGatedGCN/peptides-${task}-DRewGatedGCN+${pe}.yaml"
 
-# layer=gcnconv
+layer=gcnconv
 # layer=my_gcnconv
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-layer=gatedgcnconv_noedge
+# layer=gatedgcnconv_noedge
 
 # layer=gatedgcnconv_noedge
 
@@ -88,8 +88,8 @@ slic=30
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
-gnn=my_custom_gnn
-# gnn=gnn
+# gnn=my_custom_gnn
+gnn=gnn
 # gnn=custom_gnn
 
 nu=1
