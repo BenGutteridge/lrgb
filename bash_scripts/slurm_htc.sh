@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VDGINLnobn
+#SBATCH --job-name=VDGINL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -94,7 +94,7 @@ slic=30
 gnn=drew_gin
 # gnn=gnn
 # gnn=custom_gnn
-bn=False
+bn=True
 
 nu=1
 L=8
