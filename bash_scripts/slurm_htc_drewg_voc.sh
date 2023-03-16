@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Vdrewgcn
+#SBATCH --job-name=VnGCN
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
