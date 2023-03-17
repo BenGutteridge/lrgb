@@ -64,9 +64,9 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # layer=drewgatedgcnconv
 layer=gatedgcnconv_noedge
 
-seed=0
+seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
-out_dir=results/diglvoc
+out_dir=results/diglvoc/seed=$seed
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
 rho_max=1000000
@@ -80,7 +80,7 @@ bs=32
 # digl_alpha=$1
 digl_alpha=0.20
 
-avg_deg=$SLURM_ARRAY_TASK_ID
+avg_deg=14
 tf="digl=$avg_deg"
 # tf=none
 
