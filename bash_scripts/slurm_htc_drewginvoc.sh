@@ -68,7 +68,7 @@ file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
 
 seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
-out_dir=results/drew_gin_voc
+out_dir=results/drew_gin_voc/seed=$seed
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
 rho_max=1000000
