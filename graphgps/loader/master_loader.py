@@ -198,7 +198,7 @@ def load_dataset_master(format, name, dataset_dir):
         alpha_str = '_alpha=p%02d'%int(cfg.digl.alpha*100) if cfg.digl.alpha != 0.15 else ''
         digl_filepath = osp.join(dataset_dir, '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
         if osp.exists(digl_filepath):
-            print('Loading GDC transformed dataset feom file %s' % digl_filepath)
+            print('Loading GDC transformed dataset from file %s' % digl_filepath)
             dataset = torch.load(digl_filepath)
         else:
             print('Applying transform...')
