@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VDGINL
+#SBATCH --job-name=Vdig
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -31,8 +31,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file="configs/rbar-GCN/peptides-${task}-DelayGCN+${pe}.yaml"
 
 # file='configs/GCN/vocsuperpixels-GCN.yaml'
-# file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
-file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
+# file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
@@ -62,13 +62,13 @@ file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 layer=my_gcnconv
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-# layer=gatedgcnconv_noedge
+layer=gatedgcnconv_noedge
 
 # layer=gatedgcnconv_noedge
 
 seed=0
 dir=datasets
-out_dir=results/drew_gin_voc
+out_dir=results/diglvoc
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
 rho_max=1000000
@@ -80,26 +80,26 @@ epochs=300
 use_CC=False
 bs=32
 # digl_alpha=$1
-digl_alpha=0.15
+digl_alpha=0.20
 
-# avg_deg=$SLURM_ARRAY_TASK_ID
-# tf="digl=$avg_deg"
-tf=none
+avg_deg=$SLURM_ARRAY_TASK_ID
+tf="digl=$avg_deg"
+# tf=none
 
 slic=30
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
-# gnn=my_custom_gnn
-gnn=drew_gin
+gnn=my_custom_gnn
+# gnn=drew_gin
 # gnn=gnn
 # gnn=custom_gnn
-bn=True
+# bn=True
 
 nu=1
 L=8
 
-python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha gnn.batchnorm $bn train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom
+python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom
 
 # FOR NO BN
 # python main.py --cfg "$file" --repeat 3 gnn.layer_type $layer gnn.batchnorm False gnn.l2norm False out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch 300 gnn.dim_inner $dim tensorboard_each_run True train.mode my_custom
