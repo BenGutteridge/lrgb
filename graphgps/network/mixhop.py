@@ -68,7 +68,7 @@ class DRewGIN(nn.Module):
         return batch
 
 
-register_network('drew_gin', DRewGIN)
+register_network('mixhop', DRewGIN)
 
 class DRewGINLayer(nn.Module):
     """
