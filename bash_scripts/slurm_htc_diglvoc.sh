@@ -64,8 +64,8 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # layer=drewgatedgcnconv
 layer=gatedgcnconv_noedge
 
-# seed=$SLURM_ARRAY_TASK_ID
-seed=0
+seed=$SLURM_ARRAY_TASK_ID
+# seed=0
 dir=datasets
 out_dir=results/diglvoc
 # rho=$SLURM_ARRAY_TASK_ID
@@ -81,7 +81,7 @@ bs=32
 # digl_alpha=$1
 digl_alpha=0.20
 
-avg_deg=$SLURM_ARRAY_TASK_ID
+avg_deg=15
 tf="digl=$avg_deg"
 # tf=none
 
@@ -117,4 +117,4 @@ python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size 
 # L=5
 # python main.py --cfg $cfg --repeat 3 gnn.stage_type $S agg_weights.use $A agg_weights.convex_combo $C fixed_params.N 500_000 gnn.layer_type my_gcnconv out_dir "results/$out_dir" device cuda dataset.dir datasets nu $nu gnn.layers_mp $L optim.max_epoch 300 tensorboard_each_run True train.mode my_custom train.auto_resume True train.ckpt_period 10
 
-# (tf="digl=20"; python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom) & (tf="digl=25"; python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom)
+(tf="digl=20"; python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom) & (tf="digl=25"; python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha train.batch_size $bs dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.slic_compactness $slic dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom)
