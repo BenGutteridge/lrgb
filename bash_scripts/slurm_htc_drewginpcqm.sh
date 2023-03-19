@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QnGINCC
+#SBATCH --job-name=QnGINnoBN
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -75,7 +75,7 @@ k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
 epochs=300
-use_CC=True
+use_CC=False
 digl_alpha=0.15
 
 # avg_deg=$SLURM_ARRAY_TASK_ID
@@ -88,7 +88,7 @@ tf=none
 gnn=drew_gin
 # gnn=gnn
 # gnn=custom_gnn
-bn=True
+bn=False
 
 nu=-1
 L=20
