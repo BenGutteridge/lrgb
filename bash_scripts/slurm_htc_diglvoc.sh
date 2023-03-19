@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=VdigLap
+#SBATCH --job-name=Vdig
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -48,8 +48,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
-file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
+file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
 
@@ -64,8 +64,8 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # layer=drewgatedgcnconv
 layer=gatedgcnconv_noedge
 
-seed=$SLURM_ARRAY_TASK_ID
-# seed=0
+# seed=$SLURM_ARRAY_TASK_ID
+seed=0
 dir=datasets
 out_dir=results/diglvoc
 # rho=$SLURM_ARRAY_TASK_ID
@@ -81,7 +81,8 @@ bs=32
 # digl_alpha=$1
 digl_alpha=0.20
 
-avg_deg=15
+avg_deg=$SLURM_ARRAY_TASK_ID
+# avg_deg=15
 tf="digl=$avg_deg"
 # tf=none
 
