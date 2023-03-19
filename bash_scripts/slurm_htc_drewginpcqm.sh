@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QnGINnoBN
+#SBATCH --job-name=QnGINlap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -36,9 +36,9 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
@@ -88,7 +88,7 @@ tf=none
 gnn=drew_gin
 # gnn=gnn
 # gnn=custom_gnn
-bn=False
+bn=True
 
 nu=-1
 L=20
