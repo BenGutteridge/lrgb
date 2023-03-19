@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QnGIN
+#SBATCH --job-name=QnGINnoBN
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -88,7 +88,7 @@ tf=none
 gnn=drew_gin
 # gnn=gnn
 # gnn=custom_gnn
-bn=True
+bn=False
 
 nu=1
 L=20
