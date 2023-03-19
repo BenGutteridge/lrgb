@@ -91,7 +91,7 @@ gnn=drew_gin
 bn=True
 
 nu=-1
-L=20
+L=10
 
 python main.py --cfg "$file" --repeat 1 out_dir $out_dir digl.alpha $digl_alpha gnn.batchnorm $bn dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom
 
