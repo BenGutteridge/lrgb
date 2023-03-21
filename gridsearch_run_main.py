@@ -136,7 +136,7 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'out_dir results/search_v0',
+        'out_dir results/search_func_digl',
         'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
@@ -152,8 +152,8 @@ def parse_args() -> argparse.Namespace:
     'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
                 'configs/GCN/peptides-func-GCN+LapPE.yaml'],
     'nu': [1, -1],
-    # 'digl.alpha': [0.05, 0.1, 0.15, 0.2],
-    # 'dataset.transform': ['digl=%d' % i for i in [2,3,5,10,15,20]]
+    'digl.alpha': [0.05, 0.1, 0.15, 0.2],
+    'dataset.transform': ['digl=%d' % i for i in [2,3,5,10,15,20]]
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
@@ -164,7 +164,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
 
 
-num_runs = 3
+num_runs = 50
 
 if __name__ == '__main__':
     # Load cmd line args

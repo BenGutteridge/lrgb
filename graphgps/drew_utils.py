@@ -59,6 +59,8 @@ def get_run_name(cfg_fname, default):
     model = cfg.model.type
   if '+' in cfg.dataset.node_encoder_name: # note if PE used
     model += '_%s' % cfg.dataset.node_encoder_name.split('+')[-1]
+  if cfg.model.type == 'mixhop_gcn':
+    model += '_P=%02d' % cfg.mixhop_args.max_P
   if cfg.nu != 1:
     nu = '%02d' % cfg.nu if cfg.nu != -1 else 'inf'
     model += '_nu=%s' % nu
