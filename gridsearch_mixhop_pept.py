@@ -155,7 +155,7 @@ def parse_args() -> argparse.Namespace:
                 'configs/GCN/peptides-struct-GCN.yaml', 
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
-    'mixhop_args': [3,5,7,10]
+    'mixhop_args': [3,5,7,10],
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
@@ -171,8 +171,9 @@ num_runs = 500
 if __name__ == '__main__':
     # Load cmd line args
     for i in range(num_runs):
-        # if True:
-        try:
+        print(i)
+        if True:
+        # try:
             args = parse_args()
             # Load config file
             set_cfg(cfg)
@@ -229,5 +230,5 @@ if __name__ == '__main__':
             if args.mark_done:
                 os.rename(args.cfg_file, '{}_done'.format(args.cfg_file))
             logging.info(f"[*] All done: {datetime.datetime.now()}")
-        except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
-        # else: pass
+        # except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
+        else: pass
