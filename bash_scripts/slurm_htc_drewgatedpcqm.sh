@@ -36,7 +36,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
@@ -45,7 +45,7 @@ file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN.yaml'
 # file='configs/SAN/pcqm-contact-SAN.yaml'
-# file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
+file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
@@ -76,7 +76,7 @@ k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
 epochs=90
-use_CC=False
+use_CC=True
 # digl_alpha=$1
 digl_alpha=0.20
 
