@@ -148,12 +148,12 @@ def parse_args() -> argparse.Namespace:
         ]
     
     hyperparams = {
-    'gnn.layers_mp': torch.arange(5,23,2).tolist(),
+    'gnn.layers_mp': torch.arange(5,13,2).tolist(),
     'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
                 'configs/GCN/peptides-func-GCN+LapPE.yaml'],
     'nu': [1, -1],
     'digl.alpha': [0.05, 0.1, 0.15, 0.2],
-    'dataset.transform': ['digl=%d' % i for i in [2,4,6,8,10]]
+    'dataset.transform': ['digl=%d' % i for i in [2,3,4,5,6,7]]
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
