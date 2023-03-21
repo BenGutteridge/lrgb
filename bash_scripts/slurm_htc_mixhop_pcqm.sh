@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QMixP5
+#SBATCH --job-name=QMixP5lap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -44,6 +44,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
 
 file='configs/GCN/pcqm-contact-GCN.yaml'
+file='configs/GCN/pcqm-contact-GCN+LapPE.yaml'
 # file='configs/SAN/pcqm-contact-SAN.yaml'
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 # file='configs/GatedGCN/pcqm-contact-GatedGCN+LapPE.yaml'
