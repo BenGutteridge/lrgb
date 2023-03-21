@@ -153,7 +153,7 @@ def parse_args() -> argparse.Namespace:
                 'configs/GCN/peptides-func-GCN+LapPE.yaml'],
     'nu': [1, -1],
     'digl.alpha': [0.05, 0.1, 0.15, 0.2],
-    'dataset.transform': ['digl=%d' % i for i in [2,3,5,10,15,20]]
+    'dataset.transform': ['digl=%d' % i for i in [2,4,6,8,10]]
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
@@ -169,7 +169,8 @@ num_runs = 50
 if __name__ == '__main__':
     # Load cmd line args
     for i in range(num_runs):
-        try:
+        if True:
+        # try:
             args = parse_args()
             # Load config file
             set_cfg(cfg)
@@ -226,4 +227,5 @@ if __name__ == '__main__':
             if args.mark_done:
                 os.rename(args.cfg_file, '{}_done'.format(args.cfg_file))
             logging.info(f"[*] All done: {datetime.datetime.now()}")
-        except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
+        # except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
+        else: pass
