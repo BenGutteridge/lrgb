@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Fdig
+#SBATCH --job-name=Sdig
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -27,7 +27,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # task=$4
 
 pe=none
-task=func
+task=struct
 
 file="configs/GCN/peptides-${task}-GCN+${pe}.yaml"
 # file="configs/GCN/peptides-${task}-ResGCN+${pe}.yaml"
