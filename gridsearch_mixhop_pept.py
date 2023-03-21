@@ -155,7 +155,7 @@ def parse_args() -> argparse.Namespace:
                 'configs/GCN/peptides-struct-GCN.yaml', 
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
-    'mixhop_args': [3,5,7,10],
+    'mixhop_args.max_P': [3,5,7,10],
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
