@@ -76,7 +76,11 @@ class MixHopGCN(nn.Module):
         else: head_dim_in = sum(cfg.mixhop_args.layers)
 
         GNNHead = register.head_dict[cfg.gnn.head]
-        self.post_mp = GNNHead(dim_in=head_dim_in, dim_out=dim_out)
+        from graphgps.drew_utils import get_task_id
+        if get_task_id() == 'pcqm': 
+            kwargs = dict(mixhop_dims=(sum(cfg.mixhop_args.layers), cfg.mixhop_args.layers[0])) # want final layer in InductiveEdgeHead to be Pd * d, not Pd*Pd
+        else: kwargs = {}
+        self.post_mp = GNNHead(dim_in=head_dim_in, dim_out=dim_out, **kwargs)
         cfg.gnn.layers_post_mp = save_num_post_mp_layers
 
     def forward(self, batch):

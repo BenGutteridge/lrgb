@@ -115,10 +115,10 @@ model = 'GCN'
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
-# Peptides-struct
-argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# # PCQM-Contact
-# argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# # Peptides-struct
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
+# PCQM-Contact
+argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
