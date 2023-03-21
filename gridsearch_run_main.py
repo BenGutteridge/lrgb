@@ -172,8 +172,8 @@ num_runs = 500
 if __name__ == '__main__':
     # Load cmd line args
     for i in range(num_runs):
-        if True:
-        # try:
+        # if True:
+        try:
             args = parse_args()
             # Load config file
             set_cfg(cfg)
@@ -230,5 +230,5 @@ if __name__ == '__main__':
             if args.mark_done:
                 os.rename(args.cfg_file, '{}_done'.format(args.cfg_file))
             logging.info(f"[*] All done: {datetime.datetime.now()}")
-        # except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
-        else: pass
+        except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
+        # else: pass
