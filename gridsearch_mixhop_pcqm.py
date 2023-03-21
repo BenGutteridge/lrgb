@@ -136,8 +136,8 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'out_dir results/search_pept_digl',
-        'dataset.dir /data/beng/datasets',
+        'out_dir results/search_pept_mixhop',
+        'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
         'train.auto_resume True',
@@ -145,18 +145,17 @@ def parse_args() -> argparse.Namespace:
         'train.ckpt_period 20',
         'optim.max_epoch 300',
         'device cuda',
+        'model.type mixhop_gcn'
         ]
     
     hyperparams = {
-    'gnn.layers_mp': torch.arange(5,15,2).tolist(),
+    'gnn.layers_mp': torch.arange(5,20,3).tolist(),
     'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
                 'configs/GCN/peptides-func-GCN+LapPE.yaml',
                 'configs/GCN/peptides-struct-GCN.yaml', 
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
-    'nu': [1, -1],
-    'digl.alpha': [0.05, 0.1, 0.15, 0.2],
-    'dataset.transform': ['digl=%d' % i for i in [2,3,4,5,6,7]]
+    'mixhop_args.max_P': [3,5,7,10],
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
@@ -167,13 +166,14 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
 
 
-num_runs = 50
+num_runs = 500
 
 if __name__ == '__main__':
     # Load cmd line args
     for i in range(num_runs):
-        if True:
-        # try:
+        print(i)
+        # if True:
+        try:
             args = parse_args()
             # Load config file
             set_cfg(cfg)
@@ -230,5 +230,5 @@ if __name__ == '__main__':
             if args.mark_done:
                 os.rename(args.cfg_file, '{}_done'.format(args.cfg_file))
             logging.info(f"[*] All done: {datetime.datetime.now()}")
-        # except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
-        else: pass
+        except: write_to_file(os.path.join(cfg.run_dir, 'search.txt'), 'FAILED', i)
+        # else: pass
