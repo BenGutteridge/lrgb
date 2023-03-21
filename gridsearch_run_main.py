@@ -136,14 +136,14 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'out_dir results/search_func_digl',
+        'out_dir results/search_pept_digl',
         'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
         'train.auto_resume True',
         'fixed_params.N 500_000',
         'train.ckpt_period 20',
-        'optim.max_epoch 1',
+        'optim.max_epoch 300',
         'device cuda',
         ]
     
