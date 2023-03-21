@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=Vdig
+#SBATCH --job-name=VnGCNlap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -32,7 +32,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/vocsuperpixels-GCN.yaml'
 # file='configs/DelayGCN/vocsuperpixels-DelayGCN.yaml'
-# file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
+file='configs/DelayGCN/vocsuperpixels-DelayGCN+LapPE.yaml'
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
@@ -48,7 +48,7 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 # file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
 
 # # DRewGated, VOC 
-file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
+# file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN+LapPE.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN.yaml'
 # file='configs/DRewGatedGCN/vocsuperpixels-DRewGatedGCN+LapPE.yaml'
@@ -59,16 +59,17 @@ file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 # file="configs/DRewGatedGCN/peptides-${task}-DRewGatedGCN+${pe}.yaml"
 
 # layer=gcnconv
-# layer=my_gcnconv
+layer=my_gcnconv
 # layer=share_drewgatedgcnconv
 # layer=drewgatedgcnconv
-layer=gatedgcnconv_noedge
+# layer=gatedgcnconv_noedge
 
-# seed=$SLURM_ARRAY_TASK_ID
-seed=0
+# layer=gatedgcnconv_noedge
+
+seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
-out_dir=results/diglvoc
-# rho=$SLURM_ARRAY_TASK_ID
+out_dir=results/drewgcnvoc
+# rho=
 rho=0
 rho_max=1000000
 jk=none
@@ -78,23 +79,19 @@ edge_encoder=False
 epochs=300
 use_CC=False
 bs=32
-# digl_alpha=$1
-digl_alpha=0.20
+digl_alpha=0.15
 
-avg_deg=$SLURM_ARRAY_TASK_ID
-# avg_deg=15
-tf="digl=$avg_deg"
-# tf=none
+# avg_deg=$SLURM_ARRAY_TASK_ID
+# tf="digl=$avg_deg"
+tf=none
 
 slic=30
 
 # gnn=drew_gated_gnn
 # gnn=alpha_gated_gnn
-gnn=my_custom_gnn
-# gnn=drew_gin
-# gnn=gnn
+# gnn=my_custom_gnn
+gnn=gnn
 # gnn=custom_gnn
-# bn=True
 
 nu=1
 L=8

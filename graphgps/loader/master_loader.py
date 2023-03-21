@@ -210,7 +210,10 @@ def load_dataset_master(format, name, dataset_dir):
                 sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
                 exact=True,
             ) # using default, except for avg degree
-            dataset = squeeze_edge_attrs(dataset)
+            if 1 in dataset.data.edge_attr.shape:
+                dataset = squeeze_edge_attrs(dataset)
+            else:
+                dataset = remove_edge_attrs(dataset)
             pre_transform_in_memory(dataset, tf, show_progress=True)
             try:
                 torch.save(dataset, digl_filepath)

@@ -104,17 +104,17 @@ def run_loop_settings():
         run_ids = split_indices
     return run_ids, seeds, split_indices
 
-model = 'DelayGCN'
-# model = 'GCN'
+# model = 'DelayGCN'
+model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# # VOC superpixels
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# VOC superpixels
+argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -179,7 +179,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type my_custom_gnn',
         # 'model.type GIN',
         # 'model.type R*-SPN',
-        'model.type drew_gin',
+        'model.type mixhop_gcn',
         # 'gnn.stage_type custom_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type alpha_gnn',
@@ -189,8 +189,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type share_drewgatedgcnconv',
         # 'gnn.layer_type gatedgcnconv_noedge',
         # 'nu 2',
-        'gnn.dim_inner 4',
-        'gnn.layers_mp 3',
+        'gnn.dim_inner 20',
+        'gnn.layers_mp 8',
         'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -198,14 +198,14 @@ def parse_args() -> argparse.Namespace:
         # 'posenc_LapPE.dim_pe 8', # 8 steps for RWSE
         # 'spn.K 10',
         # 'posenc_RWSE.dim_pe 8',
-        'seed 5',
+        'seed 0',
         # 'train.auto_resume True',
         # 'gnn.l2norm False',
         'gnn.batchnorm False',
+        'mixhop_args.max_P 5',
 
-
-        'fixed_params.N 0',
-        # 'fixed_params.N 500_000',
+        # 'fixed_params.N 0',
+        'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',

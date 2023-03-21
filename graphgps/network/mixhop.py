@@ -13,6 +13,7 @@ from typing import Callable, Union, Optional
 from torch_geometric.typing import OptPairTensor, Adj, OptTensor, Size, List
 
 import torch
+from torch import nn
 from torch import Tensor
 from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.nn.dense.linear import Linear
@@ -21,16 +22,27 @@ from torch_geometric.nn.inits import reset
 from torch_sparse import SparseTensor, matmul
 from functools import partial
 
-class DRewGIN(nn.Module):
+from torch_geometric.utils import to_dense_adj, dense_to_sparse
+from scipy import sparse
+from .mixhop_layers import SparseNGCNLayer, DenseNGCNLayer, ListModule
+from torch_geometric.nn.conv.gcn_conv import gcn_norm as get_normalized_adj
+
+class MixHopGCN(nn.Module):
     """
     
-
-    num parameters scales as d**2 * L(|E| + (L+1)/2) for hidden dim d, L layers, num edges types E
     """
 
     def __init__(self, dim_in, dim_out):
         super().__init__()
         assert not cfg.nu_v2, "nu_v2 not implemented yet"
+
+        if cfg.mixhop_args.max_P != 0:
+            cfg.mixhop_args.layers = [cfg.gnn.dim_inner] * cfg.mixhop_args.max_P
+        else:
+            print('Warning: P parameter not set for MixHop; node encoder and MixHop layer dimensionalities will be inconsistent.')
+
+        assert len(set(cfg.mixhop_args.layers)) == 1 # first layer has same dimensionality for each adj power
+        dim_in = cfg.mixhop_args.layers[0]
         self.encoder = FeatureEncoder(dim_in)
         dim_in = self.encoder.dim_in
 
@@ -44,153 +56,94 @@ class DRewGIN(nn.Module):
         assert cfg.gnn.dim_inner == dim_in, \
             "The inner and hidden dims must match."
 
-        layers = []
-        for t in range(cfg.gnn.layers_mp):
-            layers.append(DRewGINLayer(t, dim_in))
-        self.gnn_layers = torch.nn.ModuleList(layers)     
+        feature_number = dim_in # node feature dim
+        class_number = dim_out # maybe? or whatever the output is
+
+        self.args = cfg.mixhop_args
+        self.args.dropout = cfg.gnn.dropout
+        self.feature_number = feature_number 
+        self.class_number = class_number
+        self.setup_layer_structure() 
+          
+        save_num_post_mp_layers = cfg.gnn.layers_post_mp
+        if cfg.gnn.layers_post_mp > 1: # if there are multiple post-mp layers we want them to have inner dim d, not P*d
+            self.pre_post_mp = nn.Sequential(nn.Linear(cfg.gnn.dim_inner*cfg.mixhop_args.max_P, 
+                                                       cfg.gnn.dim_inner, bias=True),
+                                                       nn.ReLU())
+            
+            cfg.gnn.layers_post_mp -= 1
+            head_dim_in = cfg.mixhop_args.layers[0]
+        else: head_dim_in = sum(cfg.mixhop_args.layers)
 
         GNNHead = register.head_dict[cfg.gnn.head]
-        self.post_mp = GNNHead(dim_in=cfg.gnn.dim_inner, dim_out=dim_out)
+        self.post_mp = GNNHead(dim_in=head_dim_in, dim_out=dim_out)
+        cfg.gnn.layers_post_mp = save_num_post_mp_layers
 
     def forward(self, batch):
+
+        """
+        """
+
         batch = self.encoder(batch)
         batch = self.pre_mp(batch)
-        xs = []
-        for t, layer in enumerate(self.gnn_layers):
-            xs.append(batch.x) # does this change the xs element?
-            batch = layer(t, xs, batch)
-            # taken out of GINEConvLayer
-            batch.x = F.relu(batch.x)
-            batch.x = F.dropout(batch.x, p=cfg.gnn.dropout, training=self.training)
-            if cfg.gnn.residual:
-                batch.x = xs[-1] + batch.x  # residual connection. Essentially done already with MLP_s
+
+        # features = batch.x
+        A_tilde_hat = get_normalized_adj(batch.edge_index, add_self_loops=True)
+        A_tilde_hat = dict(indices=A_tilde_hat[0],
+                                           values=A_tilde_hat[1])
+
+        for t in range(cfg.gnn.layers_mp):
+            batch.x = torch.cat([self.layers[t][i](A_tilde_hat, batch.x) for i in range(len(self.layers[t]))], dim=1)
+            if cfg.gnn.batchnorm: batch.x = self.batchnorm[t](batch.x)
+            batch.x = nn.ReLU()(batch.x)
+
+        if cfg.gnn.layers_post_mp > 1: batch.x = self.pre_post_mp(batch.x)
         batch = self.post_mp(batch)
         return batch
 
-
-register_network('mixhop', DRewGIN)
-
-class DRewGINLayer(nn.Module):
-    """
-    Just a nn.Module wrapper for the MessagePassing SPNConv
-    """
-    def __init__(self, t, hidden_dim):
-        super().__init__()
-        d = hidden_dim
-        gin_nn_post = nn.Sequential(
-            # pyg_nn.Linear(d, d), 
-            # nn.ReLU(),
-            # pyg_nn.Linear(d, d),
-            )
-        lin = partial(pyg_nn.Linear, d, d)
-        if cfg.gnn.batchnorm:
-            bn = partial(nn.BatchNorm1d, d, eps=cfg.bn.eps, momentum=cfg.bn.mom)
-        else:
-            bn = nn.Identity
-
-        # alpha = torch.nn.Parameter(torch.randn(t+1))
-        mlp_s = nn.Sequential(lin(), bn(), nn.ReLU()) # self-connection
-        mlp_k = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), bn(), nn.ReLU()) for k in range(1, t+2)]) # k-hop connections
-        # mlp_e = nn.ModuleList([nn.Sequential(pyg_nn.Linear(d, d), bn(), nn.ReLU()) for _ in range(len(cfg.edge_types))]) # 1-hop edge-type connections
-        all_modules = dict(gin_nn_post=gin_nn_post, # making an attr of the module so it shows in model summary (hopefully)
-                            # alpha=alpha,
-                            mlp_s=mlp_s,
-                            mlp_k=mlp_k,
-                            # mlp_e=mlp_e,
-                            )
-        self.model = DRewGINConv(all_modules)
-
-    def forward(self, t, xs, batch):
-        batch.x = self.model(t, xs, batch.edge_index, 
-                             batch.edge_attr, # for k-hop labels
-                             )
-        return batch
+    
+    # def get_normalized_adj(self, edge_index):
+    #     A = to_dense_adj(edge_index).squeeze()
+    #     A_tilde = A + torch.eye(A.shape[0])
+    #     D = torch.diag(A_tilde.sum(axis=0)) # diagonalise row (or col) sums of adj
+    #     D = D.power(-0.5)
+    #     A_tilde_hat = D.dot(A_tilde).dot(D)
+    #     return A_tilde_hat
 
 
-class DRewGINConv(MessagePassing):
-    r"""The graph isomorphism operator from the `"How Powerful are
-    Graph Neural Networks?" <https://arxiv.org/abs/1810.00826>`_ paper
+    # def calculate_layer_sizes(self):
+    #     self.abstract_feature_number_1 = sum(self.args.layers)
+    #     # self.abstract_feature_number_2 = sum(self.args.layers_2)
+    #     self.order_1 = len(self.args.layers_1)
+    #     self.order_2 = len(self.args.layers_2)
 
-    .. math::
-        \mathbf{x}^{\prime}_i = h_{\mathbf{\Theta}} \left( (1 + \epsilon) \cdot
-        \mathbf{x}_i + \sum_{j \in \mathcal{N}(i)} \mathbf{x}_j \right)
+    def setup_layer_structure(self):
+        """
+        Creating the layer structure (3 convolutional upper layers, 3 bottom layers) and dense final.
+        """
+        # nb replaced sparse w dense
+        # self.upper_layers = [DenseNGCNLayer(self.feature_number, self.args.layers_1[i-1], i, self.args.dropout) for i in range(1, self.order_1+1)]
+        # self.upper_layers = ListModule(*self.upper_layers)
+        # self.bottom_layers = [DenseNGCNLayer(self.abstract_feature_number_1, self.args.layers_2[i-1], i, self.args.dropout) for i in range(1, self.order_2+1)]
+        # self.bottom_layers = ListModule(*self.bottom_layers)
 
-    or
+        if cfg.gnn.batchnorm: 
+            bn = partial(nn.BatchNorm1d, sum(self.args.layers), eps=cfg.bn.eps, momentum=cfg.bn.mom)
+            self.batchnorm = [bn()]
+        first_layer = [DenseNGCNLayer(self.feature_number, 
+                                      self.args.layers[i-1], 
+                                      i, self.args.dropout) for i in range(1, len(self.args.layers)+1)]
+        self.layers = [ListModule(*first_layer)]
+        
+        for t in range(1, cfg.gnn.layers_mp):
+            self.layers.append(ListModule(*[DenseNGCNLayer(sum(self.args.layers), 
+                                                          self.args.layers[i-1],
+                                                          i, self.args.dropout) for i in range(1, len(self.args.layers)+1)]))
+            if cfg.gnn.batchnorm: self.batchnorm.append(bn())
+        self.layers = nn.ModuleList(self.layers)
+        if cfg.gnn.batchnorm: self.batchnorm = nn.ModuleList(self.batchnorm)
 
-    .. math::
-        \mathbf{X}^{\prime} = h_{\mathbf{\Theta}} \left( \left( \mathbf{A} +
-        (1 + \epsilon) \cdot \mathbf{I} \right) \cdot \mathbf{X} \right),
+        # self.fully_connected = torch.nn.Linear(self.abstract_feature_number_2, self.class_number)
 
-    here :math:`h_{\mathbf{\Theta}}` denotes a neural network, *.i.e.* an MLP.
 
-    Args:
-        nn (torch.nn.Module): A neural network :math:`h_{\mathbf{\Theta}}` that
-            maps node features :obj:`x` of shape :obj:`[-1, in_channels]` to
-            shape :obj:`[-1, out_channels]`, *e.g.*, defined by
-            :class:`torch.nn.Sequential`.
-        eps (float, optional): (Initial) :math:`\epsilon`-value.
-            (default: :obj:`0.`)
-        train_eps (bool, optional): If set to :obj:`True`, :math:`\epsilon`
-            will be a trainable parameter. (default: :obj:`False`)
-        **kwargs (optional): Additional arguments of
-            :class:`torch_geometric.nn.conv.MessagePassing`.
-    """
-    def __init__(self, modules: nn.ModuleDict,
-                 eps: float = 0., train_eps: bool = False,
-                 **kwargs):
-        kwargs.setdefault('aggr', 'add')
-        super(DRewGINConv, self).__init__(**kwargs)
-        self.nu = cfg.nu if cfg.nu != -1 else float('inf')
-        self.nn_post = modules['gin_nn_post']
-        # self.alpha = modules['alpha'] # for the k-hop aggregations weights
-        self.mlp_s = modules['mlp_s'] # for the self-connection ((1+eps) weighted)
-        self.mlp_k = modules['mlp_k'] # for the k-hop aggregations (list)
-        # self.mlp_e = modules['mlp_e'] # for the edge-type aggregations (list)
-        self.initial_eps = eps
-        if train_eps:
-            self.eps = torch.nn.Parameter(torch.Tensor([eps]))
-        else:
-            self.register_buffer('eps', torch.Tensor([eps]))
-        self.reset_parameters()
-
-    def reset_parameters(self):
-        reset(self.nn_post)
-        self.eps.data.fill_(self.initial_eps)
-
-    def forward(self, t: int, # current layer/timestep
-                    xs: List[Tensor],
-                    edge_indices: List[Adj], # TODO: what is adj? a 2xN tensor?
-                    edge_attr: OptTensor = None,
-                    size: Size = None) -> Tensor:
-
-        x = xs[-1]
-
-        # if isinstance(x, Tensor): # TODO: does every element of xs need to be an OptPairTensor?
-        #     x: OptPairTensor = (x, x)
-        # # propagate_type: (x: OptPairTensor, edge_attr: OptTensor)
-
-        A = lambda k : edge_indices[:, edge_attr==k]
-        mlp = lambda k : self.mlp_k[k-1] # k=1 is the first element in the list
-        # alpha_weights = F.softmax(self.alpha, dim=0) # convex combination
-        # alpha = lambda k : alpha_weights[k-1] # k=1 is the first element in the list
-
-        # weighted self connection
-        out = (1 + self.eps) * self.mlp_s(x)
-
-        for k in range(1, t+2): # doesn't skip if A(k) empty - by design
-            if A(k).shape[1] > 0: # shouldn't happen unless L > graph diameter
-                delay = max(k - self.nu, 0)
-                out += mlp(k)(self.propagate(A(k), x=xs[t-delay], size=size))
-
-        return self.nn_post(out)
-
-    def message(self, x_j: Tensor) -> Tensor:
-        return x_j
-
-    def message_and_aggregate(self, adj_t: SparseTensor,
-                              x: OptPairTensor) -> Tensor:
-        adj_t = adj_t.set_value(None, layout=None)
-        return matmul(adj_t, x[0], reduce=self.aggr)
-
-    # def __repr__(self):
-    #     return '{}(nn={})'.format(self.__class__.__name__, self.nn)
+register_network('mixhop_gcn', MixHopGCN)

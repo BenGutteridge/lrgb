@@ -45,6 +45,9 @@ def return_hidden_dim(N):
   ])
   if is_drew_gcn:
     num_fc = get_num_fc_drew(L)
+  elif cfg.model.type == 'mixhop_gcn':
+    P = cfg.mixhop_args.max_P 
+    num_fc = P + (L-1) * P**2
   elif cfg.model.type == 'drew_gin':
     num_fc = get_num_fc_drew(L) + L # MLP_s + MLP_k for {k}s
   elif cfg.gnn.stage_type == 'delay_share_gnn': # weight sharing - only one W mp per layer
@@ -73,6 +76,7 @@ def return_hidden_dim(N):
   # other params and summation
   post_mp = cfg.gnn.layers_post_mp - 1       # 2-layer MLP at end -- not counting final layer to num classes
   num_bn = cfg.gnn.batchnorm * num_fc        # batch norm layers
+  if cfg.model.type == 'mixhop_gcn': num_bn = cfg.gnn.batchnorm * L * cfg.mixhop_args.max_P
   task = get_task_id()
   if task == 'pept':
     node_embed = sum(get_atom_feature_dims())
