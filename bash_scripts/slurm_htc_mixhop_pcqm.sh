@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QMixP3
+#SBATCH --job-name=QMixP5
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -94,7 +94,7 @@ gnn=mixhop_gcn
 # gnn=gnn
 # gnn=custom_gnn
 bn=True
-P=3
+P=5
 
 nu=1
 L=$SLURM_ARRAY_TASK_ID
