@@ -74,7 +74,7 @@ jk=none
 k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
-epochs=120
+epochs=100
 use_CC=True
 digl_alpha=0.15
 
