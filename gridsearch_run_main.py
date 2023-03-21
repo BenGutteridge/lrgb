@@ -167,7 +167,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
 
 
-num_runs = 50
+num_runs = 500
 
 if __name__ == '__main__':
     # Load cmd line args
