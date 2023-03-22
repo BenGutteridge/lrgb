@@ -149,10 +149,10 @@ def parse_args() -> argparse.Namespace:
     
     hyperparams = {
     'gnn.layers_mp': torch.arange(5,15,2).tolist(),
-    'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
-                'configs/GCN/peptides-func-GCN+LapPE.yaml',
-                'configs/GCN/peptides-struct-GCN.yaml', 
-                'configs/GCN/peptides-struct-GCN+LapPE.yaml',
+    'argpath': ['configs/GCN/vocsuperpixels-GCN.yaml', 
+                # 'configs/GCN/peptides-func-GCN+LapPE.yaml',
+                # 'configs/GCN/peptides-struct-GCN.yaml', 
+                # 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
     'nu': [1, -1],
     'digl.alpha': [

@@ -196,7 +196,7 @@ def load_dataset_master(format, name, dataset_dir):
         avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
         print('Using GDC transform, average degree %d' % avg_degree)
         alpha_str = '_alpha=p%02d'%int(cfg.digl.alpha*100) if cfg.digl.alpha != 0.15 else ''
-        digl_filepath = osp.join(dataset_dir, 'k_hop_indices', '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
+        digl_filepath = osp.join(cfg.dataset.dir, 'k_hop_indices', '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
         if osp.exists(digl_filepath):
             print('Loading GDC transformed dataset from file %s' % digl_filepath)
             dataset = torch.load(digl_filepath)
