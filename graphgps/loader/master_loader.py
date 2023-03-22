@@ -196,12 +196,12 @@ def load_dataset_master(format, name, dataset_dir):
         avg_degree = int(cfg.dataset.transform[cfg.dataset.transform.index('=')+1:])
         print('Using GDC transform, average degree %d' % avg_degree)
         alpha_str = '_alpha=p%02d'%int(cfg.digl.alpha*100) if cfg.digl.alpha != 0.15 else ''
-        digl_filepath = osp.join(dataset_dir, '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
+        digl_filepath = osp.join(dataset_dir, 'k_hop_indices', '%s_%s_%s%s.pt' % (format, name, cfg.dataset.transform, alpha_str))
         if osp.exists(digl_filepath):
             print('Loading GDC transformed dataset from file %s' % digl_filepath)
             dataset = torch.load(digl_filepath)
         else:
-            print('Applying transform...')
+            print('No file %s\nApplying transform...' % digl_filepath)
             tf = T.GDC(
                 self_loop_weight=1.,
                 normalization_in='sym',
@@ -216,6 +216,7 @@ def load_dataset_master(format, name, dataset_dir):
                 dataset = remove_edge_attrs(dataset)
             pre_transform_in_memory(dataset, tf, show_progress=True)
             try:
+                print('Saving file to %s...' % digl_filepath)
                 torch.save(dataset, digl_filepath)
             except: print('Failed to save.') # TODO: make this work
         if use_drew or ('noedge' in cfg.gnn.layer_type) or ('peptides' in name):
