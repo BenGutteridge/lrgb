@@ -66,7 +66,7 @@ layer=my_gcnconv
 
 seed=$SLURM_ARRAY_TASK_ID
 dir=datasets
-out_dir="results/drew_gin_pcqm/seed=$seed"
+out_dir="results/finish_Qdrewgin" #drew_gin_pcqm/seed=$seed"
 # rho=$SLURM_ARRAY_TASK_ID
 rho=0
 rho_max=1000000
@@ -74,7 +74,7 @@ jk=none
 k_max=1000000 # default 1e6
 ckpt_period=10
 edge_encoder=False
-epochs=100
+epochs=90
 use_CC=True
 digl_alpha=0.15
 

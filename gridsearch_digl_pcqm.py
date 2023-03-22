@@ -136,7 +136,8 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'out_dir results/search_pept_digl_new',
+        'out_dir results/search_pcqm_digl',
+        # 'dataset.dir /data/beng/datasets',
         'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
@@ -149,15 +150,13 @@ def parse_args() -> argparse.Namespace:
     
     hyperparams = {
     'gnn.layers_mp': torch.arange(5,15,2).tolist(),
-    'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
-                'configs/GCN/peptides-func-GCN+LapPE.yaml',
-                'configs/GCN/peptides-struct-GCN.yaml', 
-                'configs/GCN/peptides-struct-GCN+LapPE.yaml',
+    'argpath': ['configs/GCN/pcqm-contact-GCN.yaml',
+                # 'configs/GCN/pcqm-contact-GCN+LapPE.yaml'
                 ],
     'digl.alpha': [
         # 0.05, 0.1, 0.15,
                    0.2],
-    'dataset.transform': ['digl=%d' % i for i in [2,3,4,5,6,7]]
+    'dataset.transform': ['digl=%d' % i for i in [15]]
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
