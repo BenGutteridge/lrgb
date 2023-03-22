@@ -137,7 +137,7 @@ def parse_args() -> argparse.Namespace:
 
     extra_args = [
         'out_dir results/search_pept_digl',
-        'dataset.dir /data/beng/datasets',
+        'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
         'train.auto_resume True',
