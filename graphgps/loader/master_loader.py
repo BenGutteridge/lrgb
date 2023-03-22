@@ -176,6 +176,11 @@ def load_dataset_master(format, name, dataset_dir):
     else:
         raise ValueError(f"Unknown data format: {format}")
 
+    if cfg.sdrf.use:
+        from gdl.data import SDRFDataset
+        tmp = SDRFDataset(max_steps=5)
+        dataset = tmp.process()
+
     multi_hop_stages = [
         'alpha_gnn',
         'delay_gnn',

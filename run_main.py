@@ -109,12 +109,12 @@ model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# VOC superpixels
-argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# # VOC superpixels
+# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# # Peptides-func
-# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# Peptides-func
+argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
 # # PCQM-Contact
@@ -149,6 +149,8 @@ argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (mode
 
 # argpath = 'configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
 
+argpath.replace('.yaml', '+LapPE.yaml')
+
 repeat = 1
 import argparse
 def parse_args() -> argparse.Namespace:
@@ -179,7 +181,7 @@ def parse_args() -> argparse.Namespace:
         # 'model.type my_custom_gnn',
         # 'model.type GIN',
         # 'model.type R*-SPN',
-        'model.type mixhop_gcn',
+        # 'model.type mixhop_gcn',
         # 'gnn.stage_type custom_stack',
         # 'gnn.stage_type delay_gnn',
         # 'gnn.stage_type alpha_gnn',
@@ -202,7 +204,7 @@ def parse_args() -> argparse.Namespace:
         # 'train.auto_resume True',
         # 'gnn.l2norm False',
         'gnn.batchnorm False',
-        'mixhop_args.max_P 5',
+        # 'mixhop_args.max_P 5',
 
         # 'fixed_params.N 0',
         'fixed_params.N 500_000',
