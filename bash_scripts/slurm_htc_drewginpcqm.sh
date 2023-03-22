@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QnGINCClap
+#SBATCH --job-name=QnGINCC
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -36,9 +36,9 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/pcqm-contact-GCN+none.yaml'
 # file='configs/GCN/pcqm-contact-GCN+RWSE.yaml'
-# file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
+file='configs/DelayGCN/pcqm-contact-DelayGCN+none.yaml'
 # file='configs/DelayGCN/pcqm-contact-DelayGCN+RWSE.yaml'
-file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
+# file='configs/DelayGCN/pcqm-contact-DelayGCN+LapPE.yaml'
 
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN.yaml'
 # file='configs/DelayGCN/cocosuperpixels-DelayGCN+LapPE.yaml'
@@ -91,7 +91,7 @@ gnn=drew_gin
 bn=True
 
 nu=-1
-L=10
+L=20
 
 python main.py --cfg "$file" --repeat 1 out_dir $out_dir digl.alpha $digl_alpha gnn.batchnorm $bn dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom
 
