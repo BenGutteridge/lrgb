@@ -148,15 +148,14 @@ def parse_args(i) -> argparse.Namespace:
         ]
     
     hyperparams = {
-    'gnn.layers_mp': [13,11,5,7,7],
-    'argpath': ['configs/GCN/peptides-func-GCN.yaml', 
-                'configs/GCN/peptides-func-GCN+LapPE.yaml',
+    'gnn.layers_mp': [5,7,7],
+    'argpath': [
                 'configs/GCN/peptides-struct-GCN.yaml', 
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
-    'digl.alpha': [0.2]*5,
-    'dataset.transform': ['digl=%d' % i for i in [6,6,6,4,6]]
+    'digl.alpha': [0.2]*3,
+    'dataset.transform': ['digl=%d' % i for i in [6,4,6]]
     }
     search_args = {key: value[i] for key, value in hyperparams.items()}
     argpath = search_args.pop('argpath')
@@ -167,7 +166,7 @@ def parse_args(i) -> argparse.Namespace:
     return parser.parse_args("--cfg {} --repeat {} {}".format(argpath, repeat, extra_args).split())
 
 
-num_runs = 5
+num_runs = 3
 
 if __name__ == '__main__':
     # Load cmd line args
