@@ -155,7 +155,9 @@ def parse_args() -> argparse.Namespace:
                 'configs/GCN/peptides-struct-GCN+LapPE.yaml',
                 ],
     'nu': [1, -1],
-    'digl.alpha': [0.05, 0.1, 0.15, 0.2],
+    'digl.alpha': [
+        # 0.05, 0.1, 0.15,
+                   0.2],
     'dataset.transform': ['digl=%d' % i for i in [2,3,4,5,6,7]]
     }
     search_args = {key: random.choice(value) for key, value in hyperparams.items()}
