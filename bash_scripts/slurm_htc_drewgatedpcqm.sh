@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QnGGlap
+#SBATCH --job-name=QnGGCC
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -45,8 +45,8 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 # file='configs/GCN/pcqm-contact-GCN.yaml'
 # file='configs/SAN/pcqm-contact-SAN.yaml'
-# file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
-file='configs/GatedGCN/pcqm-contact-GatedGCN+LapPE.yaml'
+file='configs/GatedGCN/pcqm-contact-GatedGCN.yaml'
+# file='configs/GatedGCN/pcqm-contact-GatedGCN+LapPE.yaml'
 
 # # DRewGated, VOC 
 # file='configs/GatedGCN/vocsuperpixels-GatedGCN.yaml'
@@ -95,7 +95,7 @@ gnn=drew_gated_gnn
 # bn=True
 
 nu=-1
-L=10
+L=20
 
 python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha dataset.transform $tf seed $seed agg_weights.convex_combo $use_CC dataset.edge_encoder $edge_encoder model.type $gnn k_max $k_max jk_mode $jk fixed_params.N 500_000 rho $rho rho_max $rho_max train.auto_resume True train.ckpt_period $ckpt_period gnn.layer_type $layer out_dir $out_dir device cuda dataset.dir "$dir" nu $nu gnn.layers_mp $L optim.max_epoch $epochs tensorboard_each_run True train.mode custom
 
