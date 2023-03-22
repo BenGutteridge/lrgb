@@ -136,7 +136,7 @@ def parse_args() -> argparse.Namespace:
                         help='See graphgym/config.py for remaining options.')
 
     extra_args = [
-        'out_dir results/search_pept_digl',
+        'out_dir results/search_pept_digl_new',
         'dataset.dir datasets',
         'train.mode custom',
         'seed 0',
