@@ -113,12 +113,12 @@ model = 'GCN'
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
-# Peptides-func
-argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
+# # Peptides-func
+# argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# # PCQM-Contact
-# argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# PCQM-Contact
+argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
@@ -170,7 +170,6 @@ def parse_args() -> argparse.Namespace:
         'out_dir results',
         'dataset.dir datasets',
         'train.mode custom',
-        # 'dataset.name Cora',
         # 'dataset.format PyG',
         # 'dataset.task node',
         # 'dataset.node_encoder False',
@@ -191,8 +190,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type share_drewgatedgcnconv',
         # 'gnn.layer_type gatedgcnconv_noedge',
         # 'nu 2',
-        'gnn.dim_inner 20',
-        'gnn.layers_mp 8',
+        # 'gnn.dim_inner 20',
+        'gnn.layers_mp 10',
         'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -203,7 +202,7 @@ def parse_args() -> argparse.Namespace:
         'seed 0',
         # 'train.auto_resume True',
         # 'gnn.l2norm False',
-        'gnn.batchnorm False',
+        # 'gnn.batchnorm False',
         # 'mixhop_args.max_P 5',
 
         # 'fixed_params.N 0',
@@ -219,8 +218,8 @@ def parse_args() -> argparse.Namespace:
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
         # 'dataset.slic_compactness 30',
-        # 'dataset.transform digl=2',
-        # 'digl.alpha 0.05',
+        'dataset.transform digl=5',
+        'digl.alpha 0.2',
         'optim.max_epoch 300',
         ]
 
