@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=QMixP3lap
+#SBATCH --job-name=QMixP3
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -21,8 +21,8 @@ nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 
-# file='configs/GCN/pcqm-contact-GCN.yaml'
-file='configs/GCN/pcqm-contact-GCN+LapPE.yaml'
+file='configs/GCN/pcqm-contact-GCN.yaml'
+# file='configs/GCN/pcqm-contact-GCN+LapPE.yaml'
 
 seed=$SLURM_ARRAY_TASK_ID
 # seed=0
