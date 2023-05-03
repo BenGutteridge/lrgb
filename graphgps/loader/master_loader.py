@@ -215,6 +215,7 @@ def load_dataset_master(format, name, dataset_dir):
                 sparsification_kwargs=dict(method='threshold', avg_degree=avg_degree),
                 exact=True,
             ) # using default, except for avg degree
+            tf = digl_tf_wrapper(tf)
             if 1 in dataset.data.edge_attr.shape:
                 dataset = squeeze_edge_attrs(dataset)
             else:
@@ -712,9 +713,30 @@ def unsqueeze_edge_attrs(dataset):
         print('Reshaping edge attrs...')
         for i in tqdm(range(len(dataset))): 
             if dataset.get(i).edge_attr.dim() == 1:
-                dataset._data_list[i] = Data(x=dataset.get(i).x,
-                                            edge_index=dataset.get(i).edge_index,
-                                            edge_attr=dataset.get(i).edge_attr.reshape(-1,1),
-                                            y=dataset.get(i).y)
+                d_i = dataset.get(i)
+                dataset._data_list[i] = Data(x=d_i.x,
+                                            edge_index=d_i.edge_index,
+                                            edge_attr=d_i.edge_attr.reshape(-1,1),
+                                            y=d_i.y,
+                                            edge_index_labeled=getattr(d_i, 'edge_index_labeled', None),  # for PCQM
+                                            edge_label=getattr(d_i, 'edge_label', None)                 # for PCQM
+                                            )
         assert all([dataset.get(i).edge_attr.dim() == 2 for i in range(len(dataset))])
     return dataset
+
+def digl_tf_wrapper(f):
+    """For DIGL transformation; skipping over graphs with no edges"""
+    def wrapper(x):
+        if x.edge_index.shape[-1] == 0:
+            print('Edgeless graph skipped.')
+            if x.edge_attr is None:
+                x = Data(edge_index=x.edge_index,
+                        x=x.x,
+                        edge_index_labeled=x.edge_index_labeled,
+                        edge_label=x.edge_label,
+                        edge_attr=torch.tensor([])
+                        )
+            return x
+        else:
+            return f(x)
+    return wrapper

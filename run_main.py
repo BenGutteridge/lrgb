@@ -109,16 +109,16 @@ model = 'GCN'
 # model='SAN'
 # model='alphaGCN'
 
-# # VOC superpixels
-# argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
+# VOC superpixels
+argpath = "/Users/beng/Documents/lrgb/configs/%s/vocsuperpixels-%s.yaml" % (model, model)
 # Coco-superpixels
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/cocosuperpixels-%s.yaml' % (model, model)
 # # Peptides-func
 # argpath = '/Users/beng/Documents/lrgb/configs/%s/peptides-func-%s.yaml' % (model, model)
 # # Peptides-struct
 # argpath = "/Users/beng/Documents/lrgb/configs/%s/peptides-struct-%s.yaml" % (model, model)
-# PCQM-Contact
-argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
+# # PCQM-Contact
+# argpath = "configs/%s/pcqm-contact-%s.yaml" % (model, model)
 
 # argpath = 'configs/Transformer/peptides-func-Transformer+LapPE.yaml'
 
@@ -190,8 +190,8 @@ def parse_args() -> argparse.Namespace:
         # 'gnn.layer_type share_drewgatedgcnconv',
         # 'gnn.layer_type gatedgcnconv_noedge',
         # 'nu 2',
-        # 'gnn.dim_inner 20',
-        'gnn.layers_mp 10',
+        'gnn.dim_inner 5',
+        'gnn.layers_mp 2',
         'dataset.edge_encoder False',
         # 'use_edge_labels True',
         # 'train.batch_size 128',
@@ -206,7 +206,7 @@ def parse_args() -> argparse.Namespace:
         # 'mixhop_args.max_P 5',
 
         # 'fixed_params.N 0',
-        'fixed_params.N 500_000',
+        # 'fixed_params.N 500_000',
         # 'agg_weights.use True',
         # 'agg_weights.convex_combo True'
         # 'rho 3',
@@ -218,9 +218,9 @@ def parse_args() -> argparse.Namespace:
         # 'alt_postlayer.bn True',
         # 'alt_postlayer.act True',
         # 'dataset.slic_compactness 30',
-        'dataset.transform digl=5',
+        'dataset.transform digl=2',
         'digl.alpha 0.2',
-        'optim.max_epoch 300',
+        'optim.max_epoch 2',
         ]
 
     # argpath='results/pept-func_delay_gnn_kmax=03_rho=03_rho_max=10_d=080_L=14/config.yaml'
