@@ -20,10 +20,11 @@ nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 
-file='configs/GCN/pcqm-contact-GCN.yaml'
+pe=$1
+file="configs/GCN/pcqm-contact-GCN+$pe.yaml"
 
-# seed=$SLURM_ARRAY_TASK_ID
-seed=0
+seed=$SLURM_ARRAY_TASK_ID
+# seed=0
 dir=datasets
 out_dir=results/diglpcqm
 ckpt_period=10
@@ -31,8 +32,8 @@ edge_encoder=False
 epochs=100
 
 digl_alpha=0.20
-avg_deg=$SLURM_ARRAY_TASK_ID
-# avg_deg=15
+# avg_deg=$SLURM_ARRAY_TASK_ID
+avg_deg=2
 tf="digl=$avg_deg"
 
 python main.py --cfg "$file" --repeat 1 digl.alpha $digl_alpha dataset.transform $tf seed $seed dataset.edge_encoder $edge_encoder fixed_params.N 500_000 train.auto_resume True train.ckpt_period $ckpt_period out_dir $out_dir device cuda dataset.dir "$dir" optim.max_epoch $epochs tensorboard_each_run True train.mode custom
