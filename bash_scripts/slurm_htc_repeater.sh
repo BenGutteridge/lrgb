@@ -34,4 +34,4 @@ ckpt_period=10
 
 epochs=300
 
-python main.py --cfg "$file" --repeat 1 seed $seed train.auto_resume True train.ckpt_period $ckpt_period out_dir $out_dir device cuda optim.max_epoch $epochs tensorboard_each_run True train.mode custom
+python main.py --cfg "$file" --repeat 1 seed $seed train.auto_resume True train.ckpt_period $ckpt_period out_dir $out_dir dataset.dir datasets device cuda optim.max_epoch $epochs tensorboard_each_run True train.mode custom
