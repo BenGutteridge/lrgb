@@ -1,5 +1,5 @@
 #! /bin/bash
-#SBATCH --job-name=repeatSlap
+#SBATCH --job-name=repeatQlap
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=12:00:00
@@ -20,11 +20,11 @@ nvcc --version
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
 
-# file=bash_scripts/to_repeat/PCQM4Mv2Contact-shuffle_drew_gin_LapPE_nu=inf_CC_bn_bs=0256_d=085_L=10/config.yaml
+file=bash_scripts/to_repeat/PCQM4Mv2Contact-shuffle_drew_gin_LapPE_nu=inf_CC_bn_bs=0256_d=085_L=10/config.yaml
 
 # file=bash_scripts/to_repeat/pept-struct_drew_gin_nu=inf_bn_bs=0128_d=059_L=15/config.yaml
 
-file=bash_scripts/to_repeat/pept-struct_drew_gin_LapPE_nu=inf_bn_bs=0128_d=152_L=05/config.yaml
+# file=bash_scripts/to_repeat/pept-struct_drew_gin_LapPE_nu=inf_bn_bs=0128_d=152_L=05/config.yaml
 
 out_dir=results/repeats
 
@@ -32,6 +32,6 @@ seed=$SLURM_ARRAY_TASK_ID
 
 ckpt_period=10
 
-epochs=300
+epochs=100
 
-python main.py --cfg "$file" --repeat 3 seed $seed train.auto_resume True train.ckpt_period $ckpt_period out_dir $out_dir dataset.dir datasets device cuda optim.max_epoch $epochs tensorboard_each_run True train.mode custom
+python main.py --cfg "$file" --repeat 1 seed $seed train.auto_resume True train.ckpt_period $ckpt_period out_dir $out_dir dataset.dir datasets device cuda optim.max_epoch $epochs tensorboard_each_run True train.mode custom
